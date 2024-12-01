@@ -47,7 +47,20 @@ def display_all_fridge_contents():
             print(f"{'Ingredient Name':<20}{'Quantity':<10}")
             for ingredient_name, quantity in items:
                 print(f"{ingredient_name:<20}{quantity:<10}")
+        # Prompt the user to choose a fridge
+        while True:
+            fridge_choice = input("\nWhich Fridge do you want to choose? : ")
+
+            # Check if the entered fridge ID exists
+            if fridge_choice.isdigit() and int(fridge_choice) in fridge_data:
+                print(f"You selected Fridge {fridge_choice}")
+                break  # Exit loop if valid choice
+            else:
+                print("Invalid fridge choice. Please choose a valid fridge.")
     except Exception as e:
         print("Error:", e)
     finally:
         cursor.close()
+
+display_all_fridge_contents()
+connection.close()
