@@ -18,7 +18,7 @@ CREATE TABLE UserInventory (
     user_id INT NOT NULL,
     fridge_id INT NOT NULL,
     ingredients TEXT NOT NULL, 
-    PRIMARY KEY (user_id, fridge_id)
+    PRIMARY KEY (user_id)
 );
 
 INSERT INTO Recipe (recipe_id, recipe_name, ingredient_list, preparation_time, serving_size, dietary_requirement, instructions)
