@@ -3,6 +3,17 @@ from typing import Dict,Any
 import logging
 import ast
 
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.DEBUG)
+
+console_handler = logging.StreamHandler()
+console_handler.setLevel(logging.DEBUG)
+
+formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+console_handler.setFormatter(formatter)
+
+logger.addHandler(console_handler)
+
 class RecipeSuggestion:
     def __init__(self, db_params: Dict[str, str], user_id: int):
         
@@ -81,3 +92,30 @@ class RecipeSuggestion:
         except psycopg2.Error as e:
             logging.error(f"Database error in get_recipes: {e}")
             return {}    
+
+    def get_inventory(self) -> Dict[int, str]:
+            
+            try:
+                with self.db_connection.cursor() as cursor:
+                    query = """
+                        SELECT ingredients
+                        FROM userinventory
+                        WHERE user_id = %s AND fridge_id = 4
+                    """
+                    cursor.execute(query, (self.user_id,))
+                    result = cursor.fetchone()
+
+                if result:
+                    try:
+                        raw_ingredients = ast.literal_eval(result[0])
+                        inventory = {int(ingredient_id): str(quantity) for ingredient_id, quantity in raw_ingredients.items()}
+                        return inventory
+                    except (ValueError, SyntaxError):
+                        logger.error("Error parsing inventory ingredients")
+                        return {}
+                else:
+                    return {}
+            except psycopg2.Error as e:
+                logger.error(f"Database error in get_inventory: {e}")
+                return {}
+    
