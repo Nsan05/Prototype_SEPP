@@ -13,4 +13,14 @@ class RecipeSuggestion:
             self.ingredient_names = self.get_ingredient_names()
         except (Exception, psycopg2.Error) as error:
             logging.error(f"Error connecting to database: {error}")
-            raise
+            raise 
+
+    def get_ingredient_names(self) -> Dict[int, str]:
+        try:
+            with self.db_connection.cursor() as cursor:
+                query = "SELECT ingredient_id, ingredient_name FROM ingredient"
+                cursor.execute(query)
+                return dict(cursor.fetchall())
+        except psycopg2.Error as e:
+            logging.error(f"Database error in get_ingredient_names: {e}")
+            return {}
