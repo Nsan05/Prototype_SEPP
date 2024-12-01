@@ -7,7 +7,7 @@ def load_data(file_path):
 
 #preprocess the data 
 def preprocess_data(df):
-    # Group by recipe and aggregate ingredient information
+    #grouping
     recipe_ingredients = df.groupby('recipe_name').apply(lambda x: {
         'ingredients': x['ingredient_name'].tolist(),
         'quantities': x['quantity'].tolist(),
@@ -15,3 +15,9 @@ def preprocess_data(df):
     }).reset_index()
     
     return recipe_ingredients
+ 
+def extract_features(recipe_ingredients):
+    vectorizer = CountVectorizer()
+    ingredient_features = vectorizer.fit_transform(
+        [' '.join(ingredients) for ingredients in recipe_ingredients['ingredients']] #matrix
+    )
