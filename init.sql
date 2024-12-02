@@ -355,15 +355,230 @@ VALUES
 (1602, 'Lentils', '["red lentils", "green lentils", "brown lentils"]'),
 (1603, 'Chickpeas', '["canned chickpeas", "dried chickpeas", "roasted chickpeas"]'),
 (1604, 'Nutritional Yeast', '["fortified nutritional yeast", "non-fortified nutritional yeast"]'),
-(1605, 'Tahini', '["light tahini", "dark tahini", "whole sesame tahini"]');
+(1605, 'Tahini', '["light tahini", "dark tahini", "whole sesame tahini"]'),
+-- Tomato Alternatives
+(1605, 'cherry tomato', '["Tomato", "plum tomato"]'),
+(1606, 'plum tomato', '["Tomato", "cherry tomato"]'),
+-- Cucumber Alternatives
+(1607, 'english cucumber', '["Cucumber", "persian cucumber"]'),
+(1608, 'persian cucumber', '["Cucumber", "english cucumber"]'),
+-- Red Onion Alternatives
+(1609, 'sweet onion', '["Red Onion", "white onion"]'),
+(1610, 'white onion', '["Red Onion", "sweet onion"]'),
+-- Chicken Breast Alternatives
+(1611, 'chicken thigh', '["Chicken Breast", "turkey breast"]'),
+(1612, 'turkey breast', '["Chicken Breast", "chicken thigh"]'),
+-- Ginger Alternatives
+(1613, 'ginger paste', '["Ginger", "minced ginger"]'),
+(1614, 'minced ginger', '["Ginger", "ginger paste"]'),
+-- Coconut Milk Alternatives
+(1615, 'cream', '["Coconut Milk", "almond milk"]'),
+(1616, 'almond milk', '["Coconut Milk", "cream"]'),
+-- Curry Powder Alternatives
+(1617, 'garam masala', '["Curry Powder", "turmeric"]'),
+(1618, 'turmeric', '["Curry Powder", "garam masala"]'),
+-- Garlic Alternatives
+(1619, 'garlic paste', '["Garlic", "dried garlic"]'),
+(1620, 'dried garlic', '["Garlic", "garlic paste"]'),
+-- Mixed Vegetables Alternatives
+(1621, 'frozen vegetables', '["Mixed Vegetables", "seasonal vegetables"]'),
+(1622, 'seasonal vegetables', '["Mixed Vegetables", "frozen vegetables"]'),
+-- Olive Oil Alternatives
+(1623, 'vegetable oil', '["Olive Oil", "canola oil"]'),
+(1624, 'canola oil', '["Olive Oil", "vegetable oil"]'),
+-- Bread Alternatives
+(1625, 'whole wheat bread', '["Bread", "sourdough"]'),
+(1626, 'sourdough', '["Bread", "whole wheat bread"]'),
+-- Egg Alternatives
+(1627, 'egg whites', '["Egg", "vegan egg substitute"]'),
+(1628, 'vegan egg substitute', '["Egg", "egg whites"]'),
+-- Banana Alternatives
+(1629, 'frozen banana', '["Banana", "plantain"]'),
+(1630, 'plantain', '["Banana", "frozen banana"]'),
+-- Greek Yogurt Alternatives
+(1631, 'regular yogurt', '["Greek Yogurt", "plant-based yogurt"]'),
+(1632, 'plant-based yogurt', '["Greek Yogurt", "regular yogurt"]'),
+-- Honey Alternatives
+(1633, 'agave syrup', '["Honey", "maple syrup"]'),
+(1634, 'maple syrup', '["Honey", "agave syrup"]'),
+-- Salmon Alternatives
+(1635, 'trout', '["Salmon", "tilapia"]'),
+(1636, 'tilapia', '["Salmon", "trout"]'),
+-- Lemon Alternatives
+(1637, 'lime', '["Lemon", "preserved lemon"]'),
+(1638, 'preserved lemon', '["Lemon", "lime"]'),
+-- Dill Alternatives
+(1639, 'dried dill', '["Dill", "parsley"]'),
+(1640, 'parsley', '["Dill", "dried dill"]'),
+-- Beef Alternatives
+(1641, 'ground beef', '["Beef", "steak", "sirloin"]'),
+(1642, 'steak', '["Beef", "ground beef", "sirloin"]'),
+(1643, 'sirloin', '["Beef", "ground beef", "steak"]'),
+-- Tofu Alternatives
+(1644, 'tempeh', '["Tofu", "seitan", "plant-based protein"]'),
+(1645, 'seitan', '["Tofu", "tempeh", "plant-based protein"]'),
+(1646, 'plant-based protein', '["Tofu", "tempeh", "seitan"]'),
+-- Shrimp Alternatives
+(1647, 'prawns', '["Shrimp", "crab", "imitation crab"]'),
+(1648, 'crab', '["Shrimp", "prawns", "imitation crab"]'),
+(1649, 'imitation crab', '["Shrimp", "prawns", "crab"]'),
+-- Lamb Alternatives
+(1650, 'goat meat', '["Lamb", "mutton"]'),
+(1651, 'mutton', '["Lamb", "goat meat"]'),
+-- Spinach Alternatives
+(1652, 'kale', '["Spinach", "swiss chard", "collard greens"]'),
+(1653, 'swiss chard', '["Spinach", "kale", "collard greens"]'),
+(1654, 'collard greens', '["Spinach", "kale", "swiss chard"]'),
+-- Bell Pepper Alternatives
+(1655, 'capsicum', '["Bell Pepper", "paprika", "chili pepper"]'),
+(1656, 'paprika', '["Bell Pepper", "capsicum", "chili pepper"]'),
+(1657, 'chili pepper', '["Bell Pepper", "capsicum", "paprika"]'),
+-- Eggplant Alternatives
+(1658, 'aubergine', '["Eggplant", "brinjal"]'),
+(1659, 'brinjal', '["Eggplant", "aubergine"]'),
+-- Zucchini Alternatives
+(1660, 'courgette', '["Zucchini", "summer squash"]'),
+(1661, 'summer squash', '["Zucchini", "courgette"]'),
+-- Carrot Alternatives
+(1662, 'baby carrot', '["Carrot", "rainbow carrot"]'),
+(1663, 'rainbow carrot', '["Carrot", "baby carrot"]'),
+-- Rice Alternatives
+(1664, 'basmati rice', '["Rice", "brown rice", "jasmine rice"]'),
+(1665, 'brown rice', '["Rice", "basmati rice", "jasmine rice"]'),
+(1666, 'jasmine rice', '["Rice", "basmati rice", "brown rice"]'),
+-- Pasta Alternatives
+(1667, 'spaghetti', '["Pasta", "penne", "gluten-free pasta"]'),
+(1668, 'penne', '["Pasta", "spaghetti", "gluten-free pasta"]'),
+(1669, 'gluten-free pasta', '["Pasta", "spaghetti", "penne"]'),
+-- Potato Alternatives
+(1670, 'sweet potato', '["Potato", "yam", "fingerling potato"]'),
+(1671, 'yam', '["Potato", "sweet potato", "fingerling potato"]'),
+(1672, 'fingerling potato', '["Potato", "sweet potato", "yam"]'),
+-- Cheese Alternatives
+(1673, 'cheddar', '["Cheese", "mozzarella", "vegan cheese"]'),
+(1674, 'mozzarella', '["Cheese", "cheddar", "vegan cheese"]'),
+(1675, 'vegan cheese', '["Cheese", "cheddar", "mozzarella"]'),
+-- Milk Alternatives
+(1676, 'almond milk', '["Milk", "soy milk", "oat milk"]'),
+(1677, 'soy milk', '["Milk", "almond milk", "oat milk"]'),
+(1678, 'oat milk', '["Milk", "almond milk", "soy milk"]'),
+-- Cream Alternatives
+(1679, 'heavy cream', '["Cream", "light cream", "coconut cream"]'),
+(1680, 'light cream', '["Cream", "heavy cream", "coconut cream"]'),
+(1681, 'coconut cream', '["Cream", "heavy cream", "light cream"]'),
+-- Basil Alternatives
+(1682, 'fresh basil', '["Basil", "dried basil", "thai basil"]'),
+(1683, 'dried basil', '["Basil", "fresh basil", "thai basil"]'),
+(1684, 'thai basil', '["Basil", "fresh basil", "dried basil"]'),
+-- Cilantro Alternatives
+(1685, 'coriander leaves', '["Cilantro", "chinese parsley"]'),
+(1686, 'chinese parsley', '["Cilantro", "coriander leaves"]'),
+-- Mint Alternatives
+(1687, 'peppermint', '["Mint", "spearmint"]'),
+(1688, 'spearmint', '["Mint", "peppermint"]'),
+-- Paprika Alternatives
+(1689, 'smoked paprika', '["Paprika", "hot paprika"]'),
+(1690, 'hot paprika', '["Paprika", "smoked paprika"]'),
+-- Cumin Alternatives
+(1691, 'ground cumin', '["Cumin", "whole cumin seeds"]'),
+(1692, 'whole cumin seeds', '["Cumin", "ground cumin"]'),
+-- Apple Alternatives
+(1693, 'green apple', '["Apple", "red apple", "cooking apple"]'),
+(1694, 'red apple', '["Apple", "green apple", "cooking apple"]'),
+(1695, 'cooking apple', '["Apple", "green apple", "red apple"]'),
+-- Orange Alternatives
+(1696, 'mandarin', '["Orange", "clementine", "blood orange"]'),
+(1697, 'clementine', '["Orange", "mandarin", "blood orange"]'),
+(1698, 'blood orange', '["Orange", "mandarin", "clementine"]'),
+-- Avocado Alternatives
+(1699, 'hass avocado', '["Avocado", "fuerte avocado"]'),
+(1700, 'fuerte avocado', '["Avocado", "hass avocado"]'),
+-- Soy Sauce Alternatives
+(1701, 'tamari', '["Soy Sauce", "light soy sauce", "dark soy sauce"]'),
+(1702, 'light soy sauce', '["Soy Sauce", "tamari", "dark soy sauce"]'),
+(1703, 'dark soy sauce', '["Soy Sauce", "tamari", "light soy sauce"]'),
+-- Vinegar Alternatives
+(1704, 'apple cider vinegar', '["Vinegar", "rice vinegar", "balsamic vinegar"]'),
+(1705, 'rice vinegar', '["Vinegar", "apple cider vinegar", "balsamic vinegar"]'),
+(1706, 'balsamic vinegar', '["Vinegar", "apple cider vinegar", "rice vinegar"]'),
+-- Mustard Alternatives
+(1707, 'dijon mustard', '["Mustard", "whole grain mustard", "yellow mustard"]'),
+(1708, 'whole grain mustard', '["Mustard", "dijon mustard", "yellow mustard"]'),
+(1709, 'yellow mustard', '["Mustard", "dijon mustard", "whole grain mustard"]'),
+-- Sugar Alternatives
+(1710, 'brown sugar', '["Sugar", "raw sugar", "coconut sugar"]'),
+(1711, 'raw sugar', '["Sugar", "brown sugar", "coconut sugar"]'),
+(1712, 'coconut sugar', '["Sugar", "brown sugar", "raw sugar"]'),
+-- Flour Alternatives
+(1713, 'wheat flour', '["Flour", "almond flour", "gluten-free flour"]'),
+(1714, 'almond flour', '["Flour", "wheat flour", "gluten-free flour"]'),
+(1715, 'gluten-free flour', '["Flour", "wheat flour", "almond flour"]'),
+-- Vanilla Extract Alternatives
+(1716, 'vanilla bean', '["Vanilla Extract", "vanilla paste"]'),
+(1717, 'vanilla paste', '["Vanilla Extract", "vanilla bean"]'),
+-- Almonds Alternatives
+(1718, 'sliced almonds', '["Almonds", "almond flour", "roasted almonds"]'),
+(1719, 'almond flour', '["Almonds", "sliced almonds", "roasted almonds"]'),
+(1720, 'roasted almonds', '["Almonds", "sliced almonds", "almond flour"]'),
+-- Chia Seeds Alternatives
+(1721, 'ground chia', '["Chia Seeds", "whole chia seeds"]'),
+(1722, 'whole chia seeds', '["Chia Seeds", "ground chia"]'),
+-- Peanut Alternatives
+(1723, 'roasted peanuts', '["Peanut", "peanut butter"]'),
+(1724, 'peanut butter', '["Peanut", "roasted peanuts"]'),
+-- Quinoa Alternatives
+(1725, 'red quinoa', '["Quinoa", "white quinoa", "black quinoa"]'),
+(1726, 'white quinoa', '["Quinoa", "red quinoa", "black quinoa"]'),
+(1727, 'black quinoa', '["Quinoa", "red quinoa", "white quinoa"]'),
+-- Lentils Alternatives
+(1728, 'red lentils', '["Lentils", "green lentils", "brown lentils"]'),
+(1729, 'green lentils', '["Lentils", "red lentils", "brown lentils"]'),
+(1730, 'brown lentils', '["Lentils", "red lentils", "green lentils"]'),
+-- Chickpeas Alternatives
+(1731, 'canned chickpeas', '["Chickpeas", "dried chickpeas", "roasted chickpeas"]'),
+(1732, 'dried chickpeas', '["Chickpeas", "canned chickpeas", "roasted chickpeas"]'),
+(1733, 'roasted chickpeas', '["Chickpeas", "canned chickpeas", "dried chickpeas"]'),
+-- Nutritional Yeast Alternatives
+(1734, 'fortified nutritional yeast', '["Nutritional Yeast", "non-fortified nutritional yeast"]'),
+(1735, 'non-fortified nutritional yeast', '["Nutritional Yeast", "fortified nutritional yeast"]'),
+-- Tahini Alternatives
+(1736, 'light tahini', '["Tahini", "dark tahini", "whole sesame tahini"]'),
+(1737, 'dark tahini', '["Tahini", "light tahini", "whole sesame tahini"]'),
+(1738, 'whole sesame tahini', '["Tahini", "dark tahini", "light tahini"]');
 
 INSERT INTO UserInventory (user_id, fridge_id, ingredients)
 VALUES 
-(1, 1, '{101: "250g", 102: "200g", 103: "100g", 302: "50ml", 602: "30ml", 1102: "10g"}'), 
-(2, 1, '{201: "500g", 202: "20g", 203: "400ml", 204: "30g", 205: "10g", 302: "30ml"}'), 
+(1, 1, '{101: "300g", 102: "250g", 103: "100g", 302: "40ml", 401: "2", 402: "2", 205: "2", 704: "600g", 803: "250g", 804: "250g", 805: "150g", 1102: "20g", 1104: "7g", 501: "180g", 502: "130ml", 503: "22ml", 601: "520g", 602: "21ml", 603: "7g"}'),
+-- Complete: 1, 4, 8
+-- Partial: 5, 6
+
+-- From here u need to change
+-- Complete, Complete with alternative, partial, partial with missing (Only rejected if the no. of ingredients present do not make up atleast 70%)
+-- if it goes below partial check for alternative -> if it meets criteria then it might have with alternative tag 
+(2, 1, '{}'), 
+-- Complete: 12, 13
+-- Partial: 17, 22
+
 (3, 2, '{702: "350g", 801: "200g", 802: "200g", 203: "300ml", 1104: "10g", 1105: "5g", 302: "25ml"}'), 
+-- Complete: 23, 24, 25
+-- Partial: 11, 9
+
 (4, 2, '{401: "2", 402: "2", 302: "10ml", 205: "2", 1001: "100g", 903: "200g"}'), 
+-- Complete: 26
+-- Partial: 16, 19
+
 (5, 3, '{501: "200g", 502: "150ml", 503: "30ml", 302: "10ml", 1201: "200g", 1401: "30g", 1403: "10ml"}'), 
+-- Complete: 29, 30
+-- Partial: 16, 18
+
 (6, 3, '{601: "600g", 602: "30ml", 603: "10g", 302: "20ml", 1102: "10g", 703: "250g", 901: "200g"}'), 
+-- Complete: 13
+-- Partial: 21, 25
+
 (7, 4, '{702: "300g", 801: "200g", 802: "150g", 1101: "10g", 1301: "30ml", 1203: "200g", 902: "150g"}'), 
+-- Complete: 17, 20
+-- Partial: 25
+
 (8, 4, '{704: "500g", 803: "250g", 804: "200g", 805: "150g", 1102: "15g", 1104: "5g", 1001: "150g", 302: "30ml"}');
+-- Complete: 6, 7, 18
+-- Partial: 26, 30
