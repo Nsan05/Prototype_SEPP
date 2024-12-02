@@ -74,57 +74,156 @@ def fetch_fridge_data():
     finally:
         cursor.close()
 
-# def display_all_fridge_contents():
-#     try:
-#         cursor = connection.cursor()
+def create_html_file():
+    """Create an HTML file with fridge options."""
+    existing_fridges = fetch_existing_fridges()
+    all_ingredients = fetch_all_ingredients()
+    fridge_data = fetch_fridge_data()
+    
+    html_content = f"""
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Fridge Inventory Management</title>
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <style>
+            body {{
+                font-family: Arial, sans-serif;
+                max-width: 800px;
+                margin: 20px auto;
+                padding: 20px;
+                line-height: 1.6;
+            }}
+            .option-container {{
+                display: flex;
+                justify-content: space-between;
+                margin-bottom: 20px;
+            }}
+            .option-box {{
+                border: 1px solid #ddd;
+                padding: 20px;
+                width: 45%;
+                text-align: center;
+                cursor: pointer;
+                transition: background-color 0.3s;
+            }}
+            .option-box:hover {{
+                background-color: #f0f0f0;
+            }}
+            #existing-fridge-section, 
+            #create-fridge-section {{
+                display: none;
+                margin-top: 20px;
+            }}
+            .ingredient-list {{
+                max-height: 300px;
+                overflow-y: auto;
+                border: 1px solid #ddd;
+                padding: 10px;
+                margin-top: 10px;
+            }}
+            .selected-ingredient {{
+                background-color: #e0e0e0;
+            }}
+        </style>
+    </head>
+    <body>
+        <h1>Fridge Inventory Management</h1>
 
-#         # Query the entire User_Inventory_Table to get all fridge contents
-#         cursor.execute("""
-#             SELECT Fridge_Id, Ingredient_Id_quantity 
-#             FROM User_Inventory_Table;
-#         """)
-#         all_inventory = cursor.fetchall()
+        <div class="option-container">
+            <div id="existing-fridge-option" class="option-box">
+                <h2>Select Existing Fridge</h2>
+                <p>Browse and manage contents of existing fridges</p>
+            </div>
+            <div id="create-fridge-option" class="option-box">
+                <h2>Create New Fridge</h2>
+                <p>Create a new fridge with available ingredients</p>
+            </div>
+        </div>
 
-#         # Initialize a dictionary to group items by fridge
-#         fridge_data = {}
+        <div id="existing-fridge-section">
+            <h2>Existing Fridges</h2>
+            <select id="fridge-select">
+                <option value="">-- Select a Fridge --</option>
+                {' '.join(f'<option value="{fridge_id}">{fridge_id}</option>' for fridge_id in existing_fridges)}
+            </select>
+            <div id="fridge-contents" style="margin-top: 20px;"></div>
+        </div>
 
-#         for fridge_id, ingredient_dict in all_inventory:
-#             # Parse the dictionary safely
-#             ingredient_dict = ast.literal_eval(ingredient_dict)
+        <div id="create-fridge-section">
+            <h2>Create New Fridge</h2>
+            <div class="ingredient-list" id="ingredient-list">
+                {' '.join(f'<div class="ingredient-item" data-id="{ingredient_id}">{ingredient_name}</div>' for ingredient_id, ingredient_name in all_ingredients.items())}
+            </div>
+            <div id="selected-ingredients" style="margin-top: 20px;"></div>
+        </div>
 
-#             # For each ingredient ID, query the Ingredient table for the name
-#             fridge_data[fridge_id] = []  # Initialize fridge data for this Fridge_Id
-#             for ingredient_id, quantity in ingredient_dict.items():
-#                 cursor.execute("""
-#                     SELECT Ing_name
-#                     FROM Ingredient_Table
-#                     WHERE Ingredient_Id = %s;
-#                 """, (ingredient_id,))
-#                 ingredient_name = cursor.fetchone()[0]  # Fetch the name
+        <script>
+            $(document).ready(function () {{
+                const existingFridges = {json.dumps(fridge_data)};
+                const allIngredients = {json.dumps(all_ingredients)};
 
-#                 # Append ingredient details to the fridge data
-#                 fridge_data[fridge_id].append((ingredient_name, quantity))
+                // Option selection
+                $('#existing-fridge-option').on('click', function() {{
+                    $('#existing-fridge-section').show();
+                    $('#create-fridge-section').hide();
+                }});
 
-#         # Display the fridge contents
-#         for fridge_id, items in fridge_data.items():
-#             print(f"\nFridge {fridge_id}")
-#             print(f"{'Ingredient Name':<20}{'Quantity':<10}")
-#             for ingredient_name, quantity in items:
-#                 print(f"{ingredient_name:<20}{quantity:<10}")
-#         # Prompt the user to choose a fridge
-#         while True:
-#             fridge_choice = input("\nWhich Fridge do you want to choose? : ")
+                $('#create-fridge-option').on('click', function() {{
+                    $('#create-fridge-section').show();
+                    $('#existing-fridge-section').hide();
+                }});
 
-#             # Check if the entered fridge ID exists
-#             if fridge_choice.isdigit() and int(fridge_choice) in fridge_data:
-#                 print(f"You selected Fridge {fridge_choice}")
-#                 break  # Exit loop if valid choice
-#             else:
-#                 print("Invalid fridge choice. Please choose a valid fridge.")
-#     except Exception as e:
-#         print("Error:", e)
-#     finally:
-#         cursor.close()
+                // Existing Fridge Logic
+                $('#fridge-select').on('change', function () {{
+                    const fridgeId = $(this).val();
+                    $('#fridge-contents').empty();
 
-# display_all_fridge_contents()
-# connection.close()
+                    if (fridgeId && existingFridges[fridgeId]) {{
+                        const content = existingFridges[fridgeId];
+                        for (let name in content) {{
+                            $('#fridge-contents').append(<p>${{name}}: ${{content[name]}}</p>);
+                        }}
+                    }}
+                }});
+
+                // Create Fridge Logic
+                $('.ingredient-item').on('click', function() {{
+                    const ingredientId = $(this).data('id');
+                    const ingredientName = $(this).text();
+                    
+                    // Toggle selection
+                    $(this).toggleClass('selected-ingredient');
+                    
+                    // Add to selected ingredients
+                    const selectedDiv = $('#selected-ingredients');
+                    const existingItem = selectedDiv.find([data-id="${{ingredientId}}"]);
+                    
+                    if (existingItem.length) {{
+                        existingItem.remove();
+                    }} else {{
+                        selectedDiv.append(
+                            <div data-id="${{ingredientId}}">
+                                ${{ingredientName}}: 
+                                <input type="number" min="1" value="1" 
+                                       data-ingredient-id="${{ingredientId}}" 
+                                       class="ingredient-quantity">
+                            </div>
+                        );
+                    }}
+                }});
+            }});
+        </script>
+    </body>
+    </html>
+    """
+    #Write to an HTML file (temporary one)
+    with open('fridge_contents.html', 'w') as f:
+        f.write(html_content)
+    
+    #Opening it in a web browser
+    webbrowser.open('file://' + os.path.realpath('fridge_contents.html'))
+if __name__ == '__main__':
+    create_html_file()

@@ -1,0 +1,139 @@
+
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Fridge Inventory Management</title>
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <style>
+            body {
+                font-family: Arial, sans-serif;
+                max-width: 800px;
+                margin: 20px auto;
+                padding: 20px;
+                line-height: 1.6;
+            }
+            .option-container {
+                display: flex;
+                justify-content: space-between;
+                margin-bottom: 20px;
+            }
+            .option-box {
+                border: 1px solid #ddd;
+                padding: 20px;
+                width: 45%;
+                text-align: center;
+                cursor: pointer;
+                transition: background-color 0.3s;
+            }
+            .option-box:hover {
+                background-color: #f0f0f0;
+            }
+            #existing-fridge-section, 
+            #create-fridge-section {
+                display: none;
+                margin-top: 20px;
+            }
+            .ingredient-list {
+                max-height: 300px;
+                overflow-y: auto;
+                border: 1px solid #ddd;
+                padding: 10px;
+                margin-top: 10px;
+            }
+            .selected-ingredient {
+                background-color: #e0e0e0;
+            }
+        </style>
+    </head>
+    <body>
+        <h1>Fridge Inventory Management</h1>
+
+        <div class="option-container">
+            <div id="existing-fridge-option" class="option-box">
+                <h2>Select Existing Fridge</h2>
+                <p>Browse and manage contents of existing fridges</p>
+            </div>
+            <div id="create-fridge-option" class="option-box">
+                <h2>Create New Fridge</h2>
+                <p>Create a new fridge with available ingredients</p>
+            </div>
+        </div>
+
+        <div id="existing-fridge-section">
+            <h2>Existing Fridges</h2>
+            <select id="fridge-select">
+                <option value="">-- Select a Fridge --</option>
+                <option value="3">3</option> <option value="2">2</option> <option value="1">1</option>
+            </select>
+            <div id="fridge-contents" style="margin-top: 20px;"></div>
+        </div>
+
+        <div id="create-fridge-section">
+            <h2>Create New Fridge</h2>
+            <div class="ingredient-list" id="ingredient-list">
+                <div class="ingredient-item" data-id="101">Eggs</div> <div class="ingredient-item" data-id="102">Salt</div> <div class="ingredient-item" data-id="103">Pepper</div> <div class="ingredient-item" data-id="104">Milk</div> <div class="ingredient-item" data-id="105">Cheese</div> <div class="ingredient-item" data-id="106">Flour</div> <div class="ingredient-item" data-id="107">Sugar</div> <div class="ingredient-item" data-id="108">Butter</div> <div class="ingredient-item" data-id="109">Oil</div> <div class="ingredient-item" data-id="110">Garlic</div> <div class="ingredient-item" data-id="111">Onion</div> <div class="ingredient-item" data-id="112">Tomato</div> <div class="ingredient-item" data-id="113">Lemon</div> <div class="ingredient-item" data-id="114">Yogurt</div> <div class="ingredient-item" data-id="115">Cucumber</div>
+            </div>
+            <div id="selected-ingredients" style="margin-top: 20px;"></div>
+        </div>
+
+        <script>
+            $(document).ready(function () {
+                const existingFridges = {"1": {"Eggs": 2, "Salt": "25g"}, "2": {"Pepper": 5, "Milk": "100ml"}, "3": {"Pepper": "50g", "Milk": "1kg", "Cheese": "200ml"}};
+                const allIngredients = {"101": "Eggs", "102": "Salt", "103": "Pepper", "104": "Milk", "105": "Cheese", "106": "Flour", "107": "Sugar", "108": "Butter", "109": "Oil", "110": "Garlic", "111": "Onion", "112": "Tomato", "113": "Lemon", "114": "Yogurt", "115": "Cucumber"};
+
+                // Option selection
+                $('#existing-fridge-option').on('click', function() {
+                    $('#existing-fridge-section').show();
+                    $('#create-fridge-section').hide();
+                });
+
+                $('#create-fridge-option').on('click', function() {
+                    $('#create-fridge-section').show();
+                    $('#existing-fridge-section').hide();
+                });
+
+                // Existing Fridge Logic
+                $('#fridge-select').on('change', function () {
+                    const fridgeId = $(this).val();
+                    $('#fridge-contents').empty();
+
+                    if (fridgeId && existingFridges[fridgeId]) {
+                        const content = existingFridges[fridgeId];
+                        for (let name in content) {
+                            $('#fridge-contents').append(<p>${name}: ${content[name]}</p>);
+                        }
+                    }
+                });
+
+                // Create Fridge Logic
+                $('.ingredient-item').on('click', function() {
+                    const ingredientId = $(this).data('id');
+                    const ingredientName = $(this).text();
+                    
+                    // Toggle selection
+                    $(this).toggleClass('selected-ingredient');
+                    
+                    // Add to selected ingredients
+                    const selectedDiv = $('#selected-ingredients');
+                    const existingItem = selectedDiv.find([data-id="${ingredientId}"]);
+                    
+                    if (existingItem.length) {
+                        existingItem.remove();
+                    } else {
+                        selectedDiv.append(
+                            <div data-id="${ingredientId}">
+                                ${ingredientName}: 
+                                <input type="number" min="1" value="1" 
+                                       data-ingredient-id="${ingredientId}" 
+                                       class="ingredient-quantity">
+                            </div>
+                        );
+                    }
+                });
+            });
+        </script>
+    </body>
+    </html>
+    
