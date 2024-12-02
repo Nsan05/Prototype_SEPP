@@ -184,7 +184,7 @@ def create_html_file():
                     if (fridgeId && existingFridges[fridgeId]) {{
                         const content = existingFridges[fridgeId];
                         for (let name in content) {{
-                            $('#fridge-contents').append(<p>${{name}}: ${{content[name]}}</p>);
+                            $('#fridge-contents').append(`<p>${{name}}: ${{content[name]}}</p>`);
                         }}
                     }}
                 }});
@@ -199,19 +199,19 @@ def create_html_file():
                     
                     // Add to selected ingredients
                     const selectedDiv = $('#selected-ingredients');
-                    const existingItem = selectedDiv.find([data-id="${{ingredientId}}"]);
+                    const existingItem = selectedDiv.find(`[data-id="${{ingredientId}}"]`);
                     
                     if (existingItem.length) {{
                         existingItem.remove();
                     }} else {{
-                        selectedDiv.append(
+                        selectedDiv.append(`
                             <div data-id="${{ingredientId}}">
                                 ${{ingredientName}}: 
                                 <input type="number" min="1" value="1" 
                                        data-ingredient-id="${{ingredientId}}" 
                                        class="ingredient-quantity">
                             </div>
-                        );
+                        `);
                     }}
                 }});
             }});
