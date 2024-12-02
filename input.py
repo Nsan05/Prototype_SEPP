@@ -100,7 +100,7 @@ def create_html_file():
                 box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
             }}
             h1, h2 {{
-                color: #4CAF50;
+                color: #2c3e50; /* Dark blue */
                 text-align: center;
             }}
             .option-container {{
@@ -120,7 +120,7 @@ def create_html_file():
             }}
             .option-box:hover {{
                 transform: translateY(-5px);
-                background-color: #f0f8ff;
+                background-color: #eaf2f8;
                 box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.15);
             }}
             #existing-fridge-section, 
@@ -151,17 +151,18 @@ def create_html_file():
                 transition: background-color 0.3s, box-shadow 0.3s;
             }}
             .ingredient-item:hover {{
-                background-color: #e9f5e9;
+                background-color: #dceefb; /* Light blue hover */
                 box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
             }}
             .selected-ingredient {{
-                background-color: #d4edda;
-                border: 1px solid #c3e6cb;
+                background-color: #aed6f1; /* Lighter blue for selected */
+                border: 1px solid #5499c7;
             }}
             .quantity-metric-container {{
                 display: flex;
                 align-items: center;
                 gap: 10px;
+                margin-top: 10px;
             }}
             .quantity-metric-container select, 
             .quantity-metric-container input {{
@@ -171,7 +172,7 @@ def create_html_file():
             #done-button {{
                 margin-top: 20px;
                 padding: 12px 24px;
-                background-color: #28a745;
+                background-color: #34495e; /* Dark blue */
                 color: white;
                 border: none;
                 border-radius: 5px;
@@ -180,7 +181,7 @@ def create_html_file():
                 transition: background-color 0.3s;
             }}
             #done-button:hover {{
-                background-color: #218838;
+                background-color: #2c3e50; /* Slightly darker blue */
             }}
             #fridge-select {{
                 padding: 10px;
@@ -197,7 +198,7 @@ def create_html_file():
                 margin-top: 20px;
                 font-size: 1.2em;
                 font-weight: bold;
-                color: #155724;
+                color: #2c3e50; /* Dark blue */
             }}
         </style>
     </head>
@@ -278,7 +279,19 @@ def create_html_file():
                     if (existingItem.length) {{
                         existingItem.remove();
                     }} else {{
-                        selectedDiv.append(`<p data-id="${{ingredientId}}">${{ingredientName}}</p>`);
+                        selectedDiv.append(`
+                            <div data-id="${{ingredientId}}">
+                                <span>${{ingredientName}}:</span>
+                                <div class="quantity-metric-container">
+                                    <input type="number" min="1" value="1" class="ingredient-quantity">
+                                    <select class="ingredient-metric">
+                                        <option value="ml">ml</option>
+                                        <option value="g">g</option>
+                                        <option value="unit">Unit</option>
+                                    </select>
+                                </div>
+                            </div>
+                        `);
                     }}
                     $('#done-button').toggle($('#selected-ingredients').children().length > 0);
                 }});
