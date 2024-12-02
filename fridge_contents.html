@@ -8,32 +8,48 @@
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
         <style>
             body {
-                font-family: Arial, sans-serif;
-                max-width: 800px;
-                margin: 20px auto;
+                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                background-color: #f8f9fa;
+                color: #333;
+                max-width: 900px;
+                margin: 30px auto;
                 padding: 20px;
-                line-height: 1.6;
+                border-radius: 8px;
+                box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+            }
+            h1, h2 {
+                color: #4CAF50;
+                text-align: center;
             }
             .option-container {
                 display: flex;
-                justify-content: space-between;
-                margin-bottom: 20px;
+                justify-content: space-around;
+                margin-bottom: 30px;
             }
             .option-box {
                 border: 1px solid #ddd;
+                background-color: #ffffff;
                 padding: 20px;
-                width: 45%;
+                width: 40%;
                 text-align: center;
                 cursor: pointer;
-                transition: background-color 0.3s;
+                border-radius: 10px;
+                transition: transform 0.2s, background-color 0.3s, box-shadow 0.3s;
             }
             .option-box:hover {
-                background-color: #f0f0f0;
+                transform: translateY(-5px);
+                background-color: #f0f8ff;
+                box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.15);
             }
             #existing-fridge-section, 
             #create-fridge-section {
                 display: none;
                 margin-top: 20px;
+                padding: 20px;
+                background-color: #ffffff;
+                border: 1px solid #ddd;
+                border-radius: 10px;
+                box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
             }
             .ingredient-list {
                 max-height: 300px;
@@ -41,46 +57,70 @@
                 border: 1px solid #ddd;
                 padding: 10px;
                 margin-top: 10px;
+                background-color: #fefefe;
+                border-radius: 5px;
+            }
+            .ingredient-item {
+                padding: 8px;
+                margin-bottom: 5px;
+                background-color: #f9f9f9;
+                border-radius: 5px;
+                cursor: pointer;
+                transition: background-color 0.3s, box-shadow 0.3s;
+            }
+            .ingredient-item:hover {
+                background-color: #e9f5e9;
+                box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
             }
             .selected-ingredient {
-                background-color: #e0e0e0;
+                background-color: #d4edda;
+                border: 1px solid #c3e6cb;
             }
             .quantity-metric-container {
                 display: flex;
                 align-items: center;
                 gap: 10px;
             }
-            .quantity-metric-container select {
-                padding: 5px;
-                font-size: 1em;
-            }
+            .quantity-metric-container select, 
             .quantity-metric-container input {
                 padding: 5px;
-                width: 60px;
-                font-size: 1em;
-            }
-            #selected-fridge-message, #ingredient-added-message {
-                margin-top: 20px;
-                font-size: 1.2em;
-                font-weight: bold;
-                color: green;
+                font-size: 0.9em;
             }
             #done-button {
                 margin-top: 20px;
-                padding: 10px 20px;
-                background-color: #4CAF50;
+                padding: 12px 24px;
+                background-color: #28a745;
                 color: white;
                 border: none;
+                border-radius: 5px;
+                font-size: 1em;
                 cursor: pointer;
+                transition: background-color 0.3s;
             }
             #done-button:hover {
-                background-color: #45a049;
+                background-color: #218838;
+            }
+            #fridge-select {
+                padding: 10px;
+                font-size: 1em;
+                width: 100%;
+                border-radius: 5px;
+                border: 1px solid #ddd;
+            }
+            p {
+                margin: 10px 0;
+            }
+            #selected-fridge-message, 
+            #ingredient-added-message {
+                margin-top: 20px;
+                font-size: 1.2em;
+                font-weight: bold;
+                color: #155724;
             }
         </style>
     </head>
     <body>
         <h1>Fridge Inventory Management</h1>
-
         <div class="option-container">
             <div id="existing-fridge-option" class="option-box">
                 <h2>Select Existing Fridge</h2>
@@ -150,49 +190,21 @@
                 $('.ingredient-item').on('click', function() {
                     const ingredientId = $(this).data('id');
                     const ingredientName = $(this).text();
-                    
-                    // Toggle selection
                     $(this).toggleClass('selected-ingredient');
-                    
-                    // Add to selected ingredients
                     const selectedDiv = $('#selected-ingredients');
                     const existingItem = selectedDiv.find(`[data-id="${ingredientId}"]`);
-                    
                     if (existingItem.length) {
                         existingItem.remove();
                     } else {
-                        selectedDiv.append(`
-                            <div data-id="${ingredientId}">
-                                ${ingredientName}: 
-                                <input type="number" min="1" value="1" 
-                                       data-ingredient-id="${ingredientId}" 
-                                       class="ingredient-quantity">
-                                <div class="quantity-metric-container">
-                                    <label for="quantity">Quantity</label>
-                                    <input type="number" min="1" value="1" class="ingredient-quantity" />
-                                    <label for="metric">Metric</label>
-                                    <select class="ingredient-metric">
-                                        <option value="ml">ml</option>
-                                        <option value="g">g</option>
-                                        <option value="unit">Unit</option>
-                                    </select>
-                                </div>
-                            </div>
-                        `);
+                        selectedDiv.append(`<p data-id="${ingredientId}">${ingredientName}</p>`);
                     }
-
-                    // Show Done Button when ingredients are selected
-                    if ($('#selected-ingredients').children().length > 0) {
-                        $('#done-button').show();
-                    } else {
-                        $('#done-button').hide();
-                    }
+                    $('#done-button').toggle($('#selected-ingredients').children().length > 0);
                 });
 
                 // Done Button Logic
                 $('#done-button').on('click', function() {
-                    $('#ingredient-added-message').text('Ingredients added');
-                    $('#done-button').hide();  // Hide the done button after clicking
+                    $('#ingredient-added-message').text('Ingredients added successfully!');
+                    $('#done-button').hide();
                 });
             });
         </script>
