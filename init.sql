@@ -440,7 +440,7 @@ VALUES
 (1604, 'Nutritional Yeast', '["fortified nutritional yeast", "non-fortified nutritional yeast"]'),
 (1605, 'Tahini', '["light tahini", "dark tahini", "whole sesame tahini"]'),
 -- Tomato Alternatives
-(1605, 'cherry tomato', '["Tomato", "plum tomato"]'),
+(1739, 'cherry tomato', '["Tomato", "plum tomato"]'),
 (1606, 'plum tomato', '["Tomato", "cherry tomato"]'),
 -- Cucumber Alternatives
 (1607, 'english cucumber', '["Cucumber", "persian cucumber"]'),
