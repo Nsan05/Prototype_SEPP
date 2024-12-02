@@ -45,6 +45,37 @@
             .selected-ingredient {
                 background-color: #e0e0e0;
             }
+            .quantity-metric-container {
+                display: flex;
+                align-items: center;
+                gap: 10px;
+            }
+            .quantity-metric-container select {
+                padding: 5px;
+                font-size: 1em;
+            }
+            .quantity-metric-container input {
+                padding: 5px;
+                width: 60px;
+                font-size: 1em;
+            }
+            #selected-fridge-message, #ingredient-added-message {
+                margin-top: 20px;
+                font-size: 1.2em;
+                font-weight: bold;
+                color: green;
+            }
+            #done-button {
+                margin-top: 20px;
+                padding: 10px 20px;
+                background-color: #4CAF50;
+                color: white;
+                border: none;
+                cursor: pointer;
+            }
+            #done-button:hover {
+                background-color: #45a049;
+            }
         </style>
     </head>
     <body>
@@ -68,6 +99,7 @@
                 <option value="3">3</option> <option value="2">2</option> <option value="1">1</option>
             </select>
             <div id="fridge-contents" style="margin-top: 20px;"></div>
+            <div id="selected-fridge-message"></div>
         </div>
 
         <div id="create-fridge-section">
@@ -76,22 +108,26 @@
                 <div class="ingredient-item" data-id="101">Eggs</div> <div class="ingredient-item" data-id="102">Salt</div> <div class="ingredient-item" data-id="103">Pepper</div> <div class="ingredient-item" data-id="104">Milk</div> <div class="ingredient-item" data-id="105">Cheese</div> <div class="ingredient-item" data-id="106">Flour</div> <div class="ingredient-item" data-id="107">Sugar</div> <div class="ingredient-item" data-id="108">Butter</div> <div class="ingredient-item" data-id="109">Oil</div> <div class="ingredient-item" data-id="110">Garlic</div> <div class="ingredient-item" data-id="111">Onion</div> <div class="ingredient-item" data-id="112">Tomato</div> <div class="ingredient-item" data-id="113">Lemon</div> <div class="ingredient-item" data-id="114">Yogurt</div> <div class="ingredient-item" data-id="115">Cucumber</div>
             </div>
             <div id="selected-ingredients" style="margin-top: 20px;"></div>
+            <button id="done-button" style="display:none;">Done</button>
+            <div id="ingredient-added-message"></div>
         </div>
 
         <script>
             $(document).ready(function () {
-                const existingFridges = {"1": {"Eggs": 2, "Salt": "25g"}, "2": {"Pepper": 5, "Milk": "100ml"}, "3": {"Pepper": "50g", "Milk": "1kg", "Cheese": "200ml"}};
-                const allIngredients = {"101": "Eggs", "102": "Salt", "103": "Pepper", "104": "Milk", "105": "Cheese", "106": "Flour", "107": "Sugar", "108": "Butter", "109": "Oil", "110": "Garlic", "111": "Onion", "112": "Tomato", "113": "Lemon", "114": "Yogurt", "115": "Cucumber"};
+                const existingFridges = {"1": {"Eggs": 2, "Salt": "25g"}, "2": {"Pepper": 5, "Milk": "100ml"}, "3": {"Pepper": "50g", "Milk": "1kg", "Cheese": "200ml"}}; 
+                const allIngredients = {"101": "Eggs", "102": "Salt", "103": "Pepper", "104": "Milk", "105": "Cheese", "106": "Flour", "107": "Sugar", "108": "Butter", "109": "Oil", "110": "Garlic", "111": "Onion", "112": "Tomato", "113": "Lemon", "114": "Yogurt", "115": "Cucumber"}; 
 
                 // Option selection
                 $('#existing-fridge-option').on('click', function() {
                     $('#existing-fridge-section').show();
                     $('#create-fridge-section').hide();
+                    $('#selected-fridge-message').empty();
                 });
 
                 $('#create-fridge-option').on('click', function() {
                     $('#create-fridge-section').show();
                     $('#existing-fridge-section').hide();
+                    $('#selected-fridge-message').empty();
                 });
 
                 // Existing Fridge Logic
@@ -104,6 +140,9 @@
                         for (let name in content) {
                             $('#fridge-contents').append(`<p>${name}: ${content[name]}</p>`);
                         }
+                        $('#selected-fridge-message').text('You selected fridge ' + fridgeId);
+                    } else {
+                        $('#selected-fridge-message').empty();
                     }
                 });
 
@@ -128,9 +167,32 @@
                                 <input type="number" min="1" value="1" 
                                        data-ingredient-id="${ingredientId}" 
                                        class="ingredient-quantity">
+                                <div class="quantity-metric-container">
+                                    <label for="quantity">Quantity</label>
+                                    <input type="number" min="1" value="1" class="ingredient-quantity" />
+                                    <label for="metric">Metric</label>
+                                    <select class="ingredient-metric">
+                                        <option value="ml">ml</option>
+                                        <option value="g">g</option>
+                                        <option value="unit">Unit</option>
+                                    </select>
+                                </div>
                             </div>
                         `);
                     }
+
+                    // Show Done Button when ingredients are selected
+                    if ($('#selected-ingredients').children().length > 0) {
+                        $('#done-button').show();
+                    } else {
+                        $('#done-button').hide();
+                    }
+                });
+
+                // Done Button Logic
+                $('#done-button').on('click', function() {
+                    $('#ingredient-added-message').text('Ingredients added');
+                    $('#done-button').hide();  // Hide the done button after clicking
                 });
             });
         </script>
