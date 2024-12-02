@@ -127,6 +127,37 @@ def create_html_file():
             .selected-ingredient {{
                 background-color: #e0e0e0;
             }}
+            .quantity-metric-container {{
+                display: flex;
+                align-items: center;
+                gap: 10px;
+            }}
+            .quantity-metric-container select {{
+                padding: 5px;
+                font-size: 1em;
+            }}
+            .quantity-metric-container input {{
+                padding: 5px;
+                width: 60px;
+                font-size: 1em;
+            }}
+            #selected-fridge-message, #ingredient-added-message {{
+                margin-top: 20px;
+                font-size: 1.2em;
+                font-weight: bold;
+                color: green;
+            }}
+            #done-button {{
+                margin-top: 20px;
+                padding: 10px 20px;
+                background-color: #4CAF50;
+                color: white;
+                border: none;
+                cursor: pointer;
+            }}
+            #done-button:hover {{
+                background-color: #45a049;
+            }}
         </style>
     </head>
     <body>
@@ -150,6 +181,7 @@ def create_html_file():
                 {' '.join(f'<option value="{fridge_id}">{fridge_id}</option>' for fridge_id in existing_fridges)}
             </select>
             <div id="fridge-contents" style="margin-top: 20px;"></div>
+            <div id="selected-fridge-message"></div>
         </div>
 
         <div id="create-fridge-section">
@@ -158,22 +190,26 @@ def create_html_file():
                 {' '.join(f'<div class="ingredient-item" data-id="{ingredient_id}">{ingredient_name}</div>' for ingredient_id, ingredient_name in all_ingredients.items())}
             </div>
             <div id="selected-ingredients" style="margin-top: 20px;"></div>
+            <button id="done-button" style="display:none;">Done</button>
+            <div id="ingredient-added-message"></div>
         </div>
 
         <script>
             $(document).ready(function () {{
-                const existingFridges = {json.dumps(fridge_data)};
-                const allIngredients = {json.dumps(all_ingredients)};
+                const existingFridges = {json.dumps(fridge_data)}; 
+                const allIngredients = {json.dumps(all_ingredients)}; 
 
                 // Option selection
                 $('#existing-fridge-option').on('click', function() {{
                     $('#existing-fridge-section').show();
                     $('#create-fridge-section').hide();
+                    $('#selected-fridge-message').empty();
                 }});
 
                 $('#create-fridge-option').on('click', function() {{
                     $('#create-fridge-section').show();
                     $('#existing-fridge-section').hide();
+                    $('#selected-fridge-message').empty();
                 }});
 
                 // Existing Fridge Logic
@@ -186,6 +222,9 @@ def create_html_file():
                         for (let name in content) {{
                             $('#fridge-contents').append(`<p>${{name}}: ${{content[name]}}</p>`);
                         }}
+                        $('#selected-fridge-message').text('You selected fridge ' + fridgeId);
+                    }} else {{
+                        $('#selected-fridge-message').empty();
                     }}
                 }});
 
@@ -210,9 +249,32 @@ def create_html_file():
                                 <input type="number" min="1" value="1" 
                                        data-ingredient-id="${{ingredientId}}" 
                                        class="ingredient-quantity">
+                                <div class="quantity-metric-container">
+                                    <label for="quantity">Quantity</label>
+                                    <input type="number" min="1" value="1" class="ingredient-quantity" />
+                                    <label for="metric">Metric</label>
+                                    <select class="ingredient-metric">
+                                        <option value="ml">ml</option>
+                                        <option value="g">g</option>
+                                        <option value="unit">Unit</option>
+                                    </select>
+                                </div>
                             </div>
                         `);
                     }}
+
+                    // Show Done Button when ingredients are selected
+                    if ($('#selected-ingredients').children().length > 0) {{
+                        $('#done-button').show();
+                    }} else {{
+                        $('#done-button').hide();
+                    }}
+                }});
+
+                // Done Button Logic
+                $('#done-button').on('click', function() {{
+                    $('#ingredient-added-message').text('Ingredients added');
+                    $('#done-button').hide();  // Hide the done button after clicking
                 }});
             }});
         </script>
