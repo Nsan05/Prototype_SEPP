@@ -1,5 +1,5 @@
 import psycopg2
-from typing import Dict,Any,List
+from typing import Dict,Any,List,Optional
 import logging
 import ast
 
@@ -26,7 +26,7 @@ class RecipeSuggestion:
         except (Exception, psycopg2.Error) as error:
             logging.error(f"Error connecting to database: {error}")
             raise 
-        
+
     def _del_(self):
         if hasattr(self, 'db_connection'):
             try:
@@ -146,4 +146,20 @@ class RecipeSuggestion:
             logger.error(f"Database error in get_alternatives: {e}")
             return {}
         
+    def get_ingredient_id_by_name(self, ingredient_name: str) -> Optional[int]:
+        """Fetch the ingredient ID by name from the database."""
+        try:
+            with self.db_connection.cursor() as cursor:
+                query = """
+                    SELECT ingredient_id 
+                    FROM ingredient 
+                    WHERE ingredient_name = %s
+                """
+                cursor.execute(query, (ingredient_name,))
+                result = cursor.fetchone()
+
+            return result[0] if result else None
+        except psycopg2.Error as e:
+            logger.error(f"Database error in get_ingredient_id_by_name: {e}")
+            return None   
     
