@@ -162,4 +162,11 @@ class RecipeSuggestion:
         except psycopg2.Error as e:
             logger.error(f"Database error in get_ingredient_id_by_name: {e}")
             return None   
-    
+    def calculate_score(self, percentages: Dict[int, int], core: Dict[int, str], 
+                        secondary: Dict[int, str], optional: Dict[int, str]) -> float:
+        
+        core_score = sum(5 * (100 - min(percentages.get(ing, 0), 100)) for ing in core)
+        secondary_score = sum(3 * (100 - min(percentages.get(ing, 0), 100)) for ing in secondary)
+        optional_score = sum(1 * (100 - min(percentages.get(ing, 0), 100)) for ing in optional)
+        
+        return core_score + secondary_score + optional_score
