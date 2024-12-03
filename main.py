@@ -1,5 +1,5 @@
 import psycopg2
-from typing import Dict,Any
+from typing import Dict,Any,List
 import logging
 import ast
 
@@ -118,4 +118,25 @@ class RecipeSuggestion:
             except psycopg2.Error as e:
                 logger.error(f"Database error in get_inventory: {e}")
                 return {}
+            
+    def get_alternatives(self) -> Dict[int, List[str]]:
+        
+        try:
+            with self.db_connection.cursor() as cursor:
+                query = "SELECT ingredient_id, alternatives_list FROM ingredient"
+                cursor.execute(query)
+                alternatives_data = cursor.fetchall()
+
+            alternatives = {}
+            for ingredient_id, alternatives_list in alternatives_data:
+                try:
+                    alternatives[ingredient_id] = [alt.strip() for alt in alternatives_list.split(",") if alt.strip()]
+                except AttributeError:
+                    logger.error(f"Error processing alternatives for ingredient {ingredient_id}")
+
+            return alternatives
+        except psycopg2.Error as e:
+            logger.error(f"Database error in get_alternatives: {e}")
+            return {}
+        
     
