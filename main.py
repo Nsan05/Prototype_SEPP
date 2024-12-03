@@ -26,6 +26,13 @@ class RecipeSuggestion:
         except (Exception, psycopg2.Error) as error:
             logging.error(f"Error connecting to database: {error}")
             raise 
+        
+    def _del_(self):
+        if hasattr(self, 'db_connection'):
+            try:
+                self.db_connection.close()
+            except:
+                pass
 
     def get_ingredient_names(self) -> Dict[int, str]:
         try:
