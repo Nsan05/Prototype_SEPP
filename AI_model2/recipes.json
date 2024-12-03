@@ -1,0 +1,65 @@
+[
+    {
+      "recipe_id": 1,
+      "recipe_name": "Mediterranean Tomato Cucumber Salad",
+      "ingredients": [
+        {"ingredient_name": "Tomato", "importance": "core", "quantity": "200g"},
+        {"ingredient_name": "Cucumber", "importance": "core", "quantity": "150g"},
+        {"ingredient_name": "Red Onion", "importance": "secondary", "quantity": "50g"},
+        {"ingredient_name": "Olive Oil", "importance": "secondary", "quantity": "30ml"}
+      ]
+    },
+    {
+      "recipe_id": 2,
+      "recipe_name": "Coconut Chicken Curry",
+      "ingredients": [
+        {"ingredient_name": "Chicken Breast", "importance": "core", "quantity": "500g"},
+        {"ingredient_name": "Ginger", "importance": "core", "quantity": "20g"},
+        {"ingredient_name": "Coconut Milk", "importance": "core", "quantity": "400ml"},
+        {"ingredient_name": "Curry Powder", "importance": "secondary", "quantity": "30g"},
+        {"ingredient_name": "Garlic", "importance": "secondary", "quantity": "10g"},
+        {"ingredient_name": "Olive Oil", "importance": "secondary", "quantity": "30ml"}
+      ]
+    },
+    {
+      "recipe_id": 3,
+      "recipe_name": "Vegetable Medley Roast",
+      "ingredients": [
+        {"ingredient_name": "Mixed Vegetables", "importance": "core", "quantity": "400g"},
+        {"ingredient_name": "Olive Oil", "importance": "core", "quantity": "50ml"},
+        {"ingredient_name": "Curry Powder", "importance": "secondary", "quantity": "10g"},
+        {"ingredient_name": "Garlic", "importance": "secondary", "quantity": "5g"}
+      ]
+    },
+    {
+      "recipe_id": 4,
+      "recipe_name": "Classic Egg Toast",
+      "ingredients": [
+        {"ingredient_name": "Bread", "importance": "core", "quantity": "2"},
+        {"ingredient_name": "Egg", "importance": "core", "quantity": "2"},
+        {"ingredient_name": "Olive Oil", "importance": "secondary", "quantity": "10ml"},
+        {"ingredient_name": "Garlic", "importance": "optional", "quantity": "2"}
+      ]
+    },
+    {
+      "recipe_id": 5,
+      "recipe_name": "Banana Honey Smoothie",
+      "ingredients": [
+        {"ingredient_name": "Banana", "importance": "core", "quantity": "200g"},
+        {"ingredient_name": "Greek Yogurt", "importance": "core", "quantity": "150ml"},
+        {"ingredient_name": "Honey", "importance": "secondary", "quantity": "30ml"},
+        {"ingredient_name": "Olive Oil", "importance": "optional", "quantity": "10ml"}
+      ]
+    },
+    {
+      "recipe_id": 6,
+      "recipe_name": "Lemon Dill Salmon",
+      "ingredients": [
+        {"ingredient_name": "Salmon", "importance": "core", "quantity": "600g"},
+        {"ingredient_name": "Lemon", "importance": "secondary", "quantity": "30ml"},
+        {"ingredient_name": "Dill", "importance": "secondary", "quantity": "10g"},
+        {"ingredient_name": "Olive Oil", "importance": "core", "quantity": "20ml"}
+      ]
+    }
+  ]
+  
