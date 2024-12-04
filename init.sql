@@ -44,10 +44,10 @@ VALUES
       204: ["10g", "secondary"], 205: ["5g", "secondary"]}', 
     45, 3, 'veg', 
     '1. Chop mixed vegetables into uniform pieces. 2. Toss with olive oil and minced garlic. 3. Sprinkle curry powder. 4. Roast in oven at 200°C for 30 minutes. 5. Serve hot as a side dish.'),
-
+--CHANGED GARLIC FROM UNIT TO GRAMS
 (4, 'Classic Egg Toast', 
     '{401: ["2", "core"], 402: ["2", "core"], 302: ["10ml", "secondary"], 
-      205: ["2", "optional"]}', 
+      205: ["10g", "optional"]}', 
     10, 1, 'non-veg', 
     '1. Heat olive oil in a pan. 2. Toast bread. 3. Fry eggs sunny-side up. 4. Place eggs on toast. 5. Sprinkle minced garlic if desired. 6. Season with salt and pepper.'),
 
@@ -422,7 +422,7 @@ VALUES
 (1103, 'Mint', '["peppermint", "spearmint"]'),
 (1104, 'Paprika', '["smoked paprika", "hot paprika"]'),
 (1105, 'Cumin', '["ground cumin", "whole cumin seeds"]'),
-(1201, 'Apple', '["green apple", "red apple", "cooking apple"]'),
+(1201, 'Apple', '["green apple", "pear", "cooking apple"]'), -- CHANGED ALTERNATIVE TO PEAR FROM RED APPLE
 (1202, 'Orange', '["mandarin", "clementine", "blood orange"]'),
 (1203, 'Avocado', '["hass avocado", "fuerte avocado"]'),
 (1301, 'Soy Sauce', '["tamari", "light soy sauce", "dark soy sauce"]'),
@@ -487,7 +487,7 @@ VALUES
 -- Salmon Alternatives
 (1635, 'trout', '["Salmon", "tilapia"]'),
 (1636, 'tilapia', '["Salmon", "trout"]'),
--- Lemon Alternatives
+-- Lemon Alternatives 
 (1637, 'lime', '["Lemon", "preserved lemon"]'),
 (1638, 'preserved lemon', '["Lemon", "lime"]'),
 -- Dill Alternatives
@@ -566,9 +566,9 @@ VALUES
 (1691, 'ground cumin', '["Cumin", "whole cumin seeds"]'),
 (1692, 'whole cumin seeds', '["Cumin", "ground cumin"]'),
 -- Apple Alternatives
-(1693, 'green apple', '["Apple", "red apple", "cooking apple"]'),
-(1694, 'red apple', '["Apple", "green apple", "cooking apple"]'),
-(1695, 'cooking apple', '["Apple", "green apple", "red apple"]'),
+(1693, 'green apple', '["Apple", "pear", "cooking apple"]'), -- Red Apple changed to pear
+(1694, 'pear', '["Apple", "green apple", "cooking apple"]'), -- Red Apple changed to pear
+(1695, 'cooking apple', '["Apple", "green apple", "pear"]'), -- Red Apple changed to pear
 -- Orange Alternatives
 (1696, 'mandarin', '["Orange", "clementine", "blood orange"]'),
 (1697, 'clementine', '["Orange", "mandarin", "blood orange"]'),
@@ -631,20 +631,47 @@ VALUES
 
 INSERT INTO UserInventory (user_id, fridge_id, ingredients)
 VALUES 
-(1, 1, '{101: "300g", 102: "250g", 103: "100g", 302: "40ml", 401: "2", 402: "2", 205: "2", 704: "600g", 803: "250g", 804: "250g", 805: "150g", 1102: "20g", 1104: "7g", 501: "180g", 502: "130ml", 503: "22ml", 601: "520g", 602: "21ml", 603: "7g"}'),
+(1, 1, '{101: "300g", 102: "250g", 103: "100g", 302: "40ml", 
+        401: "2", 402: "2", 205: "10g", 
+        704: "600g", 803: "250g", 804: "250g", 805: "150g", 1102: "20g", 1104: "7g",
+        1647: "250g", 1203: "250g", 1665: "170g", 802: "120g", 1302: "21ml", 1103: "15g",
+        903: "300g", 1671: "500g", 1001: "198g", 1652: "147g", 1105: "5g", 1402: "22g", 1714: "60g",
+        501: "180g", 502: "130ml", 503: "22ml", 
+        601: "520g", 602: "21ml", 603: "7g",
+        201: "500g", 204: "32g",
+        1694: "180g", 1401: "35g", 1403: "7ml"}'),
+
 -- Complete: 1, 4, 8
--- Partial: 5, 6
+-- Complete w Alternative (was considered to be partial but an alternative was found above 95% for a missing ingredient/below required %): 9, 10
+-- Partial (All the ranges are between the required and beneath threshold): 5, 6
+-- Partial (But with a few missing ingredients which make up less than 30% of the recipe): 2, 11
+-- Rejected: 
 
--- From here u need to change
--- Complete, Complete with alternative, partial, partial with missing (Only rejected if the no. of ingredients present do not make up atleast 70%)
--- if it goes below partial check for alternative -> if it meets criteria then it might have with alternative tag 
-(2, 1, '{}'), 
+(2, 1, '{701: "400g", 902: "300g", 802: "150g", 804: "100g", 1303: "30g",
+        703: "350g", 804: "400g", 1003: "300ml", 1001: "150g", 1101: "20g",
+        1651: "500g", 801: "150g", 102: "100g", 1610: "49g", 1302: "30ml",
+        901: "180g", 203: "230ml", 1696: "120g", 1103: "7g",
+        1201: "180g", 1501: "90g", 1002: "220ml", 1710: "20g", 1721: "9g",
+        702: "300g", 203: "260ml", 1660: "180g", 1503: "20g"}'), 
 -- Complete: 12, 13
--- Partial: 17, 22
+-- Complete w Alternative (was considered to be partial but an alternative was found above 95% for a missing ingredient/below required %): 15
+-- Partial (All the ranges are between the required and beneath threshold): 17, 19
+-- Partial (But with a few missing ingredients which make up less than 30% of the recipe): 23
+-- Rejected: 
 
-(3, 2, '{702: "350g", 801: "200g", 802: "200g", 203: "300ml", 1104: "10g", 1105: "5g", 302: "25ml"}'), 
+(3, 2, '{702 : "360g", 203: "300ml", 804: "250g", 1503: "30g", 1103: "10g", 302: "30ml",
+        1001: "300g", 1202: "175g", 102: "98g", 103: "50g", 1302: "20ml",
+        1201: "250g", 1301: "35ml", 602: "25ml", 1101: "9.5g",
+        1724: "45g", 1685: "7g",
+        1613: "25g",
+        1630: "180g", 1631: "130ml", 1633: "20ml", 1623: "6ml",
+        1635: "520g", 1638: "13ml", 1639: "7g",
+        1201: "180g", 1401: "21g", 1403: "7g"}'), 
 -- Complete: 23, 24, 25
--- Partial: 11, 9
+-- Complete w Alternative (was considered to be partial but an alternative was found above 95% for a missing ingredient/below required %): 28,30
+-- Partial (All the ranges are between the required and beneath threshold): 33, 34
+-- Partial (But with a few missing ingredients which make up less than 30% of the recipe): 11
+-- Rejected: 
 
 (4, 2, '{401: "2", 402: "2", 302: "10ml", 205: "2", 1001: "100g", 903: "200g"}'), 
 -- Complete: 26
