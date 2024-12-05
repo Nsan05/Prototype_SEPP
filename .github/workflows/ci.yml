@@ -37,6 +37,11 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-pip-
 
+            
+      - name: List files in the working directory
+        run: ls -alh
+
+        
       # Step 4: Install dependencies
       - name: Install dependencies
         run: |
