@@ -65,3 +65,9 @@ def tokenize_function(examples):
 
 train_data = train_data.map(tokenize_function, batched=True)
 test_data = test_data.map(tokenize_function, batched=True)
+
+#metrics calc
+def compute_metrics(eval_pred):
+    logits, labels = eval_pred
+    predictions =np.argmax(logits, axis=-1)
+    return {"accuracy":np.mean(predictions == labels)}
