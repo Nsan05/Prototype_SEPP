@@ -51,3 +51,17 @@ test_data = train_test_split["test"]
 class_weights = compute_class_weight('balanced',classes=np.unique(train_data['label']), y=train_data['label'])
 class_weights = torch.tensor(class_weights, dtype=torch.float)
 
+#tokenization
+model_name = "roberta-base"  #different model due to other model failures
+tokenizer =AutoTokenizer.from_pretrained(model_name)
+model = AutoModelForSequenceClassification.from_pretrained(model_name, num_labels=3)
+
+
+def tokenize_function(examples):
+    return tokenizer(
+        examples["base_text"], truncation=True, 
+        padding=True, max_length=128, add_special_tokens=True
+    )
+
+train_data = train_data.map(tokenize_function, batched=True)
+test_data = test_data.map(tokenize_function, batched=True)
