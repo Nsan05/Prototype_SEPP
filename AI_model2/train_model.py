@@ -26,3 +26,24 @@ def extract_ingredient_features(ingredient, recipe_name):
     }
     return features
 
+#more feautures
+def prepare_dataset(raw_data):
+    prepared_data = []
+    for recipe in raw_data:
+        for ingredient in recipe['ingredients']:
+            prepared_data.append(extract_ingredient_features(ingredient, recipe['recipe_name']))
+    return prepared_data
+
+
+dataset = prepare_dataset(raw_data)
+dataset = Dataset.from_list(dataset)
+
+#mapping importance levels to ints
+labels = {"core": 0, "secondary": 1, "optional": 2}
+dataset = dataset.map(lambda x: {"label": labels[x["label"]]})
+
+#train and test data
+train_test_split = dataset.train_test_split(test_size=0.2)
+train_data = train_test_split["train"]
+test_data = train_test_split["test"]
+
