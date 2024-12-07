@@ -47,3 +47,7 @@ train_test_split = dataset.train_test_split(test_size=0.2)
 train_data = train_test_split["train"]
 test_data = train_test_split["test"]
 
+#calculate weights
+class_weights = compute_class_weight('balanced',classes=np.unique(train_data['label']), y=train_data['label'])
+class_weights = torch.tensor(class_weights, dtype=torch.float)
+
