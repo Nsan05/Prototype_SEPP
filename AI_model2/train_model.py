@@ -71,3 +71,46 @@ def compute_metrics(eval_pred):
     logits, labels = eval_pred
     predictions =np.argmax(logits, axis=-1)
     return {"accuracy":np.mean(predictions == labels)}
+
+#define trainer
+class EnhancedTrainer(Trainer):
+    def training_step(self, model, inputs, *args, **kwargs): #to override original
+        labels = inputs.get("labels")
+        outputs = model(**{k: v for k, v in inputs.items() if k != "labels"})
+        logits = outputs.logits
+        
+        loss_fct = torch.nn.CrossEntropyLoss(weight=class_weights.to(logits.device))
+        loss = loss_fct(logits.view(-1, self.model.config.num_labels), labels.view(-1))
+        
+        return loss
+    
+training_args = TrainingArguments(
+    output_dir="./AI_model2",
+    evaluation_strategy="steps",
+    save_steps=50,
+    eval_steps=50,
+    learning_rate=3e-5, #switch to diff values later to accomodate
+    per_device_train_batch_size=8,
+    num_train_epochs=7,
+    weight_decay=0.01,
+    logging_dir="./logs",
+    logging_steps=10,
+    load_best_model_at_end=True,
+    metric_for_best_model="eval_accuracy", 
+    greater_is_better=True
+)
+
+trainer = EnhancedTrainer(
+    model=model,
+    args=training_args,
+    train_dataset=train_data,
+    eval_dataset=test_data,
+    compute_metrics=compute_metrics, 
+)
+
+# train
+trainer.train()
+model.save_pretrained("./AI_model2")
+tokenizer.save_pretrained("./AI_model2")
+
+print("MODEL TRAINING COMPLETE")
