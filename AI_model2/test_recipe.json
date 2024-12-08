@@ -1,0 +1,35 @@
+[
+    {
+        "recipe_id": 8,
+        "recipe_name": "Mediterranean Lamb with Roasted Vegetables",
+        "ingredients": [
+            {"ingredient_id": 704, "ingredient_name": "Lamb", "importance": "core", "quantity": "500g"},
+            {"ingredient_id": 803, "ingredient_name": "Eggplant", "importance": "core", "quantity": "250g"},
+            {"ingredient_id": 804, "ingredient_name": "Zucchini", "importance": "core", "quantity": "200g"},
+            {"ingredient_id": 805, "ingredient_name": "Carrot", "importance": "secondary", "quantity": "150g"},
+            {"ingredient_id": 1102, "ingredient_name": "Cilantro", "importance": "secondary", "quantity": "15g"},
+            {"ingredient_id": 1104, "ingredient_name": "Paprika", "importance": "secondary", "quantity": "5g"}
+        ]
+    },
+    {
+        "recipe_id": 5,
+        "recipe_name": "Banana Honey Smoothie",
+        "ingredients": [
+            {"ingredient_id": 501, "ingredient_name": "Banana", "importance": "core", "quantity": "200g"},
+            {"ingredient_id": 502, "ingredient_name": "Greek Yogurt", "importance": "core", "quantity": "150ml"},
+            {"ingredient_id": 503, "ingredient_name": "Honey", "importance": "secondary", "quantity": "30ml"},
+            {"ingredient_id": 302, "ingredient_name": "Olive Oil", "importance": "optional", "quantity": "10ml"}
+        ]
+    },
+    {
+        "recipe_id": 9,
+        "recipe_name": "Tropical Shrimp Coconut Rice",
+        "ingredients": [
+            {"ingredient_id": 703, "ingredient_name": "Shrimp", "importance": "core", "quantity": "300g"},
+            {"ingredient_id": 901, "ingredient_name": "Rice", "importance": "core", "quantity": "200g"},
+            {"ingredient_id": 203, "ingredient_name": "Coconut Milk", "importance": "core", "quantity": "250ml"},
+            {"ingredient_id": 1202, "ingredient_name": "Pineapple", "importance": "secondary", "quantity": "150g"},
+            {"ingredient_id": 1103, "ingredient_name": "Cilantro", "importance": "optional", "quantity": "10g"}
+        ]
+    }
+]
