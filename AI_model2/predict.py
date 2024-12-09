@@ -27,4 +27,20 @@ with open(test_recipe_path, "r") as f:
 
 with open("recipes.json", "r") as f:
     training_recipes = json.load(f)
-    
+
+#classification of ingredients
+for recipe in test_recipe:
+    print(f"Recipe: {recipe['recipe_name']}")
+    for ingredient in recipe["ingredients"]:
+        ingredient_text = f"{ingredient['quantity']} of {ingredient['ingredient_name']} in {recipe['recipe_name']}"
+        result = classifier(ingredient_text)
+        
+        # mapping label
+        predicted_label = label_map[int(result[0]["label"].replace("LABEL_",""))]
+        actual_label = ingredient["importance"]
+
+        #matching
+        match_status = "MATCH" if predicted_label.lower() == actual_label else "MISMATCH"
+        print(
+            f"'{ingredient_text}' -> Predicted: {predicted_label}, Actual: {actual_label} ({match_status})"
+        )
