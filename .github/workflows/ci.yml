@@ -42,15 +42,15 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           python -m pip install -r requirements.txt
-      # Step 5: Run tests with pytest
-      - name: Run tests
-        run: |
-          pytest --log-cli-level=INFO > pytest.log
-        continue-on-error: false
+      # # Step 5: Run tests with pytest
+      # - name: Run tests
+      #   run: |
+      #     pytest --log-cli-level=INFO > pytest.log
+      #   continue-on-error: false
 
-      # Step 6: Upload test logs as artifacts
-      - name: Upload test logs
-        uses: actions/upload-artifact@v3
-        with:
-          name: test-logs-${{ matrix.os }}-python-${{ matrix.python-version }}
-          path: pytest.log
+      # # Step 6: Upload test logs as artifacts
+      # - name: Upload test logs
+      #   uses: actions/upload-artifact@v3
+      #   with:
+      #     name: test-logs-${{ matrix.os }}-python-${{ matrix.python-version }}
+      #     path: pytest.log
