@@ -1,1 +1,6 @@
 psycopg2-binary==2.9.9
+datasets==2.11.0
+transformers==4.30.0
+numpy==1.23.0
+scikit-learn==1.1.2
+torch==1.12.0
