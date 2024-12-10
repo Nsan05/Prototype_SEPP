@@ -16,8 +16,8 @@ logger.addHandler(console_handler)
 
 def parse_quantity(recipe_quantity: str, inventory_quantity: str) -> int:
     try:
-        recipe_value = int(recipe_quantity.replace('g', '').replace('ml', ''))
-        inventory_value = int(inventory_quantity.replace('g', '').replace('ml', ''))
+        recipe_value = float(recipe_quantity.replace('g', '').replace('ml', ''))
+        inventory_value = float(inventory_quantity.replace('g', '').replace('ml', ''))
         
         if recipe_value == 0:
             return 0
@@ -122,7 +122,7 @@ class RecipeSuggestion:
                     query = """
                         SELECT ingredients
                         FROM userinventory
-                        WHERE user_id = %s AND fridge_id = 1
+                        WHERE user_id = %s AND fridge_id = 2
                     """
                     cursor.execute(query, (self.user_id,))
                     result = cursor.fetchone()
@@ -181,18 +181,43 @@ class RecipeSuggestion:
         logger.debug(f"Fridge Inventory: {fridge}")
 
         results = []
+
         for recipe_id, recipe_data in recipes.items():
             core = recipe_data["core"]
             secondary = recipe_data["secondary"]
             optional = recipe_data["optional"]
 
             percentages = {}
-            for ingredient_id, required_qty in {**core, **secondary, **optional}.items():
+            all_ingredients = {**core, **secondary, **optional}
+
+
+            for ingredient_id, required_qty in all_ingredients.items():
                 available_qty = fridge.get(ingredient_id, '0')
                 percentages[ingredient_id] = parse_quantity(required_qty, available_qty)
                 logger.debug(f"Ingredient ID: {ingredient_id}, Required: {required_qty}, Available: {available_qty}, Percentage: {percentages[ingredient_id]}")
+        
+            for ingredient_id in core.keys():
+                if percentages.get(ingredient_id, 0) < 95:  
+                    for alt in self.alternatives.get(ingredient_id, []):
+                        alt_id = next((id for id, name in self.ingredient_names.items() if name == alt), None)
+                        if alt_id and alt_id in fridge:
+                            alt_available_qty = fridge[alt_id]
+                            percentages[ingredient_id] = max(percentages[ingredient_id], parse_quantity(required_qty, alt_available_qty))
 
-            if all(95 <= percentages.get(ing, 0) <= 100 for ing in {**core, **secondary, **optional}):
+            for ingredient_id in secondary.keys():
+                if percentages[ingredient_id] < 65:  
+                    for alt in self.alternatives.get(ingredient_id, []):
+                        alt_id = next((id for id, name in self.ingredient_names.items() if name == alt), None)
+                        if alt_id and alt_id in fridge:
+                            alt_available_qty = fridge[alt_id]
+                            alt_percentage = parse_quantity(secondary[ingredient_id], alt_available_qty)
+                            percentages[ingredient_id] = max(percentages[ingredient_id], alt_percentage)
+            
+            core_complete = all(percentages.get(ing, 0) >= 95 for ing in core)
+            secondary_complete = all(percentages.get(ing, 0) >= 95 for ing in secondary)
+            optional_complete = all(percentages.get(ing, 0) >= 95 for ing in optional)
+            print("c:",core_complete,"\ns:",secondary_complete,"\no:",optional_complete)
+            if core_complete and secondary_complete and optional_complete:
                 score1 = self.calculate_score(percentages, core, secondary, optional)
                 results.append({
                     "recipe": recipe_data['recipe_name'], 
@@ -201,8 +226,10 @@ class RecipeSuggestion:
                     "score2": 0, 
                     "total": score1
                 })
-                continue
+                print(f"Recipe: {recipe_data['recipe_name']} - Complete, Score: {score1:.2f}")
+                continue  
 
+            
             core_available = {ing for ing, perc in percentages.items() if 85 <= min(perc, 100) <= 100}
             secondary_available = {ing for ing, perc in percentages.items() if 65 <= min(perc, 100) <= 100}
             optional_available = {ing for ing, perc in percentages.items() if 45 <= min(perc, 100) <= 100}
@@ -214,23 +241,12 @@ class RecipeSuggestion:
             total_ingredients = len(core) + len(secondary) + len(optional)
             missing_percentage = (len(missing) / total_ingredients) * 100 if total_ingredients > 0 else 100
 
-            if missing_percentage > 34:
+            if missing_percentage > 33:
                 results.append({
                     "recipe": recipe_data['recipe_name'],
                     "case": "Rejected",
                     "reason": "More than 30% missing ingredients",
                     "total": 0
-                })
-                continue
-
-            if not missing:
-                score1 = self.calculate_score(percentages, core, secondary, optional)
-                results.append({
-                    "recipe": recipe_data['recipe_name'], 
-                    "case": "Partial", 
-                    "score1": score1, 
-                    "score2": 0, 
-                    "total": score1
                 })
                 continue
 
@@ -267,7 +283,7 @@ def main():
 
     try:
         logging.getLogger().setLevel(logging.DEBUG)
-        user_id = 2
+        user_id = 3
         recipe_suggester = RecipeSuggestion(db_params, user_id)
         results = recipe_suggester.suggest_recipes()
 
