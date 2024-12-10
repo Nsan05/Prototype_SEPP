@@ -44,10 +44,10 @@ VALUES
       204: ["10g", "secondary"], 205: ["5g", "secondary"]}', 
     45, 3, 'veg', 
     '1. Chop mixed vegetables into uniform pieces. 2. Toss with olive oil and minced garlic. 3. Sprinkle curry powder. 4. Roast in oven at 200°C for 30 minutes. 5. Serve hot as a side dish.'),
-
+--CHANGED GARLIC FROM UNIT TO GRAMS
 (4, 'Classic Egg Toast', 
     '{401: ["2", "core"], 402: ["2", "core"], 302: ["10ml", "secondary"], 
-      205: ["2", "optional"]}', 
+      205: ["10g", "optional"]}', 
     10, 1, 'non-veg', 
     '1. Heat olive oil in a pan. 2. Toast bread. 3. Fry eggs sunny-side up. 4. Place eggs on toast. 5. Sprinkle minced garlic if desired. 6. Season with salt and pepper.'),
 
@@ -297,7 +297,90 @@ VALUES
       202: ["20g", "secondary"], 
       1101: ["10g", "optional"]}', 
     35, 2, 'veg', 
-    '1. Prepare seitan. 2. Add water chestnuts. 3. Slice purple cabbage and zucchini. 4. Heat soy sauce in wok. 5. Stir-fry with fresh ginger. 6. Garnish with toasted sesame seeds. 7. Serve immediately.');
+    '1. Prepare seitan. 2. Add water chestnuts. 3. Slice purple cabbage and zucchini. 4. Heat soy sauce in wok. 5. Stir-fry with fresh ginger. 6. Garnish with toasted sesame seeds. 7. Serve immediately.'),
+
+(31, 'Rustic Chicken Thigh Curry', 
+    '{1611: ["500g", "core"], 1613: ["20g", "core"], 203: ["400ml", "core"], 
+      1617: ["30g", "secondary"], 1619: ["10g", "secondary"], 
+      1623: ["30ml", "secondary"]}', 
+    55, 4, 'non-veg', 
+    '1. Marinate chicken thighs in ginger paste. 2. Sauté ginger paste in vegetable oil. 3. Add chicken and brown. 4. Stir in garam masala. 5. Pour coconut milk and simmer. 6. Serve with rice.'),
+
+(32, 'Whole Wheat Egg White Toast', 
+    '{1625: ["2", "core"], 1627: ["2", "core"], 1623: ["10ml", "secondary"], 
+      1619: ["2", "optional"]}', 
+    10, 1, 'non-veg', 
+    '1. Heat vegetable oil in a pan. 2. Toast whole wheat bread. 3. Fry egg whites. 4. Place egg whites on toast. 5. Sprinkle dried garlic if desired. 6. Season to taste.'),
+
+(33, 'Plantain Green Smoothie', 
+    '{1630: ["200g", "core"], 
+      1631: ["150ml", "core"], 
+      1633: ["30ml", "secondary"], 
+      1623: ["10ml", "optional"]}', 
+    10, 2, 'veg', 
+    '1. Peel and chop plantain. 2. Blend plantain with regular yogurt. 3. Add agave syrup for sweetness. 4. Optional: Add vegetable oil for richness. 5. Blend until smooth. 6. Serve chilled.'),
+
+(34, 'Mediterranean Trout with Preserved Lemon', 
+    '{1635: ["600g", "core"], 
+      1638: ["20ml", "secondary"], 
+      1639: ["10g", "secondary"], 
+      1623: ["20ml", "core"]}', 
+    40, 4, 'non-veg', 
+    '1. Preheat oven to 180°C. 2. Place trout on baking tray. 3. Drizzle with vegetable oil. 4. Add preserved lemon. 5. Sprinkle dried dill. 6. Bake for 20-25 minutes. 7. Serve hot with lemon wedges.'),
+
+(35, 'Spicy Tempeh Stir Fry with Thai Basil', 
+    '{1644: ["250g", "core"], 
+      1684: ["10g", "optional"], 
+      804: ["200g", "core"], 
+      1701: ["30ml", "secondary"], 
+      1637: ["20ml", "secondary"]}', 
+    30, 3, 'veg', 
+    '1. Press and marinate tempeh. 2. Chop zucchini. 3. Heat tamari and lime juice in wok. 4. Stir-fry tempeh until golden. 5. Add vegetables. 6. Garnish with Thai basil. 7. Serve immediately.'),
+
+(36, 'Prawns with Tilapia Seafood Medley',
+    '{1647: ["300g", "core"], 
+      1636: ["300g", "core"], 
+      1637: ["20ml", "secondary"], 
+      1640: ["10g", "optional"], 
+      1623: ["30ml", "core"], 
+      1705: ["15ml", "secondary"]}',
+    35, 4, 'non-veg',
+    '1. Clean and devein prawns. 2. Cut tilapia into bite-sized pieces. 3. Heat vegetable oil in a large skillet. 4. Add prawns and tilapia, sear until golden. 5. Deglaze pan with rice vinegar and lime juice. 6. Sprinkle parsley as garnish. 7. Serve hot with side of choice.'),
+
+(37, 'Zucchini and Tofu Mediterranean Stir Fry',
+    '{1660: ["300g", "core"],
+     1644: ["250g", "core"], 
+     1637: ["20ml", "secondary"], 
+     1701: ["30ml", "secondary"], 
+     1685: ["10g", "optional"]}',
+    35, 3, 'veg',
+    '1. Press and cube tempeh. 2. Slice summer squash into ribbons. 3. Heat tamari and lime in a wok. 4. Stir-fry tempeh until golden. 5. Add summer squash. 6. Garnish with coriander leaves. 7. Serve hot.'),
+
+(38, 'Sweet Potato and Goat Meat Roast',
+    '{1670: ["400g", "core"], 
+    1650: ["500g", "core"], 
+    1689: ["15g", "secondary"], 
+    1623: ["30ml", "secondary"], 
+    1682: ["10g", "optional"]}',
+    75, 4, 'non-veg',
+    '1. Preheat oven to 200°C. 2. Cut sweet potatoes into wedges. 3. Marinate goat meat in vegetable oil. 4. Sprinkle smoked paprika over both. 5. Roast in oven for 60 minutes. 6. Garnish with fresh basil. 7. Serve hot.'),
+
+(39, 'Plantain and Almond Milk Smoothie Bowl',
+    '{1630: ["200g", "core"], 
+    1676: ["250ml", "core"], 
+    1718: ["50g", "topping"], 
+    1633: ["20ml", "secondary"]}',
+    15, 2, 'veg',
+    '1. Blend plantain with almond milk. 2. Add agave syrup for sweetness. 3. Pour into bowl. 4. Top with sliced almonds. 5. Serve chilled.'),
+
+(40, 'Trout with Capsicum and Parsley',
+    '{1635: ["600g", "core"],
+    1655: ["300g", "core"],
+    1640: ["15g", "optional"],
+    1623: ["30ml", "secondary"],
+    1637: ["10ml", "secondary"]}',
+    40, 4, 'non-veg',
+    '1. Preheat oven to 180°C. 2. Slice capsicum. 3. Place trout on baking tray. 4. Drizzle with vegetable oil and lime juice. 5. Add capsicum slices. 6. Bake for 25 minutes. 7. Garnish with parsley. 8. Serve hot.');
 
 INSERT INTO Ingredient (ingredient_id, ingredient_name, alternatives_list)
 VALUES
@@ -339,7 +422,7 @@ VALUES
 (1103, 'Mint', '["peppermint", "spearmint"]'),
 (1104, 'Paprika', '["smoked paprika", "hot paprika"]'),
 (1105, 'Cumin', '["ground cumin", "whole cumin seeds"]'),
-(1201, 'Apple', '["green apple", "red apple", "cooking apple"]'),
+(1201, 'Apple', '["green apple", "pear", "cooking apple"]'), -- CHANGED ALTERNATIVE TO PEAR FROM RED APPLE
 (1202, 'Orange', '["mandarin", "clementine", "blood orange"]'),
 (1203, 'Avocado', '["hass avocado", "fuerte avocado"]'),
 (1301, 'Soy Sauce', '["tamari", "light soy sauce", "dark soy sauce"]'),
@@ -355,15 +438,257 @@ VALUES
 (1602, 'Lentils', '["red lentils", "green lentils", "brown lentils"]'),
 (1603, 'Chickpeas', '["canned chickpeas", "dried chickpeas", "roasted chickpeas"]'),
 (1604, 'Nutritional Yeast', '["fortified nutritional yeast", "non-fortified nutritional yeast"]'),
-(1605, 'Tahini', '["light tahini", "dark tahini", "whole sesame tahini"]');
+(1605, 'Tahini', '["light tahini", "dark tahini", "whole sesame tahini"]'),
+-- Tomato Alternatives
+(1739, 'cherry tomato', '["Tomato", "plum tomato"]'),
+(1606, 'plum tomato', '["Tomato", "cherry tomato"]'),
+-- Cucumber Alternatives
+(1607, 'english cucumber', '["Cucumber", "persian cucumber"]'),
+(1608, 'persian cucumber', '["Cucumber", "english cucumber"]'),
+-- Red Onion Alternatives
+(1609, 'sweet onion', '["Red Onion", "white onion"]'),
+(1610, 'white onion', '["Red Onion", "sweet onion"]'),
+-- Chicken Breast Alternatives
+(1611, 'chicken thigh', '["Chicken Breast", "turkey breast"]'),
+(1612, 'turkey breast', '["Chicken Breast", "chicken thigh"]'),
+-- Ginger Alternatives
+(1613, 'ginger paste', '["Ginger", "minced ginger"]'),
+(1614, 'minced ginger', '["Ginger", "ginger paste"]'),
+-- Coconut Milk Alternatives
+(1615, 'cream', '["Coconut Milk", "almond milk"]'),
+(1616, 'almond milk', '["Coconut Milk", "cream"]'),
+-- Curry Powder Alternatives
+(1617, 'garam masala', '["Curry Powder", "turmeric"]'),
+(1618, 'turmeric', '["Curry Powder", "garam masala"]'),
+-- Garlic Alternatives
+(1619, 'garlic paste', '["Garlic", "dried garlic"]'),
+(1620, 'dried garlic', '["Garlic", "garlic paste"]'),
+-- Mixed Vegetables Alternatives
+(1621, 'frozen vegetables', '["Mixed Vegetables", "seasonal vegetables"]'),
+(1622, 'seasonal vegetables', '["Mixed Vegetables", "frozen vegetables"]'),
+-- Olive Oil Alternatives
+(1623, 'vegetable oil', '["Olive Oil", "canola oil"]'),
+(1624, 'canola oil', '["Olive Oil", "vegetable oil"]'),
+-- Bread Alternatives
+(1625, 'whole wheat bread', '["Bread", "sourdough"]'),
+(1626, 'sourdough', '["Bread", "whole wheat bread"]'),
+-- Egg Alternatives
+(1627, 'egg whites', '["Egg", "vegan egg substitute"]'),
+(1628, 'vegan egg substitute', '["Egg", "egg whites"]'),
+-- Banana Alternatives
+(1629, 'frozen banana', '["Banana", "plantain"]'),
+(1630, 'plantain', '["Banana", "frozen banana"]'),
+-- Greek Yogurt Alternatives
+(1631, 'regular yogurt', '["Greek Yogurt", "plant-based yogurt"]'),
+(1632, 'plant-based yogurt', '["Greek Yogurt", "regular yogurt"]'),
+-- Honey Alternatives
+(1633, 'agave syrup', '["Honey", "maple syrup"]'),
+(1634, 'maple syrup', '["Honey", "agave syrup"]'),
+-- Salmon Alternatives
+(1635, 'trout', '["Salmon", "tilapia"]'),
+(1636, 'tilapia', '["Salmon", "trout"]'),
+-- Lemon Alternatives 
+(1637, 'lime', '["Lemon", "preserved lemon"]'),
+(1638, 'preserved lemon', '["Lemon", "lime"]'),
+-- Dill Alternatives
+(1639, 'dried dill', '["Dill", "parsley"]'),
+(1640, 'parsley', '["Dill", "dried dill"]'),
+-- Beef Alternatives
+(1641, 'ground beef', '["Beef", "steak", "sirloin"]'),
+(1642, 'steak', '["Beef", "ground beef", "sirloin"]'),
+(1643, 'sirloin', '["Beef", "ground beef", "steak"]'),
+-- Tofu Alternatives
+(1644, 'tempeh', '["Tofu", "seitan", "plant-based protein"]'),
+(1645, 'seitan', '["Tofu", "tempeh", "plant-based protein"]'),
+(1646, 'plant-based protein', '["Tofu", "tempeh", "seitan"]'),
+-- Shrimp Alternatives
+(1647, 'prawns', '["Shrimp", "crab", "imitation crab"]'),
+(1648, 'crab', '["Shrimp", "prawns", "imitation crab"]'),
+(1649, 'imitation crab', '["Shrimp", "prawns", "crab"]'),
+-- Lamb Alternatives
+(1650, 'goat meat', '["Lamb", "mutton"]'),
+(1651, 'mutton', '["Lamb", "goat meat"]'),
+-- Spinach Alternatives
+(1652, 'kale', '["Spinach", "swiss chard", "collard greens"]'),
+(1653, 'swiss chard', '["Spinach", "kale", "collard greens"]'),
+(1654, 'collard greens', '["Spinach", "kale", "swiss chard"]'),
+-- Bell Pepper Alternatives
+(1655, 'capsicum', '["Bell Pepper", "paprika", "chili pepper"]'),
+(1656, 'paprika', '["Bell Pepper", "capsicum", "chili pepper"]'),
+(1657, 'chili pepper', '["Bell Pepper", "capsicum", "paprika"]'),
+-- Eggplant Alternatives
+(1658, 'aubergine', '["Eggplant", "brinjal"]'),
+(1659, 'brinjal', '["Eggplant", "aubergine"]'),
+-- Zucchini Alternatives
+(1660, 'courgette', '["Zucchini", "summer squash"]'),
+(1661, 'summer squash', '["Zucchini", "courgette"]'),
+-- Carrot Alternatives
+(1662, 'baby carrot', '["Carrot", "rainbow carrot"]'),
+(1663, 'rainbow carrot', '["Carrot", "baby carrot"]'),
+-- Rice Alternatives
+(1664, 'basmati rice', '["Rice", "brown rice", "jasmine rice"]'),
+(1665, 'brown rice', '["Rice", "basmati rice", "jasmine rice"]'),
+(1666, 'jasmine rice', '["Rice", "basmati rice", "brown rice"]'),
+-- Pasta Alternatives
+(1667, 'spaghetti', '["Pasta", "penne", "gluten-free pasta"]'),
+(1668, 'penne', '["Pasta", "spaghetti", "gluten-free pasta"]'),
+(1669, 'gluten-free pasta', '["Pasta", "spaghetti", "penne"]'),
+-- Potato Alternatives
+(1670, 'sweet potato', '["Potato", "yam", "fingerling potato"]'),
+(1671, 'yam', '["Potato", "sweet potato", "fingerling potato"]'),
+(1672, 'fingerling potato', '["Potato", "sweet potato", "yam"]'),
+-- Cheese Alternatives
+(1673, 'cheddar', '["Cheese", "mozzarella", "vegan cheese"]'),
+(1674, 'mozzarella', '["Cheese", "cheddar", "vegan cheese"]'),
+(1675, 'vegan cheese', '["Cheese", "cheddar", "mozzarella"]'),
+-- Milk Alternatives
+(1676, 'almond milk', '["Milk", "soy milk", "oat milk"]'),
+(1677, 'soy milk', '["Milk", "almond milk", "oat milk"]'),
+(1678, 'oat milk', '["Milk", "almond milk", "soy milk"]'),
+-- Cream Alternatives
+(1679, 'heavy cream', '["Cream", "light cream", "coconut cream"]'),
+(1680, 'light cream', '["Cream", "heavy cream", "coconut cream"]'),
+(1681, 'coconut cream', '["Cream", "heavy cream", "light cream"]'),
+-- Basil Alternatives
+(1682, 'fresh basil', '["Basil", "dried basil", "thai basil"]'),
+(1683, 'dried basil', '["Basil", "fresh basil", "thai basil"]'),
+(1684, 'thai basil', '["Basil", "fresh basil", "dried basil"]'),
+-- Cilantro Alternatives
+(1685, 'coriander leaves', '["Cilantro", "chinese parsley"]'),
+(1686, 'chinese parsley', '["Cilantro", "coriander leaves"]'),
+-- Mint Alternatives
+(1687, 'peppermint', '["Mint", "spearmint"]'),
+(1688, 'spearmint', '["Mint", "peppermint"]'),
+-- Paprika Alternatives
+(1689, 'smoked paprika', '["Paprika", "hot paprika"]'),
+(1690, 'hot paprika', '["Paprika", "smoked paprika"]'),
+-- Cumin Alternatives
+(1691, 'ground cumin', '["Cumin", "whole cumin seeds"]'),
+(1692, 'whole cumin seeds', '["Cumin", "ground cumin"]'),
+-- Apple Alternatives
+(1693, 'green apple', '["Apple", "pear", "cooking apple"]'), -- Red Apple changed to pear
+(1694, 'pear', '["Apple", "green apple", "cooking apple"]'), -- Red Apple changed to pear
+(1695, 'cooking apple', '["Apple", "green apple", "pear"]'), -- Red Apple changed to pear
+-- Orange Alternatives
+(1696, 'mandarin', '["Orange", "clementine", "blood orange"]'),
+(1697, 'clementine', '["Orange", "mandarin", "blood orange"]'),
+(1698, 'blood orange', '["Orange", "mandarin", "clementine"]'),
+-- Avocado Alternatives
+(1699, 'hass avocado', '["Avocado", "fuerte avocado"]'),
+(1700, 'fuerte avocado', '["Avocado", "hass avocado"]'),
+-- Soy Sauce Alternatives
+(1701, 'tamari', '["Soy Sauce", "light soy sauce", "dark soy sauce"]'),
+(1702, 'light soy sauce', '["Soy Sauce", "tamari", "dark soy sauce"]'),
+(1703, 'dark soy sauce', '["Soy Sauce", "tamari", "light soy sauce"]'),
+-- Vinegar Alternatives
+(1704, 'apple cider vinegar', '["Vinegar", "rice vinegar", "balsamic vinegar"]'),
+(1705, 'rice vinegar', '["Vinegar", "apple cider vinegar", "balsamic vinegar"]'),
+(1706, 'balsamic vinegar', '["Vinegar", "apple cider vinegar", "rice vinegar"]'),
+-- Mustard Alternatives
+(1707, 'dijon mustard', '["Mustard", "whole grain mustard", "yellow mustard"]'),
+(1708, 'whole grain mustard', '["Mustard", "dijon mustard", "yellow mustard"]'),
+(1709, 'yellow mustard', '["Mustard", "dijon mustard", "whole grain mustard"]'),
+-- Sugar Alternatives
+(1710, 'brown sugar', '["Sugar", "raw sugar", "coconut sugar"]'),
+(1711, 'raw sugar', '["Sugar", "brown sugar", "coconut sugar"]'),
+(1712, 'coconut sugar', '["Sugar", "brown sugar", "raw sugar"]'),
+-- Flour Alternatives
+(1713, 'wheat flour', '["Flour", "almond flour", "gluten-free flour"]'),
+(1714, 'almond flour', '["Flour", "wheat flour", "gluten-free flour"]'),
+(1715, 'gluten-free flour', '["Flour", "wheat flour", "almond flour"]'),
+-- Vanilla Extract Alternatives
+(1716, 'vanilla bean', '["Vanilla Extract", "vanilla paste"]'),
+(1717, 'vanilla paste', '["Vanilla Extract", "vanilla bean"]'),
+-- Almonds Alternatives
+(1718, 'sliced almonds', '["Almonds", "almond flour", "roasted almonds"]'),
+(1719, 'almond flour', '["Almonds", "sliced almonds", "roasted almonds"]'),
+(1720, 'roasted almonds', '["Almonds", "sliced almonds", "almond flour"]'),
+-- Chia Seeds Alternatives
+(1721, 'ground chia', '["Chia Seeds", "whole chia seeds"]'),
+(1722, 'whole chia seeds', '["Chia Seeds", "ground chia"]'),
+-- Peanut Alternatives
+(1723, 'roasted peanuts', '["Peanut", "peanut butter"]'),
+(1724, 'peanut butter', '["Peanut", "roasted peanuts"]'),
+-- Quinoa Alternatives
+(1725, 'red quinoa', '["Quinoa", "white quinoa", "black quinoa"]'),
+(1726, 'white quinoa', '["Quinoa", "red quinoa", "black quinoa"]'),
+(1727, 'black quinoa', '["Quinoa", "red quinoa", "white quinoa"]'),
+-- Lentils Alternatives
+(1728, 'red lentils', '["Lentils", "green lentils", "brown lentils"]'),
+(1729, 'green lentils', '["Lentils", "red lentils", "brown lentils"]'),
+(1730, 'brown lentils', '["Lentils", "red lentils", "green lentils"]'),
+-- Chickpeas Alternatives
+(1731, 'canned chickpeas', '["Chickpeas", "dried chickpeas", "roasted chickpeas"]'),
+(1732, 'dried chickpeas', '["Chickpeas", "canned chickpeas", "roasted chickpeas"]'),
+(1733, 'roasted chickpeas', '["Chickpeas", "canned chickpeas", "dried chickpeas"]'),
+-- Nutritional Yeast Alternatives
+(1734, 'fortified nutritional yeast', '["Nutritional Yeast", "non-fortified nutritional yeast"]'),
+(1735, 'non-fortified nutritional yeast', '["Nutritional Yeast", "fortified nutritional yeast"]'),
+-- Tahini Alternatives
+(1736, 'light tahini', '["Tahini", "dark tahini", "whole sesame tahini"]'),
+(1737, 'dark tahini', '["Tahini", "light tahini", "whole sesame tahini"]'),
+(1738, 'whole sesame tahini', '["Tahini", "dark tahini", "light tahini"]');
 
 INSERT INTO UserInventory (user_id, fridge_id, ingredients)
 VALUES 
-(1, 1, '{101: "250g", 102: "200g", 103: "100g", 302: "50ml", 602: "30ml", 1102: "10g"}'), 
-(2, 1, '{201: "500g", 202: "20g", 203: "400ml", 204: "30g", 205: "10g", 302: "30ml"}'), 
-(3, 2, '{702: "350g", 801: "200g", 802: "200g", 203: "300ml", 1104: "10g", 1105: "5g", 302: "25ml"}'), 
+(1, 1, '{101: "300g", 102: "250g", 103: "100g", 302: "40ml", 
+        401: "2", 402: "2", 205: "10g", 
+        704: "600g", 803: "250g", 804: "250g", 805: "150g", 1102: "20g", 1104: "7g",
+        1647: "250g", 1203: "250g", 1665: "170g", 802: "120g", 1302: "21ml", 1103: "15g",
+        903: "300g", 1671: "500g", 1001: "198g", 1652: "147g", 1105: "5g", 1402: "22g", 1714: "60g",
+        501: "180g", 502: "130ml", 503: "22ml", 
+        601: "520g", 602: "21ml", 603: "7g",
+        201: "500g", 204: "32g",
+        1694: "180g", 1401: "35g", 1403: "7ml"}'),
+
+-- Complete: 1, 4, 8
+-- Complete w Alternative (was considered to be partial but an alternative was found above 95% for a missing ingredient/below required %): 9, 10
+-- Partial (All the ranges are between the required and beneath threshold): 5, 6
+-- Partial (But with a few missing ingredients which make up less than 30% of the recipe): 2, 11
+-- Rejected: 
+
+(2, 1, '{701: "400g", 902: "300g", 802: "150g", 804: "100g", 1303: "30g",
+        703: "350g", 804: "400g", 1003: "300ml", 1001: "150g", 1101: "20g",
+        1651: "500g", 801: "150g", 102: "100g", 1610: "49g", 1302: "30ml",
+        901: "180g", 203: "230ml", 1696: "120g", 1103: "7g",
+        1201: "180g", 1501: "90g", 1002: "220ml", 1710: "20g", 1721: "9g",
+        702: "300g", 203: "260ml", 1660: "180g", 1503: "20g"}'), 
+-- Complete: 12, 13
+-- Complete w Alternative (was considered to be partial but an alternative was found above 95% for a missing ingredient/below required %): 15
+-- Partial (All the ranges are between the required and beneath threshold): 17, 19
+-- Partial (But with a few missing ingredients which make up less than 30% of the recipe): 23
+-- Rejected: 
+
+(3, 2, '{702 : "360g", 203: "300ml", 804: "250g", 1503: "30g", 1103: "10g", 302: "30ml",
+        1001: "300g", 1202: "175g", 102: "98g", 103: "50g", 1302: "20ml",
+        1201: "250g", 1301: "35ml", 602: "25ml", 1101: "9.5g",
+        1724: "45g", 1685: "7g",
+        1613: "25g",
+        1630: "180g", 1631: "130ml", 1633: "20ml", 1623: "6ml",
+        1635: "520g", 1638: "13ml", 1639: "7g",
+        1201: "180g", 1401: "21g", 1403: "7g"}'), 
+-- Complete: 23, 24, 25
+-- Complete w Alternative (was considered to be partial but an alternative was found above 95% for a missing ingredient/below required %): 28,30
+-- Partial (All the ranges are between the required and beneath threshold): 33, 34
+-- Partial (But with a few missing ingredients which make up less than 30% of the recipe): 11
+-- Rejected: 
+
 (4, 2, '{401: "2", 402: "2", 302: "10ml", 205: "2", 1001: "100g", 903: "200g"}'), 
+-- Complete: 26
+-- Partial: 16, 19
+
 (5, 3, '{501: "200g", 502: "150ml", 503: "30ml", 302: "10ml", 1201: "200g", 1401: "30g", 1403: "10ml"}'), 
+-- Complete: 29, 30
+-- Partial: 16, 18
+
 (6, 3, '{601: "600g", 602: "30ml", 603: "10g", 302: "20ml", 1102: "10g", 703: "250g", 901: "200g"}'), 
+-- Complete: 13
+-- Partial: 21, 25
+
 (7, 4, '{702: "300g", 801: "200g", 802: "150g", 1101: "10g", 1301: "30ml", 1203: "200g", 902: "150g"}'), 
+-- Complete: 17, 20
+-- Partial: 25
+
 (8, 4, '{704: "500g", 803: "250g", 804: "200g", 805: "150g", 1102: "15g", 1104: "5g", 1001: "150g", 302: "30ml"}');
+-- Complete: 6, 7, 18
+-- Partial: 26, 30
