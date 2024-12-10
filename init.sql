@@ -666,7 +666,7 @@ VALUES
         1613: "25g",
         1630: "180g", 1631: "130ml", 1633: "20ml", 1623: "6ml",
         1635: "520g", 1638: "13ml", 1639: "7g",
-        1401: "21g", 1403: "7g"}'), 
+        1401: "21g", 1403: "7ml"}'), 
 -- Complete: 23, 24, 25
 -- Complete w Alternative (was considered to be partial but an alternative was found above 95% for a missing ingredient/below required %): 28,30
 -- Partial (All the ranges are between the required and beneath threshold): 33, 34
