@@ -1,5 +1,10 @@
 from datasets import load_dataset, Dataset
+from transformers import AutoTokenizer, AutoModelForSequenceClassification, Trainer, TrainingArguments
+import numpy as np
+from sklearn.utils.class_weight import compute_class_weight
+import torch
 import json
+import re
 
 
 #load data
@@ -19,7 +24,8 @@ def extract_ingredient_features(ingredient, recipe_name):
             return 0.0
         
     features = {
-        "base_text": f"{ingredient['quantity']} of {ingredient['ingredient_name']} in {recipe_name}",
+        "base_text": f"{ingredient['ingredient_name']} is a {ingredient['importance']} ingredient in {recipe_name}",
+        # "base_text": f"{ingredient['quantity']} of {ingredient['ingredient_name']} in {recipe_name}",
         "normalized_quantity": normalize_quantity(ingredient['quantity']),
         "ingredient_name_length": len(ingredient['ingredient_name']),
         "label": ingredient['importance']
@@ -43,9 +49,12 @@ labels = {"core": 0, "secondary": 1, "optional": 2}
 dataset = dataset.map(lambda x: {"label": labels[x["label"]]})
 
 #train and test data
-train_test_split = dataset.train_test_split(test_size=0.2)
-train_data = train_test_split["train"]
-test_data = train_test_split["test"]
+# train_test_split = dataset.train_test_split(test_size=0.2)
+# train_data = train_test_split["train"]
+# test_data = train_test_split["test"]
+#debug-using same data for test and train
+train_data = dataset
+test_data = dataset
 
 #calculate weights
 class_weights = compute_class_weight('balanced',classes=np.unique(train_data['label']), y=train_data['label'])
@@ -85,14 +94,14 @@ class EnhancedTrainer(Trainer):
         return loss
     
 training_args = TrainingArguments(
-    output_dir="./AI_model2",
+    output_dir="./AI_model_roberta",
     evaluation_strategy="steps",
     save_steps=50,
     eval_steps=50,
-    learning_rate=3e-5, #switch to diff values later to accomodate
-    per_device_train_batch_size=8,
-    num_train_epochs=7,
-    weight_decay=0.01,
+    learning_rate=2e-5, #switch to diff values later to accomodate
+    per_device_train_batch_size=4,
+    num_train_epochs=15,
+    weight_decay=0.02,
     logging_dir="./logs",
     logging_steps=10,
     load_best_model_at_end=True,
@@ -110,7 +119,10 @@ trainer = EnhancedTrainer(
 
 # train
 trainer.train()
-model.save_pretrained("./AI_model2")
-tokenizer.save_pretrained("./AI_model2")
+model.save_pretrained("./AI_model_roberta_saved")
+tokenizer.save_pretrained("./AI_model_roberta_saved")
 
-print("MODEL TRAINING COMPLETE")
+print("Roberta Base MODEL TRAINING COMPLETE")
+
+
+#accuracy try1- 50.9, try 2- 13.5

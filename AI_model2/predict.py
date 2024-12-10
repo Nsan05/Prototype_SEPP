@@ -1,10 +1,13 @@
 from transformers import pipeline, AutoTokenizer, AutoModelForSequenceClassification
+import json
+import re
 
 # label
 label_map = {0:"core", 1:"secondary",2:"optional"}
 
 #loading
-model_path = "./AI_model2"
+# model_path = "./AI_model_roberta_saved" #testing roberta
+model_path = "./AI_model_distilbert_saved" #testing distilbert
 tokenizer = AutoTokenizer.from_pretrained(model_path)
 model = AutoModelForSequenceClassification.from_pretrained(model_path)
 
