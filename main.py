@@ -2,6 +2,7 @@ import psycopg2
 from typing import Dict,Any,List,Optional
 import logging
 import ast
+import json
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
@@ -122,7 +123,7 @@ class RecipeSuggestion:
                     query = """
                         SELECT ingredients
                         FROM userinventory
-                        WHERE user_id = %s AND fridge_id = 2
+                        WHERE user_id = %s AND fridge_id = 1
                     """
                     cursor.execute(query, (self.user_id,))
                     result = cursor.fetchone()
@@ -146,17 +147,18 @@ class RecipeSuggestion:
         
         try:
             with self.db_connection.cursor() as cursor:
-                query = "SELECT ingredient_id, alternatives_list FROM ingredient"
+                query = "SELECT ingredient_id, ingredient_name, alternatives_list FROM ingredient"
                 cursor.execute(query)
                 alternatives_data = cursor.fetchall()
 
             alternatives = {}
-            for ingredient_id, alternatives_list in alternatives_data:
+            for ingredient_id, ingredient_name, alternatives_list in alternatives_data:
                 try:
-                    alternatives[ingredient_id] = [alt.strip() for alt in alternatives_list.split(",") if alt.strip()]
-                except AttributeError:
-                    logger.error(f"Error processing alternatives for ingredient {ingredient_id}")
-
+                    parsed_alternatives = json.loads(alternatives_list) if alternatives_list else []
+                    alternatives[ingredient_id] = parsed_alternatives
+                except (json.JSONDecodeError, AttributeError) as e:
+                    logger.error(f"Error processing alternatives for ingredient {ingredient_id}: {e}")
+            
             return alternatives
         except psycopg2.Error as e:
             logger.error(f"Database error in get_alternatives: {e}")
@@ -194,7 +196,7 @@ class RecipeSuggestion:
             for ingredient_id, required_qty in all_ingredients.items():
                 available_qty = fridge.get(ingredient_id, '0')
                 percentages[ingredient_id] = parse_quantity(required_qty, available_qty)
-                logger.debug(f"Ingredient ID: {ingredient_id}, Required: {required_qty}, Available: {available_qty}, Percentage: {percentages[ingredient_id]}")
+                # logger.debug(f"Ingredient ID: {ingredient_id}, Required: {required_qty}, Available: {available_qty}, Percentage: {percentages[ingredient_id]}")
         
             for ingredient_id in core.keys():
                 if percentages.get(ingredient_id, 0) < 95:  
@@ -213,6 +215,8 @@ class RecipeSuggestion:
                             alt_percentage = parse_quantity(secondary[ingredient_id], alt_available_qty)
                             percentages[ingredient_id] = max(percentages[ingredient_id], alt_percentage)
             
+            logger.debug(f"Ingredient ID: {ingredient_id}, Required: {required_qty}, Available: {available_qty}, Percentage: {percentages[ingredient_id]}")
+                
             core_complete = all(percentages.get(ing, 0) >= 95 for ing in core)
             secondary_complete = all(percentages.get(ing, 0) >= 95 for ing in secondary)
             optional_complete = all(percentages.get(ing, 0) >= 95 for ing in optional)
@@ -241,7 +245,7 @@ class RecipeSuggestion:
             total_ingredients = len(core) + len(secondary) + len(optional)
             missing_percentage = (len(missing) / total_ingredients) * 100 if total_ingredients > 0 else 100
 
-            if missing_percentage > 33:
+            if missing_percentage > 31:
                 results.append({
                     "recipe": recipe_data['recipe_name'],
                     "case": "Rejected",
@@ -283,7 +287,7 @@ def main():
 
     try:
         logging.getLogger().setLevel(logging.DEBUG)
-        user_id = 3
+        user_id = 2
         recipe_suggester = RecipeSuggestion(db_params, user_id)
         results = recipe_suggester.suggest_recipes()
 
