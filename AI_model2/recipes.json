@@ -1,0 +1,334 @@
+[
+    {
+      "recipe_id": 1,
+      "recipe_name": "Mediterranean Tomato Cucumber Salad",
+      "ingredients": [
+        {"ingredient_name": "Tomato", "importance": "core", "quantity": "200g"},
+        {"ingredient_name": "Cucumber", "importance": "core", "quantity": "150g"},
+        {"ingredient_name": "Red Onion", "importance": "secondary", "quantity": "50g"},
+        {"ingredient_name": "Olive Oil", "importance": "secondary", "quantity": "30ml"}
+      ]
+    },
+    {
+      "recipe_id": 2,
+      "recipe_name": "Coconut Chicken Curry",
+      "ingredients": [
+        {"ingredient_name": "Chicken Breast", "importance": "core", "quantity": "500g"},
+        {"ingredient_name": "Ginger", "importance": "core", "quantity": "20g"},
+        {"ingredient_name": "Coconut Milk", "importance": "core", "quantity": "400ml"},
+        {"ingredient_name": "Curry Powder", "importance": "secondary", "quantity": "30g"},
+        {"ingredient_name": "Garlic", "importance": "secondary", "quantity": "10g"},
+        {"ingredient_name": "Olive Oil", "importance": "secondary", "quantity": "30ml"}
+      ]
+    },
+    {
+      "recipe_id": 3,
+      "recipe_name": "Vegetable Medley Roast",
+      "ingredients": [
+        {"ingredient_name": "Mixed Vegetables", "importance": "core", "quantity": "400g"},
+        {"ingredient_name": "Olive Oil", "importance": "core", "quantity": "50ml"},
+        {"ingredient_name": "Curry Powder", "importance": "secondary", "quantity": "10g"},
+        {"ingredient_name": "Garlic", "importance": "secondary", "quantity": "5g"}
+      ]
+    },
+    {
+      "recipe_id": 4,
+      "recipe_name": "Classic Egg Toast",
+      "ingredients": [
+        {"ingredient_name": "Bread", "importance": "core", "quantity": "2"},
+        {"ingredient_name": "Egg", "importance": "core", "quantity": "2"},
+        {"ingredient_name": "Olive Oil", "importance": "secondary", "quantity": "10ml"},
+        {"ingredient_name": "Garlic", "importance": "optional", "quantity": "2"}
+      ]
+    },
+    {
+      "recipe_id": 5,
+      "recipe_name": "Banana Honey Smoothie",
+      "ingredients": [
+        {"ingredient_name": "Banana", "importance": "core", "quantity": "200g"},
+        {"ingredient_name": "Greek Yogurt", "importance": "core", "quantity": "150ml"},
+        {"ingredient_name": "Honey", "importance": "secondary", "quantity": "30ml"},
+        {"ingredient_name": "Olive Oil", "importance": "optional", "quantity": "10ml"}
+      ]
+    },
+    {
+      "recipe_id": 6,
+      "recipe_name": "Lemon Dill Salmon",
+      "ingredients": [
+        {"ingredient_name": "Salmon", "importance": "core", "quantity": "600g"},
+        {"ingredient_name": "Lemon", "importance": "secondary", "quantity": "30ml"},
+        {"ingredient_name": "Dill", "importance": "secondary", "quantity": "10g"},
+        {"ingredient_name": "Olive Oil", "importance": "core", "quantity": "20ml"}
+      ]
+    },
+    {
+        "recipe_id": 8,
+        "recipe_name": "Avocado and Shrimp Rice Bowl",
+        "ingredients": [
+        {"ingredient_name": "Shrimp", "importance": "core", "quantity": "250g"},
+        {"ingredient_name": "Avocado", "importance": "core", "quantity": "200g"},
+        {"ingredient_name": "Rice", "importance": "core", "quantity": "150g"},
+        {"ingredient_name": "Bell Pepper", "importance": "secondary", "quantity": "100g"},
+        {"ingredient_name": "Vinegar", "importance": "secondary", "quantity": "20ml"},
+        {"ingredient_name": "Mint", "importance": "optional", "quantity": "10g"}
+        ]
+    },
+    {
+        "recipe_id": 9,
+        "recipe_name": "Vegetarian Potato and Cheese Bake",
+        "ingredients": [
+        {"ingredient_name": "Potato", "importance": "core", "quantity": "400g"},
+        {"ingredient_name": "Cheese", "importance": "core", "quantity": "200g"},
+        {"ingredient_name": "Spinach", "importance": "secondary", "quantity": "150g"},
+        {"ingredient_name": "Cumin", "importance": "secondary", "quantity": "5g"},
+        {"ingredient_name": "Flour", "importance": "optional", "quantity": "50g"}
+        ]
+    },
+    {
+        "recipe_id": 10,
+        "recipe_name": "Apple Cinnamon Oatmeal",
+        "ingredients": [
+        {"ingredient_name": "Apple", "importance": "core", "quantity": "200g"},
+        {"ingredient_name": "Sugar", "importance": "secondary", "quantity": "30g"},
+        {"ingredient_name": "Vanilla Extract", "importance": "secondary", "quantity": "10ml"},
+        {"ingredient_name": "Chia Seeds", "importance": "optional", "quantity": "15g"}
+        ]
+    },
+    {
+        "recipe_id": 11,
+        "recipe_name": "Beef and Vegetable Pasta",
+        "ingredients": [
+        {"ingredient_name": "Beef", "importance": "core", "quantity": "400g"},
+        {"ingredient_name": "Pasta", "importance": "core", "quantity": "250g"},
+        {"ingredient_name": "Bell Pepper", "importance": "secondary", "quantity": "150g"},
+        {"ingredient_name": "Zucchini", "importance": "secondary", "quantity": "100g"},
+        {"ingredient_name": "Mustard", "importance": "optional", "quantity": "20g"}
+        ]
+    },
+    {
+        "recipe_id": 12,
+        "recipe_name": "Zucchini Noodle Shrimp Alfredo",
+        "ingredients": [
+        {"ingredient_name": "Shrimp", "importance": "core", "quantity": "300g"},
+        {"ingredient_name": "Zucchini", "importance": "core", "quantity": "400g"},
+        {"ingredient_name": "Cream", "importance": "core", "quantity": "200ml"},
+        {"ingredient_name": "Cheese", "importance": "secondary", "quantity": "100g"},
+        {"ingredient_name": "Basil", "importance": "secondary", "quantity": "15g"}
+        ]
+    },
+    {
+        "recipe_id": 13,
+        "recipe_name": "Spicy Tofu and Bell Pepper Curry",
+        "ingredients": [
+        {"ingredient_name": "Tofu", "importance": "core", "quantity": "350g"},
+        {"ingredient_name": "Bell Pepper", "importance": "core", "quantity": "200g"},
+        {"ingredient_name": "Coconut Milk", "importance": "core", "quantity": "300ml"},
+        {"ingredient_name": "Paprika", "importance": "secondary", "quantity": "10g"},
+        {"ingredient_name": "Cumin", "importance": "secondary", "quantity": "5g"}
+        ]
+    },
+    {
+      "recipe_id": 14,
+      "recipe_name": "Mediterranean Lamb Salad",
+      "ingredients": [
+        {"ingredient_name": "Lamb", "importance": "core", "quantity": "400g"},
+        {"ingredient_name": "Spinach", "importance": "core", "quantity": "150g"},
+        {"ingredient_name": "Cucumber", "importance": "core", "quantity": "100g"},
+        {"ingredient_name": "Red Onion", "importance": "secondary", "quantity": "50g"},
+        {"ingredient_name": "Vinegar", "importance": "secondary", "quantity": "30ml"},
+        {"ingredient_name": "Basil", "importance": "optional", "quantity": "10g"}
+      ]
+    },
+    {
+      "recipe_id": 15,
+      "recipe_name": "Loaded Vegetable Potato Skins",
+      "ingredients": [
+        {"ingredient_name": "Potato", "importance": "core", "quantity": "500g"},
+        {"ingredient_name": "Cheese", "importance": "core", "quantity": "150g"},
+        {"ingredient_name": "Bell Pepper", "importance": "secondary", "quantity": "100g"},
+        {"ingredient_name": "Spinach", "importance": "secondary", "quantity": "100g"},
+        {"ingredient_name": "Peanut", "importance": "optional", "quantity": "50g"}
+      ]
+    },
+    {
+      "recipe_id": 16,
+      "recipe_name": "Tropical Shrimp Coconut Rice",
+      "ingredients": [
+        {"ingredient_name": "Shrimp", "importance": "core", "quantity": "300g"},
+        {"ingredient_name": "Rice", "importance": "core", "quantity": "200g"},
+        {"ingredient_name": "Coconut Milk", "importance": "core", "quantity": "200ml"},
+        {"ingredient_name": "Pineapple", "importance": "secondary", "quantity": "100g"},
+        {"ingredient_name": "Garlic", "importance": "optional", "quantity": "5g"}
+      ]
+    },
+    {
+        "recipe_id": 17,
+        "recipe_name": "Tropical Shrimp Coconut Rice",
+        "ingredients": [
+          {"ingredient_name": "Shrimp", "importance": "core", "quantity": "300g"},
+          {"ingredient_name": "Rice", "importance": "core", "quantity": "200g"},
+          {"ingredient_name": "Coconut Milk", "importance": "core", "quantity": "250ml"},
+          {"ingredient_name": "Orange", "importance": "secondary", "quantity": "150g"},
+          {"ingredient_name": "Mint", "importance": "optional", "quantity": "10g"}
+        ]
+      },
+      {
+        "recipe_id": 18,
+        "recipe_name": "Vegan Lentil and Vegetable Stew",
+        "ingredients": [
+          {"ingredient_name": "Tofu", "importance": "core", "quantity": "250g"},
+          {"ingredient_name": "Spinach", "importance": "core", "quantity": "200g"},
+          {"ingredient_name": "Zucchini", "importance": "core", "quantity": "150g"},
+          {"ingredient_name": "Cumin", "importance": "secondary", "quantity": "5g"},
+          {"ingredient_name": "Paprika", "importance": "secondary", "quantity": "5g"},
+          {"ingredient_name": "Cilantro", "importance": "optional", "quantity": "15g"}
+        ]
+      },
+      {
+        "recipe_id": 19,
+        "recipe_name": "Apple Almond Breakfast Parfait",
+        "ingredients": [
+          {"ingredient_name": "Apple", "importance": "core", "quantity": "200g"},
+          {"ingredient_name": "Almonds", "importance": "core", "quantity": "100g"},
+          {"ingredient_name": "Milk", "importance": "core", "quantity": "250ml"},
+          {"ingredient_name": "Sugar", "importance": "secondary", "quantity": "30g"},
+          {"ingredient_name": "Chia Seeds", "importance": "optional", "quantity": "15g"}
+        ]
+      },
+      {
+        "recipe_id": 20,
+        "recipe_name": "Mediterranean Beef and Quinoa Pasta",
+        "ingredients": [
+          {"ingredient_name": "Beef", "importance": "core", "quantity": "400g"},
+          {"ingredient_name": "Pasta", "importance": "core", "quantity": "250g"},
+          {"ingredient_name": "Eggplant", "importance": "secondary", "quantity": "150g"},
+          {"ingredient_name": "Quinoa", "importance": "secondary", "quantity": "100g"},
+          {"ingredient_name": "Mint", "importance": "optional", "quantity": "10g"},
+          {"ingredient_name": "Mustard", "importance": "secondary", "quantity": "20g"}
+        ]
+      },
+      {
+        "recipe_id": 21,
+        "recipe_name": "Protein-Packed Chickpea Power Bowl",
+        "ingredients": [
+          {"ingredient_name": "Chickpeas", "importance": "core", "quantity": "250g"},
+          {"ingredient_name": "Potato", "importance": "core", "quantity": "200g"},
+          {"ingredient_name": "Spinach", "importance": "core", "quantity": "150g"},
+          {"ingredient_name": "Tahini", "importance": "secondary", "quantity": "30ml"},
+          {"ingredient_name": "Mint", "importance": "optional", "quantity": "10g"},
+          {"ingredient_name": "Olive Oil", "importance": "core", "quantity": "20ml"}
+        ]
+      },
+      {
+        "recipe_id": 22,
+        "recipe_name": "Spicy Mediterranean Roasted Vegetable and Lentil Medley",
+        "ingredients": [
+          {"ingredient_name": "Bell Pepper", "importance": "core", "quantity": "250g"},
+          {"ingredient_name": "Lentils", "importance": "core", "quantity": "200g"},
+          {"ingredient_name": "Orange", "importance": "secondary", "quantity": "150g"},
+          {"ingredient_name": "Olive Oil", "importance": "core", "quantity": "40ml"},
+          {"ingredient_name": "Nutritional Yeast", "importance": "secondary", "quantity": "10g"},
+          {"ingredient_name": "Paprika", "importance": "secondary", "quantity": "10g"},
+          {"ingredient_name": "Cumin", "importance": "secondary", "quantity": "10g"}
+        ]
+      },
+      {
+        "recipe_id": 23,
+        "recipe_name": "Coconut Seitan Vegetable Curry",
+        "ingredients": [
+          {"ingredient_name": "Tofu", "importance": "core", "quantity": "350g"},
+          {"ingredient_name": "Coconut Milk", "importance": "core", "quantity": "300ml"},
+          {"ingredient_name": "Zucchini", "importance": "core", "quantity": "200g"},
+          {"ingredient_name": "Peanut", "importance": "secondary", "quantity": "30g"},
+          {"ingredient_name": "Mint", "importance": "optional", "quantity": "10g"},
+          {"ingredient_name": "Olive Oil", "importance": "secondary", "quantity": "25ml"}
+        ]
+      },
+      {
+        "recipe_id": 24,
+        "recipe_name": "Mediterranean Halloumi and Roasted Vegetable Salad",
+        "ingredients": [
+          {"ingredient_name": "Cheese", "importance": "core", "quantity": "250g"},
+          {"ingredient_name": "Orange", "importance": "secondary", "quantity": "150g"},
+          {"ingredient_name": "Cucumber", "importance": "core", "quantity": "100g"},
+          {"ingredient_name": "Red Onion", "importance": "secondary", "quantity": "50g"},
+          {"ingredient_name": "Olive Oil", "importance": "core", "quantity": "30ml"},
+          {"ingredient_name": "Vinegar", "importance": "secondary", "quantity": "20ml"}
+        ]
+      },
+      {
+        "recipe_id": 25,
+        "recipe_name": "Spicy Tempeh and Bok Choy Stir Fry",
+        "ingredients": [
+          {"ingredient_name": "Tofu", "importance": "core", "quantity": "250g"},
+          {"ingredient_name": "Apple", "importance": "core", "quantity": "200g"},
+          {"ingredient_name": "Zucchini", "importance": "core", "quantity": "150g"},
+          {"ingredient_name": "Soy Sauce", "importance": "secondary", "quantity": "30ml"},
+          {"ingredient_name": "Lemon", "importance": "secondary", "quantity": "20ml"},
+          {"ingredient_name": "Basil", "importance": "optional", "quantity": "10g"}
+        ]
+      },
+      {
+        "recipe_id": 26,
+        "recipe_name": "Protein-Packed Black Bean and Avocado Bowl",
+        "ingredients": [
+          {"ingredient_name": "Chickpeas", "importance": "core", "quantity": "300g"},
+          {"ingredient_name": "Avocado", "importance": "core", "quantity": "200g"},
+          {"ingredient_name": "Pasta", "importance": "core", "quantity": "150g"},
+          {"ingredient_name": "Olive Oil", "importance": "core", "quantity": "40ml"},
+          {"ingredient_name": "Cilantro", "importance": "optional", "quantity": "5g"}
+        ]
+      },
+      {
+        "recipe_id": 27,
+        "recipe_name": "Mediterranean Feta and Vegetable Feast",
+        "ingredients": [
+          {"ingredient_name": "Cheese", "importance": "core", "quantity": "250g"},
+          {"ingredient_name": "Cucumber", "importance": "core", "quantity": "200g"},
+          {"ingredient_name": "Spinach", "importance": "secondary", "quantity": "150g"},
+          {"ingredient_name": "Olive Oil", "importance": "core", "quantity": "30ml"},
+          {"ingredient_name": "Vinegar", "importance": "secondary", "quantity": "20ml"},
+          {"ingredient_name": "Cilantro", "importance": "optional", "quantity": "10g"}
+        ]
+      },
+      {
+        "recipe_id": 28,
+        "recipe_name": "Spicy Tempeh and Butternut Squash Curry",
+        "ingredients": [
+          {"ingredient_name": "Tofu", "importance": "core", "quantity": "350g"},
+          {"ingredient_name": "Coconut Milk", "importance": "core", "quantity": "300ml"},
+          {"ingredient_name": "Zucchini", "importance": "core", "quantity": "250g"},
+          {"ingredient_name": "Peanut", "importance": "secondary", "quantity": "40g"},
+          {"ingredient_name": "Cilantro", "importance": "optional", "quantity": "5g"},
+          {"ingredient_name": "Olive Oil", "importance": "secondary", "quantity": "25ml"}
+        ]
+      },
+      {
+        "recipe_id": 29,
+        "recipe_name": "Roasted Vegetable and Tempeh Medley",
+        "ingredients": [
+          {"ingredient_name": "Tofu", "importance": "core", "quantity": "300g"},
+          {"ingredient_name": "Carrot", "importance": "core", "quantity": "200g"},
+          {"ingredient_name": "Zucchini", "importance": "core", "quantity": "150g"},
+          {"ingredient_name": "Olive Oil", "importance": "core", "quantity": "35ml"},
+          {"ingredient_name": "Paprika", "importance": "secondary", "quantity": "5g"},
+          {"ingredient_name": "Cumin", "importance": "secondary", "quantity": "5g"},
+          {"ingredient_name": "Cilantro", "importance": "optional", "quantity": "10g"}
+        ]
+      },
+      {
+        "recipe_id": 30,
+        "recipe_name": "Protein-Rich Seitan and Vegetable Stir Fry",
+        "ingredients": [
+          {"ingredient_name": "Tofu", "importance": "core", "quantity": "250g"},
+          {"ingredient_name": "Apple", "importance": "core", "quantity": "200g"},
+          {"ingredient_name": "Zucchini", "importance": "core", "quantity": "150g"},
+          {"ingredient_name": "Soy Sauce", "importance": "secondary", "quantity": "30ml"},
+          {"ingredient_name": "Ginger", "importance": "secondary", "quantity": "20g"},
+          {"ingredient_name": "Basil", "importance": "optional", "quantity": "10g"}
+        ]
+      }
+
+]
+  
+  
