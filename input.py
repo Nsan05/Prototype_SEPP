@@ -1,8 +1,13 @@
+# #LIGHT THEME
 import psycopg2
 import ast
 import os
 import json
 import webbrowser
+import flask
+from flask import Flask, request, jsonify
+from flask_cors import CORS
+
 # Connect to the PostgreSQL database
 connection = psycopg2.connect(
     dbname="prototype",
@@ -11,6 +16,50 @@ connection = psycopg2.connect(
     host="localhost",
     port="5432"
 )
+
+# Function to save user inventory
+def save_user_inventory(user_id, inventory_dict):
+    """
+    Save user inventory to the database and print details to the terminal.
+    
+    Args:
+    user_id (int): The unique identifier for the user
+    inventory_dict (dict): Dictionary of ingredients with their quantities
+    """
+    try:
+        cursor = connection.cursor()
+        
+        # Convert inventory dict to string representation for database storage
+        inventory_str = str(inventory_dict)
+        
+        # Insert or update user inventory
+        cursor.execute("""
+            INSERT INTO User_Inventory_Table (User_Id, Ingredient_Id_quantity)
+            VALUES (%s, %s)
+            ON CONFLICT (User_Id) DO UPDATE 
+            SET Ingredient_Id_quantity = %s;
+        """, (user_id, inventory_str, inventory_str))
+        
+        connection.commit()
+        
+        # Print user inventory details to terminal
+        print("\n--- New User Inventory ---")
+        print(f"User ID: {user_id}")
+        print("Ingredients:")
+        all_ingredients = fetch_all_ingredients()
+        for ingredient_id, quantity in ast.literal_eval(inventory_str).items():
+            ingredient_name = all_ingredients.get(ingredient_id, "Unknown Ingredient")
+            print(f"- {ingredient_name} (ID: {ingredient_id}): {quantity}")
+        print("-------------------------\n")
+        
+        return True
+    except Exception as e:
+        print(f"Error saving user inventory: {e}")
+        connection.rollback()
+        return False
+    finally:
+        cursor.close()
+
 # Function to fetch all existing users
 def fetch_existing_users():
     """Fetch existing users from the database."""
@@ -27,6 +76,7 @@ def fetch_existing_users():
         return []
     finally:
         cursor.close()
+
 # Function to fetch all ingredients
 def fetch_all_ingredients():
     """Fetch all available ingredients from the Ingredient_Table."""
@@ -43,6 +93,7 @@ def fetch_all_ingredients():
         return {}
     finally:
         cursor.close()
+
 # Function to fetch all user data
 def fetch_user_data():
     """Fetch user data from the database."""
@@ -73,6 +124,25 @@ def fetch_user_data():
         return {}
     finally:
         cursor.close()
+def log_selected_ingredients(user_id, ingredients):
+    """
+    Log selected ingredients to the terminal.
+    
+    Args:
+    user_id (int or None): The user ID if an existing user is selected
+    ingredients (dict): Dictionary of selected ingredients
+    """
+    if user_id is not None:
+        print(f"\n--- Existing User {user_id} Ingredients ---")
+        for ingredient_name, quantity in ingredients.items():
+            print(f"- {ingredient_name}: {quantity}")
+    else:
+        print("\n--- New Fridge Ingredients ---")
+        all_ingredients = fetch_all_ingredients()
+        for ingredient_id, quantity in ingredients.items():
+            ingredient_name = all_ingredients.get(ingredient_id, "Unknown Ingredient")
+            print(f"- {ingredient_name}: {quantity}")
+    print("----------------------------\n")
 
 def create_html_file():
     """Create an HTML file with user options."""
@@ -87,24 +157,47 @@ def create_html_file():
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Fridge Inventory Management</title>
+        <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
         <style>
+            :root {{
+                --primary-blue: #3498db;
+                --dark-blue: #2980b9;
+                --light-blue: #5dade2;
+                --background-blue: #ebf5fb;
+                --text-color: #2c3e50;
+            }}
+
+            * {{
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
+            }}
+
             body {{
-                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-                background-color: #f8f9fa;
-                color: #333;
+                font-family: 'Poppins', sans-serif;
+                background-color: var(--background-blue);
+                color: var(--text-color);
                 max-width: 900px;
                 margin: 30px auto;
                 padding: 20px;
-                border-radius: 8px;
-                box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-                overflow-x: hidden;
+                border-radius: 15px;
+                box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+                background-image: linear-gradient(to bottom right, 
+                    rgba(255, 255, 255, 0.3), 
+                    rgba(255, 255, 255, 0.1)
+                );
             }}
+
             h1 {{
-                color: #2c3e50;
+                color: var(--dark-blue);
                 text-align: center;
+                font-weight: 600;
+                margin-bottom: 30px;
                 position: relative;
+                text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
             }}
+
             h1::after {{
                 content: "🧊🍎🥬";
                 position: absolute;
@@ -112,10 +205,14 @@ def create_html_file():
                 right: -40px;
                 animation: float 3s infinite ease-in-out;
             }}
+
             h2 {{
-                color: #2c3e50;
+                color: var(--dark-blue);
                 text-align: center;
+                margin-bottom: 15px;
+                font-weight: 500;
             }}
+
             @keyframes float {{
                 0%, 100% {{
                     transform: translateY(0);
@@ -124,141 +221,157 @@ def create_html_file():
                     transform: translateY(-10px);
                 }}
             }}
+
             .option-container {{
                 display: flex;
                 justify-content: space-around;
                 margin-bottom: 30px;
+                gap: 20px;
             }}
+
             .option-box {{
-                border: 1px solid #ddd;
-                background-color: #ffffff;
-                padding: 20px;
-                width: 40%;
+                flex: 1;
+                border: 2px solid var(--light-blue);
+                background-color: white;
+                padding: 25px;
                 text-align: center;
                 cursor: pointer;
-                border-radius: 10px;
-                transition: transform 0.2s, background-color 0.3s, box-shadow 0.3s;
+                border-radius: 15px;
+                transition: all 0.3s ease;
+                box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
                 position: relative;
+                overflow: hidden;
             }}
+
+            .option-box::before {{
+                content: "";
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: linear-gradient(45deg, 
+                    rgba(var(--light-blue), 0.1), 
+                    rgba(var(--dark-blue), 0.1)
+                );
+                opacity: 0;
+                transition: opacity 0.3s ease;
+                z-index: 1;
+            }}
+
             .option-box:hover {{
                 transform: translateY(-5px);
-                background-color: #eaf2f8;
-                box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.15);
+                box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
             }}
-            .option-box::before {{
-                content: "👆";
-                font-size: 1.5em;
-                position: absolute;
-                top: -20px;
-                left: 10px;
-                animation: bounce 2s infinite;
+
+            .option-box:hover::before {{
+                opacity: 1;
             }}
-            @keyframes bounce {{
-                0%, 100% {{
-                    transform: translateY(0);
-                }}
-                50% {{
-                    transform: translateY(-5px);
-                }}
+
+            .option-box p {{
+                color: var(--text-color);
+                opacity: 0.7;
             }}
+
             #existing-user-section, 
             #create-fridge-section {{
                 display: none;
                 margin-top: 20px;
-                padding: 20px;
-                background-color: #ffffff;
-                border: 1px solid #ddd;
-                border-radius: 10px;
-                box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+                padding: 25px;
+                background-color: white;
+                border: 2px solid var(--light-blue);
+                border-radius: 15px;
+                box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
             }}
+
             .ingredient-list {{
                 max-height: 300px;
                 overflow-y: auto;
-                border: 1px solid #ddd;
-                padding: 10px;
-                margin-top: 10px;
-                background-color: #fefefe;
-                border-radius: 5px;
-                animation: slideIn 0.5s ease-in;
+                border: 1px solid var(--light-blue);
+                padding: 15px;
+                margin-top: 15px;
+                background-color: var(--background-blue);
+                border-radius: 10px;
+                scrollbar-width: thin;
+                scrollbar-color: var(--light-blue) transparent;
             }}
-            @keyframes slideIn {{
-                from {{
-                    opacity: 0;
-                    transform: translateX(-100%);
-                }}
-                to {{
-                    opacity: 1;
-                    transform: translateX(0);
-                }}
+
+            .ingredient-list::-webkit-scrollbar {{
+                width: 8px;
             }}
+
+            .ingredient-list::-webkit-scrollbar-thumb {{
+                background-color: var(--light-blue);
+                border-radius: 4px;
+            }}
+
             .ingredient-item {{
-                padding: 8px;
-                margin-bottom: 5px;
-                background-color: #f9f9f9;
-                border-radius: 5px;
+                padding: 10px;
+                margin-bottom: 8px;
+                background-color: white;
+                border: 1px solid var(--light-blue);
+                border-radius: 8px;
                 cursor: pointer;
-                transition: background-color 0.3s, box-shadow 0.3s;
+                transition: all 0.3s ease;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
             }}
+
             .ingredient-item:hover {{
-                background-color: #dceefb;
-                box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+                background-color: var(--background-blue);
+                transform: scale(1.02);
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             }}
+
             .selected-ingredient {{
-                background-color: #aed6f1;
-                border: 1px solid #5499c7;
+                background-color: var(--light-blue);
+                color: white;
             }}
+
             .quantity-metric-container {{
                 display: flex;
                 align-items: center;
                 gap: 10px;
                 margin-top: 10px;
             }}
+
             .quantity-metric-container select, 
             .quantity-metric-container input {{
-                padding: 5px;
+                padding: 8px;
+                border: 1px solid var(--light-blue);
+                border-radius: 5px;
                 font-size: 0.9em;
             }}
+
             #done-button {{
+                display: none;
                 margin-top: 20px;
                 padding: 12px 24px;
-                background-color: #34495e;
+                background-color: var(--dark-blue);
                 color: white;
                 border: none;
-                border-radius: 5px;
+                border-radius: 8px;
                 font-size: 1em;
                 cursor: pointer;
-                transition: background-color 0.3s;
+                transition: all 0.3s ease;
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
             }}
+
             #done-button:hover {{
-                background-color: #2c3e50;
+                background-color: var(--primary-blue);
+                transform: translateY(-3px);
             }}
-            #done-button::after {{
-                content: "✅";
-                margin-left: 10px;
-            }}
+
             #selected-user-message, 
             #ingredient-added-message {{
                 margin-top: 20px;
                 font-size: 1.2em;
-                font-weight: bold;
-                color: #2c3e50;
+                font-weight: 600;
+                color: var(--dark-blue);
+                text-align: center;
             }}
-            #ingredient-added-message {{
-                animation: pop 0.5s ease-in-out;
-            }}
-            @keyframes pop {{
-                0% {{
-                    transform: scale(0.8);
-                    opacity: 0;
-                }}
-                50% {{
-                    transform: scale(1.1);
-                    opacity: 1;
-                }}
-                100% {{
-                    transform: scale(1);
-                }}
-            }}
+
             .user-ingredient-list {{
                 display: flex;
                 flex-wrap: wrap;
@@ -266,14 +379,17 @@ def create_html_file():
                 margin-top: 10px;
             }}
             .user-ingredient-item {{
-                background-color: #f0f0f0;
-                padding: 5px 10px;
-                border-radius: 5px;
+                background-color: var(--background-blue);
+                padding: 8px 12px;
+                border-radius: 8px;
                 cursor: pointer;
-                transition: background-color 0.3s;
+                transition: all 0.3s ease;
+                border: 1px solid var(--light-blue);
             }}
+
             .user-ingredient-item:hover {{
-                background-color: #e0e0e0;
+                background-color: var(--light-blue);
+                color: white;
             }}
         </style>
     </head>
@@ -305,11 +421,16 @@ def create_html_file():
                 {' '.join(f'<div class="ingredient-item" data-id="{ingredient_id}">🍴 {ingredient_name}</div>' for ingredient_id, ingredient_name in all_ingredients.items())}
             </div>
             <div id="selected-ingredients" style="margin-top: 20px;"></div>
-            <button id="done-button" style="display:none;">Done</button>
+            <button id="done-button">Done</button>
             <div id="ingredient-added-message"></div>
         </div>
 
         <script>
+            // Global variables to store selected user or new fridge data
+            let selectedUserId = null;
+            let selectedUserIngredients = null;
+            let newFridgeIngredients = {{}};
+
             $(document).ready(function () {{
                 const existingUsers = {json.dumps(user_data)};
                 const allIngredients = {json.dumps(all_ingredients)};
@@ -319,12 +440,17 @@ def create_html_file():
                     $('#existing-user-section').show();
                     $('#create-fridge-section').hide();
                     $('#selected-user-message').empty();
+                    // Reset new fridge data
+                    newFridgeIngredients = {{}};
                 }});
 
                 $('#create-fridge-option').on('click', function() {{
                     $('#create-fridge-section').show();
                     $('#existing-user-section').hide();
                     $('#selected-user-message').empty();
+                    // Reset selected user data
+                    selectedUserId = null;
+                    selectedUserIngredients = null;
                 }});
 
                 // Existing User Logic
@@ -333,15 +459,45 @@ def create_html_file():
                     $('#user-contents').empty();
 
                     if (userId && existingUsers[userId]) {{
+                        // Save selected user data to global variables
+                        selectedUserId = userId;
+                        selectedUserIngredients = existingUsers[userId];
+
                         const content = existingUsers[userId];
                         for (let name in content) {{
                             $('#user-contents').append(`<p>${{name}}: ${{content[name]}}</p>`);
                         }}
                         $('#selected-user-message').text('You selected user ' + userId);
+
+                        // Log to the terminal
+                        console.log('Selected User ID:', userId);
+                        console.log('Selected User Ingredients:', selectedUserIngredients);
                     }} else {{
                         $('#selected-user-message').empty();
+                        selectedUserId = null;
+                        selectedUserIngredients = null;
                     }}
                 }});
+
+                // Done Button Logic
+                $('#done-button').on('click', function() {{
+                    // Collect ingredients for new fridge
+                    $('#selected-ingredients > div').each(function() {{
+                        const ingredientId = $(this).data('id');
+                        const quantity = $(this).find('.ingredient-quantity').val();
+                        const metric = $(this).find('.ingredient-metric').val();
+                        
+                        // Combine quantity and metric
+                        newFridgeIngredients[ingredientId] = quantity + metric;
+                    }});
+
+                    $('#ingredient-added-message').text('🎉 Ingredients added successfully!');
+                    $('#done-button').hide();
+
+                    // Log the new fridge data to the terminal
+                    console.log('New Fridge Ingredients:', newFridgeIngredients);
+                }});
+
 
                 // Create Fridge Logic
                 $('.ingredient-item:not(.user-ingredient-item)').on('click', function() {{
@@ -352,6 +508,7 @@ def create_html_file():
                     const existingItem = selectedDiv.find(`[data-id="${{ingredientId}}"]`);
                     if (existingItem.length) {{
                         existingItem.remove();
+                        delete newFridgeIngredients[ingredientId];
                     }} else {{
                         selectedDiv.append(`
                             <div data-id="${{ingredientId}}">
@@ -372,18 +529,65 @@ def create_html_file():
 
                 // Done Button Logic
                 $('#done-button').on('click', function() {{
+            // Collect ingredients for new fridge
+            $('#selected-ingredients > div').each(function() {{
+                const ingredientId = $(this).data('id');
+                const quantity = $(this).find('.ingredient-quantity').val();
+                const metric = $(this).find('.ingredient-metric').val();
+                
+                // Combine quantity and metric
+                newFridgeIngredients[ingredientId] = quantity + metric;
+            }});
+            // Python server-side logging
+            $.ajax({{
+                url: '/log_ingredients',
+                method: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify({{
+                    'user_id': selectedUserId,
+                    'ingredients': selectedUserId ? selectedUserIngredients : newFridgeIngredients
+                }}),
+                success: function(response) {{
+                    console.log('Ingredients logged successfully');
+                }},
+                error: function(error) {{
+                    console.error('Error logging ingredients:', error);
+                }}
+            }});
+
                     $('#ingredient-added-message').text('🎉 Ingredients added successfully!');
                     $('#done-button').hide();
+                    
+                    // Log the collected data (you can remove this in production)
+                    console.log('New Fridge Ingredients:', newFridgeIngredients);
                 }});
             }});
         </script>
     </body>
     </html>
     """
+
     #Write to an HTML file (temporary one)
     with open('fridge_contents.html', 'w', encoding='utf-8') as f:
-        f.write(html_content) 
+        f.write(html_content)
+    
     #Opening it in a web browser
     webbrowser.open('file://' + os.path.realpath('fridge_contents.html'))
+app = Flask(__name__)
+CORS(app)
+
+@app.route('/log_ingredients', methods=['POST'])
+def log_ingredients():
+    data = request.json
+    user_id = data.get('user_id')
+    ingredients = data.get('ingredients')
+    
+    # Convert ingredient IDs to strings if they're not already
+    if ingredients and all(isinstance(k, int) for k in ingredients.keys()):
+        ingredients = {str(k): v for k, v in ingredients.items()}
+    
+    log_selected_ingredients(user_id, ingredients)
+    
+    return jsonify({"status": "success"})
 if __name__ == '__main__':
     create_html_file()
