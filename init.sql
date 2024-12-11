@@ -389,7 +389,7 @@ VALUES
 (103, 'Red Onion', '["sweet onion", "white onion"]'),
 (201, 'Chicken Breast', '["chicken thigh", "turkey breast"]'),
 (202, 'Ginger', '["ginger paste", "minced ginger"]'),
-(203, 'Coconut Milk', '["cream", "almond milk"]'),
+(203, 'Coconut Milk', '["greek yogurt", "cashew milk"]'),
 (204, 'Curry Powder', '["garam masala", "turmeric"]'),
 (205, 'Garlic', '["garlic paste", "dried garlic"]'),
 (301, 'Mixed Vegetables', '["frozen vegetables", "seasonal vegetables"]'),
@@ -455,8 +455,8 @@ VALUES
 (1613, 'ginger paste', '["Ginger", "minced ginger"]'),
 (1614, 'minced ginger', '["Ginger", "ginger paste"]'),
 -- Coconut Milk Alternatives
-(1615, 'cream', '["Coconut Milk", "almond milk"]'),
-(1616, 'almond milk', '["Coconut Milk", "cream"]'),
+(1615, 'greek yogurt', '["Coconut Milk", "cashew milk"]'),
+(1616, 'cashew milk', '["Coconut Milk", "greek yogurt"]'),
 -- Curry Powder Alternatives
 (1617, 'garam masala', '["Curry Powder", "turmeric"]'),
 (1618, 'turmeric', '["Curry Powder", "garam masala"]'),
@@ -673,13 +673,28 @@ VALUES
 -- Partial (But with a few missing ingredients which make up less than 30% of the recipe): 11
 -- Rejected: 
 
-(4, 2, '{401: "2", 402: "2", 302: "10ml", 205: "2", 1001: "100g", 903: "200g"}'), 
--- Complete: 26
--- Partial: 16, 19
+(4, 2, '{1603: "350g", 1203: "210g", 902: "160g", 302: "45ml", 1102: "10g",
+        702: "350g", 203: "290ml", 1660: "245g", 1503: "45g", 1623: "30ml",
+        201: "500g", 1613: "20g", 1616: "400ml", 1617: "30g", 1619: "15g",
+        903: "435g", 1001: "130g", 802: "70g", 801: "75g", 1503: "25g",
+        1201: "180g", 1501: "90g", 1002: "220g", 1401: "20g", 1502: "7g",
+        601: "590g", 602: "30ml", 302: "20ml"}'), 
+-- Complete: 37, 40
+-- Complete w Alternative (was considered to be partial but an alternative was found above 95% for a missing ingredient/below required %): 28, 31
+-- Partial (All the ranges are between the required and beneath threshold): 16, 19
+-- Partial (But with a few missing ingredients which make up less than 30% of the recipe): 6
 
-(5, 3, '{501: "200g", 502: "150ml", 503: "30ml", 302: "10ml", 1201: "200g", 1401: "30g", 1403: "10ml"}'), 
--- Complete: 29, 30
--- Partial: 16, 18
+(5, 3, '{1603: "300g", 1203: "200g", 902: "150g", 302: "40ml", 1102: "10g",
+        1660: "300g", 1644: "250g", 602: "20ml", 1701: "30ml"
+        1630: "200g", 1676: "275ml", 1501: "48g", 503: "19ml",
+        903: "430g", 1001: "128g", 802: "70g", 801: "75g", 1503: "25g",
+        1201: "180g", 1718: "90g", 1002: "215g", 1401: "22g", 1502: "8g",
+        702: "300g", 203: "260ml", 804: "180g", 1103: "5g",
+        401: "2", 402: "2"}'), 
+-- Complete: 26
+-- Complete w Alternative (was considered to be partial but an alternative was found above 95% for a missing ingredient/below required %): 37, 39
+-- Partial (All the ranges are between the required and beneath threshold): 16, 19, 23
+-- Partial (But with a few missing ingredients which make up less than 30% of the recipe): 4
 
 (6, 3, '{601: "600g", 602: "30ml", 603: "10g", 302: "20ml", 1102: "10g", 703: "250g", 901: "200g"}'), 
 -- Complete: 13
