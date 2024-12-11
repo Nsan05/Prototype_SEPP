@@ -1,0 +1,300 @@
+
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Fridge Inventory Management</title>
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <style>
+            body {
+                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                background-color: #f8f9fa;
+                color: #333;
+                max-width: 900px;
+                margin: 30px auto;
+                padding: 20px;
+                border-radius: 8px;
+                box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+                overflow-x: hidden;
+            }
+            h1 {
+                color: #2c3e50;
+                text-align: center;
+                position: relative;
+            }
+            h1::after {
+                content: "🧊🍎🥬";
+                position: absolute;
+                top: -10px;
+                right: -40px;
+                animation: float 3s infinite ease-in-out;
+            }
+            h2 {
+                color: #2c3e50;
+                text-align: center;
+            }
+            @keyframes float {
+                0%, 100% {
+                    transform: translateY(0);
+                }
+                50% {
+                    transform: translateY(-10px);
+                }
+            }
+            .option-container {
+                display: flex;
+                justify-content: space-around;
+                margin-bottom: 30px;
+            }
+            .option-box {
+                border: 1px solid #ddd;
+                background-color: #ffffff;
+                padding: 20px;
+                width: 40%;
+                text-align: center;
+                cursor: pointer;
+                border-radius: 10px;
+                transition: transform 0.2s, background-color 0.3s, box-shadow 0.3s;
+                position: relative;
+            }
+            .option-box:hover {
+                transform: translateY(-5px);
+                background-color: #eaf2f8;
+                box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.15);
+            }
+            .option-box::before {
+                content: "👆";
+                font-size: 1.5em;
+                position: absolute;
+                top: -20px;
+                left: 10px;
+                animation: bounce 2s infinite;
+            }
+            @keyframes bounce {
+                0%, 100% {
+                    transform: translateY(0);
+                }
+                50% {
+                    transform: translateY(-5px);
+                }
+            }
+            #existing-user-section, 
+            #create-fridge-section {
+                display: none;
+                margin-top: 20px;
+                padding: 20px;
+                background-color: #ffffff;
+                border: 1px solid #ddd;
+                border-radius: 10px;
+                box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+            }
+            .ingredient-list {
+                max-height: 300px;
+                overflow-y: auto;
+                border: 1px solid #ddd;
+                padding: 10px;
+                margin-top: 10px;
+                background-color: #fefefe;
+                border-radius: 5px;
+                animation: slideIn 0.5s ease-in;
+            }
+            @keyframes slideIn {
+                from {
+                    opacity: 0;
+                    transform: translateX(-100%);
+                }
+                to {
+                    opacity: 1;
+                    transform: translateX(0);
+                }
+            }
+            .ingredient-item {
+                padding: 8px;
+                margin-bottom: 5px;
+                background-color: #f9f9f9;
+                border-radius: 5px;
+                cursor: pointer;
+                transition: background-color 0.3s, box-shadow 0.3s;
+            }
+            .ingredient-item:hover {
+                background-color: #dceefb;
+                box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+            }
+            .selected-ingredient {
+                background-color: #aed6f1;
+                border: 1px solid #5499c7;
+            }
+            .quantity-metric-container {
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                margin-top: 10px;
+            }
+            .quantity-metric-container select, 
+            .quantity-metric-container input {
+                padding: 5px;
+                font-size: 0.9em;
+            }
+            #done-button {
+                margin-top: 20px;
+                padding: 12px 24px;
+                background-color: #34495e;
+                color: white;
+                border: none;
+                border-radius: 5px;
+                font-size: 1em;
+                cursor: pointer;
+                transition: background-color 0.3s;
+            }
+            #done-button:hover {
+                background-color: #2c3e50;
+            }
+            #done-button::after {
+                content: "✅";
+                margin-left: 10px;
+            }
+            #selected-user-message, 
+            #ingredient-added-message {
+                margin-top: 20px;
+                font-size: 1.2em;
+                font-weight: bold;
+                color: #2c3e50;
+            }
+            #ingredient-added-message {
+                animation: pop 0.5s ease-in-out;
+            }
+            @keyframes pop {
+                0% {
+                    transform: scale(0.8);
+                    opacity: 0;
+                }
+                50% {
+                    transform: scale(1.1);
+                    opacity: 1;
+                }
+                100% {
+                    transform: scale(1);
+                }
+            }
+            .user-ingredient-list {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 10px;
+                margin-top: 10px;
+            }
+            .user-ingredient-item {
+                background-color: #f0f0f0;
+                padding: 5px 10px;
+                border-radius: 5px;
+                cursor: pointer;
+                transition: background-color 0.3s;
+            }
+            .user-ingredient-item:hover {
+                background-color: #e0e0e0;
+            }
+        </style>
+    </head>
+    <body>
+        <h1>Fridge Inventory Management</h1>
+        <div class="option-container">
+            <div id="existing-user-option" class="option-box">
+                <h2>📂 Select Existing User</h2>
+                <p>Browse and manage contents of existing users</p>
+            </div>
+            <div id="create-fridge-option" class="option-box">
+                <h2>🆕 Create New Fridge</h2>
+                <p>Create a new fridge with available ingredients</p>
+            </div>
+        </div>
+
+        <div id="existing-user-section">
+            <h2>📂 Existing Users</h2>
+            <div id="users-ingredients-list" class="ingredient-list">
+                <div class="ingredient-item user-ingredient-item" data-userid="1">👥 User 1 Inventory: Eggs (2), Salt (25g)</div> <div class="ingredient-item user-ingredient-item" data-userid="2">👥 User 2 Inventory: Pepper (5), Milk (100ml)</div> <div class="ingredient-item user-ingredient-item" data-userid="3">👥 User 3 Inventory: Eggs (100g), Milk (23g)</div>
+            </div>
+            <div id="user-contents" style="margin-top: 20px;"></div>
+            <div id="selected-user-message"></div>
+        </div>
+
+        <div id="create-fridge-section">
+            <h2>🆕 Create New Fridge</h2>
+            <div class="ingredient-list" id="ingredient-list">
+                <div class="ingredient-item" data-id="101">🍴 Eggs</div> <div class="ingredient-item" data-id="102">🍴 Salt</div> <div class="ingredient-item" data-id="103">🍴 Pepper</div> <div class="ingredient-item" data-id="104">🍴 Milk</div> <div class="ingredient-item" data-id="105">🍴 Cheese</div> <div class="ingredient-item" data-id="106">🍴 Flour</div> <div class="ingredient-item" data-id="107">🍴 Sugar</div> <div class="ingredient-item" data-id="108">🍴 Butter</div> <div class="ingredient-item" data-id="109">🍴 Oil</div> <div class="ingredient-item" data-id="110">🍴 Garlic</div> <div class="ingredient-item" data-id="111">🍴 Onion</div> <div class="ingredient-item" data-id="112">🍴 Tomato</div> <div class="ingredient-item" data-id="113">🍴 Lemon</div> <div class="ingredient-item" data-id="114">🍴 Yogurt</div> <div class="ingredient-item" data-id="115">🍴 Cucumber</div>
+            </div>
+            <div id="selected-ingredients" style="margin-top: 20px;"></div>
+            <button id="done-button" style="display:none;">Done</button>
+            <div id="ingredient-added-message"></div>
+        </div>
+
+        <script>
+            $(document).ready(function () {
+                const existingUsers = {"1": {"Eggs": 2, "Salt": "25g"}, "2": {"Pepper": 5, "Milk": "100ml"}, "3": {"Eggs": "100g", "Milk": "23g"}};
+                const allIngredients = {"101": "Eggs", "102": "Salt", "103": "Pepper", "104": "Milk", "105": "Cheese", "106": "Flour", "107": "Sugar", "108": "Butter", "109": "Oil", "110": "Garlic", "111": "Onion", "112": "Tomato", "113": "Lemon", "114": "Yogurt", "115": "Cucumber"};
+
+                // Option selection
+                $('#existing-user-option').on('click', function() {
+                    $('#existing-user-section').show();
+                    $('#create-fridge-section').hide();
+                    $('#selected-user-message').empty();
+                });
+
+                $('#create-fridge-option').on('click', function() {
+                    $('#create-fridge-section').show();
+                    $('#existing-user-section').hide();
+                    $('#selected-user-message').empty();
+                });
+
+                // Existing User Logic
+                $('.user-ingredient-item').on('click', function () {
+                    const userId = $(this).data('userid');
+                    $('#user-contents').empty();
+
+                    if (userId && existingUsers[userId]) {
+                        const content = existingUsers[userId];
+                        for (let name in content) {
+                            $('#user-contents').append(`<p>${name}: ${content[name]}</p>`);
+                        }
+                        $('#selected-user-message').text('You selected user ' + userId);
+                    } else {
+                        $('#selected-user-message').empty();
+                    }
+                });
+
+                // Create Fridge Logic
+                $('.ingredient-item:not(.user-ingredient-item)').on('click', function() {
+                    const ingredientId = $(this).data('id');
+                    const ingredientName = $(this).text();
+                    $(this).toggleClass('selected-ingredient');
+                    const selectedDiv = $('#selected-ingredients');
+                    const existingItem = selectedDiv.find(`[data-id="${ingredientId}"]`);
+                    if (existingItem.length) {
+                        existingItem.remove();
+                    } else {
+                        selectedDiv.append(`
+                            <div data-id="${ingredientId}">
+                                <span>${ingredientName}:</span>
+                                <div class="quantity-metric-container">
+                                    <input type="number" min="1" value="1" class="ingredient-quantity">
+                                    <select class="ingredient-metric">
+                                        <option value="ml">ml</option>
+                                        <option value="g">g</option>
+                                        <option value="unit">Unit</option>
+                                    </select>
+                                </div>
+                            </div>
+                        `);
+                    }
+                    $('#done-button').toggle($('#selected-ingredients').children().length > 0);
+                });
+
+                // Done Button Logic
+                $('#done-button').on('click', function() {
+                    $('#ingredient-added-message').text('🎉 Ingredients added successfully!');
+                    $('#done-button').hide();
+                });
+            });
+        </script>
+    </body>
+    </html>
+    
