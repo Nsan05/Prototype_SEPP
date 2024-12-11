@@ -368,7 +368,7 @@ VALUES
 (39, 'Plantain and Almond Milk Smoothie Bowl',
     '{1630: ["200g", "core"], 
     1676: ["250ml", "core"], 
-    1718: ["50g", "topping"], 
+    1718: ["50g", "optional"], 
     1633: ["20ml", "secondary"]}',
     15, 2, 'veg',
     '1. Blend plantain with almond milk. 2. Add agave syrup for sweetness. 3. Pour into bowl. 4. Top with sliced almonds. 5. Serve chilled.'),
