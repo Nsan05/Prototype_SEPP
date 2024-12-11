@@ -9,14 +9,20 @@ from flask import Flask, request, jsonify
 from flask_cors import CORS
 
 # Connect to the PostgreSQL database
+# connection = psycopg2.connect(
+#     dbname="prototype",
+#     user="postgres",
+#     password="idkpassword_2024",
+#     host="localhost",
+#     port="5432"
+# )
 connection = psycopg2.connect(
-    dbname="prototype",
+    dbname="sepp1",
     user="postgres",
-    password="idkpassword_2024",
+    password="raisa",
     host="localhost",
     port="5432"
 )
-
 # Function to save user inventory
 def save_user_inventory(user_id, inventory_dict):
     """
@@ -391,6 +397,36 @@ def create_html_file():
                 background-color: var(--light-blue);
                 color: white;
             }}
+             /* raisa- added styles for recipe display */
+            #recipe-suggestions-section {{
+                margin-top: 30px;
+                padding:20px;
+                background-color: white;
+                border-radius:15px;
+                box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+            }}
+
+            .recipe-list {{
+                display: flex;
+                flex-wrap:wrap;
+                gap: 15px;
+                justify-content: center;
+            }}
+
+            .recipe-card {{
+                background-color:var(--background-blue);
+                border: 1px solid var(--light-blue);
+                border-radius: 10px;
+                padding:15px;
+                width:250px;
+                text-align:center;
+                transition:all 0.3s ease;
+            }}
+
+            .recipe-card:hover {{
+                transform:scale(1.05);
+                box-shadow:0 5px 15px rgba(0, 0, 0, 0.2);
+            }}
         </style>
     </head>
     <body>
@@ -423,9 +459,63 @@ def create_html_file():
             <div id="selected-ingredients" style="margin-top: 20px;"></div>
             <button id="done-button">Done</button>
             <div id="ingredient-added-message"></div>
+
+        <!-- raisa-added section for recipe suggestion  -->
+        <div id="recipe-suggestions-section" style="display:none;">
+            <h2>🍽️ Recipe Suggestions</h2>
+            <div id="complete-recipes-section">
+                <h3>Complete Recipes</h3>
+                <div id="complete-recipes-list" class="recipe-list"></div>
+            </div>
+            <div id="partial-recipes-section">
+                <h3>Partial Recipes</h3>
+                <div id="partial-recipes-list" class="recipe-list"></div>
+            </div>
         </div>
 
         <script>
+        //raisa-recip suggestion func
+           function suggestRecipes(ingredients) {{
+                $.ajax({{
+                    url: 'http://localhost:5000/suggest_recipes',
+                    method:'POST',
+                    contentType:'application/json',
+                    data: JSON.stringify({{
+                        'inventory':ingredients
+                    }}),
+                    success: function(response) {{
+                        $('#recipe-suggestions-section').show();
+                        //display complete
+                        const completeRecipesList =$('#complete-recipes-list');
+                        completeRecipesList.empty();
+                        response.complete_recipes.forEach(recipe => {{
+                            completeRecipesList.append(`
+                                <div class="recipe-card">
+                                    <h4>${{recipe.recipe}}</h4>
+                                    <p>Total Score:${{recipe.total.toFixed(2)}}</p>
+                                </div>
+                            `);
+                        }});
+
+                        //display full
+                        const partialRecipesList= $('#partial-recipes-list');
+                        partialRecipesList.empty();
+                        response.partial_recipes.forEach(recipe => {{
+                            partialRecipesList.append(`
+                                <div class="recipe-card">
+                                    <h4>${{recipe.recipe}}</h4>
+                                    <p>Total Score:${{recipe.total.toFixed(2)}}</p>
+                                    <p>Score 1: ${{recipe.score1.toFixed(2)}}</p>
+                                    <p>Score 2:${{recipe.score2.toFixed(2)}}</p>
+                                </div>
+                            `);
+                        }});
+                    }},
+                    error: function(error) {{
+                        console.error('Error getting recipe suggestions:', error);
+                    }}
+                }});
+            }}
             // Global variables to store selected user or new fridge data
             let selectedUserId = null;
             let selectedUserIngredients = null;
@@ -479,25 +569,6 @@ def create_html_file():
                     }}
                 }});
 
-                // Done Button Logic
-                $('#done-button').on('click', function() {{
-                    // Collect ingredients for new fridge
-                    $('#selected-ingredients > div').each(function() {{
-                        const ingredientId = $(this).data('id');
-                        const quantity = $(this).find('.ingredient-quantity').val();
-                        const metric = $(this).find('.ingredient-metric').val();
-                        
-                        // Combine quantity and metric
-                        newFridgeIngredients[ingredientId] = quantity + metric;
-                    }});
-
-                    $('#ingredient-added-message').text('🎉 Ingredients added successfully!');
-                    $('#done-button').hide();
-
-                    // Log the new fridge data to the terminal
-                    console.log('New Fridge Ingredients:', newFridgeIngredients);
-                }});
-
 
                 // Create Fridge Logic
                 $('.ingredient-item:not(.user-ingredient-item)').on('click', function() {{
@@ -527,41 +598,27 @@ def create_html_file():
                     $('#done-button').toggle($('#selected-ingredients').children().length > 0);
                 }});
 
-                // Done Button Logic
-                $('#done-button').on('click', function() {{
-            // Collect ingredients for new fridge
-            $('#selected-ingredients > div').each(function() {{
-                const ingredientId = $(this).data('id');
-                const quantity = $(this).find('.ingredient-quantity').val();
-                const metric = $(this).find('.ingredient-metric').val();
+            //raisa- combined the the done button handlers
+            $('#done-button').on('click',function() {{
                 
-                // Combine quantity and metric
-                newFridgeIngredients[ingredientId] = quantity + metric;
-            }});
-            // Python server-side logging
-            $.ajax({{
-                url: '/log_ingredients',
-                method: 'POST',
-                contentType: 'application/json',
-                data: JSON.stringify({{
-                    'user_id': selectedUserId,
-                    'ingredients': selectedUserId ? selectedUserIngredients : newFridgeIngredients
-                }}),
-                success: function(response) {{
-                    console.log('Ingredients logged successfully');
-                }},
-                error: function(error) {{
-                    console.error('Error logging ingredients:', error);
-                }}
+                $('#selected-ingredients>div').each(function() {{
+                    const ingredientId = $(this).data('id');
+                    const quantity =$(this).find('.ingredient-quantity').val();
+                    const metric =$(this).find('.ingredient-metric').val();
+                   
+                    newFridgeIngredients[ingredientId] = quantity+metric;
+                }});
+
+                $('#ingredient-added-message').text('🎉 Ingredients added successfully!');
+                $('#done-button').hide();
+            
+                suggestRecipes(newFridgeIngredients);
+                console.log('New Fridge Ingredients:', newFridgeIngredients);
             }});
 
-                    $('#ingredient-added-message').text('🎉 Ingredients added successfully!');
-                    $('#done-button').hide();
-                    
-                    // Log the collected data (you can remove this in production)
-                    console.log('New Fridge Ingredients:', newFridgeIngredients);
-                }});
-            }});
+        }});
+        
+        
         </script>
     </body>
     </html>
