@@ -23,7 +23,20 @@ connection = psycopg2.connect(
     host="localhost",
     port="5432"
 )
-# Function to save user inventory
+#raisa-func added to access user id 
+def get_next_user_id():
+    try:
+        cursor = connection.cursor()
+        cursor.execute("SELECT COALESCE(MAX(user_id), 0) + 1 FROM UserInventory")
+        next_user_id = cursor.fetchone()[0]
+        return next_user_id
+    except Exception as e:
+        print(f"Error getting next user ID: {e}")
+        return None
+    finally:
+        cursor.close()
+    
+# Function to save user inventory -- changed made(raisa)
 def save_user_inventory(user_id, inventory_dict):
     """
     Save user inventory to the database and print details to the terminal.
@@ -33,28 +46,26 @@ def save_user_inventory(user_id, inventory_dict):
     inventory_dict (dict): Dictionary of ingredients with their quantities
     """
     try:
+        user_id = get_next_user_id()
+        fridge_id = user_id  # Use same ID for fridge
         cursor = connection.cursor()
         
         # Convert inventory dict to string representation for database storage
         inventory_str = str(inventory_dict)
         
-        # Insert or update user inventory
+        # Insert or update user inventory - raisa(changed command)
         cursor.execute("""
-            INSERT INTO UserInventory (User_Id, Ingredients)
-            VALUES (%s, %s)
-            ON CONFLICT (User_Id) DO UPDATE 
-            SET Ingredients = %s;
-        """, (user_id, inventory_str, inventory_str))
+            INSERT INTO UserInventory (User_Id, Fridge_Id, Ingredients)
+            VALUES (%s, %s, %s);
+        """, (user_id, fridge_id, inventory_str))
         
         connection.commit()
         
         # Print user inventory details to terminal
-        print("\n--- New User Inventory ---")
-        print(f"User ID: {user_id}")
-        print("Ingredients:")
+        print(f"\n--- New User Inventory (User ID: {user_id}) ---")
         all_ingredients = fetch_all_ingredients()
         for ingredient_id, quantity in ast.literal_eval(inventory_str).items():
-            ingredient_name = all_ingredients.get(ingredient_id, "Unknown Ingredient")
+            ingredient_name = all_ingredients.get(str(ingredient_id), "Unknown Ingredient")
             print(f"- {ingredient_name} (ID: {ingredient_id}): {quantity}")
         print("-------------------------\n")
         
@@ -62,7 +73,7 @@ def save_user_inventory(user_id, inventory_dict):
     except Exception as e:
         print(f"Error saving user inventory: {e}")
         connection.rollback()
-        return False
+        return Nonde
     finally:
         cursor.close()
 
@@ -559,6 +570,13 @@ def create_html_file():
                         }}
                         $('#selected-user-message').text('You selected user ' + userId);
 
+                        //raisa- suggesting recipes for this user inventory
+                        const userIngredients = Object.fromEntries(
+                            Object.entries(existingUsers[userId]).map(([name, qty]) => 
+                                [Object.keys(allIngredients).find(k => allIngredients[k] === name), qty]
+                            )
+                        );
+                        suggestRecipes(userIngredients, userId);
                         // Log to the terminal
                         console.log('Selected User ID:', userId);
                         console.log('Selected User Ingredients:', selectedUserIngredients);
@@ -598,23 +616,23 @@ def create_html_file():
                     $('#done-button').toggle($('#selected-ingredients').children().length > 0);
                 }});
 
-            //raisa- combined the the done button handlers
-            $('#done-button').on('click',function() {{
-                
-                $('#selected-ingredients>div').each(function() {{
-                    const ingredientId = $(this).data('id');
-                    const quantity =$(this).find('.ingredient-quantity').val();
-                    const metric =$(this).find('.ingredient-metric').val();
-                   
-                    newFridgeIngredients[ingredientId] = quantity+metric;
-                }});
-
-                $('#ingredient-added-message').text('🎉 Ingredients added successfully!');
-                $('#done-button').hide();
+            //raisa- combined the the done button handlers 
+            $('#done-button').on('click', function() {{
             
-                suggestRecipes(newFridgeIngredients);
-                console.log('New Fridge Ingredients:', newFridgeIngredients);
+            newFridgeIngredients = {{}};
+            $('#selected-ingredients>div').each(function() {{
+                const ingredientId = $(this).data('id');
+                const quantity = $(this).find('.ingredient-quantity').val();
+                const metric = $(this).find('.ingredient-metric').val();
+                newFridgeIngredients[ingredientId] = quantity+metric;
             }});
+
+            $('#ingredient-added-message').text('🎉 Ingredients added successfully!');
+            $('#done-button').hide();
+        
+            suggestRecipes(newFridgeIngredients);
+            console.log('New Fridge Ingredients:', newFridgeIngredients);
+        }});
 
         }});
         
@@ -636,15 +654,13 @@ CORS(app)
 @app.route('/log_ingredients', methods=['POST'])
 def log_ingredients():
     data = request.json
-    user_id = data.get('user_id')
+    user_id = save_user_inventory(ingredients)
     ingredients = data.get('ingredients')
     
-    # Convert ingredient IDs to strings if they're not already
-    if ingredients and all(isinstance(k, int) for k in ingredients.keys()):
-        ingredients = {str(k): v for k, v in ingredients.items()}
-    
-    log_selected_ingredients(user_id, ingredients)
-    
-    return jsonify({"status": "success"})
+    if user_id:
+        return jsonify({"status": "success", "user_id": user_id})
+    else:
+        return jsonify({"status": "error"}), 500
+   
 if __name__ == '__main__':
     create_html_file()
