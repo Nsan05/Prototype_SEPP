@@ -34,10 +34,10 @@ def save_user_inventory(user_id, inventory_dict):
         
         # Insert or update user inventory
         cursor.execute("""
-            INSERT INTO User_Inventory_Table (User_Id, Ingredient_Id_quantity)
+            INSERT INTO UserInventory (User_Id, Ingredients)
             VALUES (%s, %s)
             ON CONFLICT (User_Id) DO UPDATE 
-            SET Ingredient_Id_quantity = %s;
+            SET Ingredients = %s;
         """, (user_id, inventory_str, inventory_str))
         
         connection.commit()
@@ -67,7 +67,7 @@ def fetch_existing_users():
         cursor = connection.cursor()
         cursor.execute("""
             SELECT DISTINCT user_id 
-            FROM User_Inventory_Table;
+            FROM UserInventory;
         """)
         existing_users = [row[0] for row in cursor.fetchall()]
         return existing_users
@@ -79,12 +79,12 @@ def fetch_existing_users():
 
 # Function to fetch all ingredients
 def fetch_all_ingredients():
-    """Fetch all available ingredients from the Ingredient_Table."""
+    """Fetch all available ingredients from the Ingredient."""
     try:
         cursor = connection.cursor()
         cursor.execute("""
-            SELECT Ingredient_Id, Ing_name 
-            FROM Ingredient_Table;
+            SELECT Ingredient_Id, Ingredient_name
+            FROM Ingredient;
         """)
         ingredients = {str(row[0]): row[1] for row in cursor.fetchall()}
         return ingredients
@@ -100,8 +100,8 @@ def fetch_user_data():
     try:
         cursor = connection.cursor()
         cursor.execute("""
-            SELECT User_Id, Ingredient_Id_quantity 
-            FROM User_Inventory_Table;
+            SELECT User_Id, Ingredients 
+            FROM UserInventory;
         """)
         all_inventory = cursor.fetchall()
 
@@ -111,8 +111,8 @@ def fetch_user_data():
             user_data[user_id] = {}
             for ingredient_id, quantity in ingredient_dict.items():
                 cursor.execute("""
-                    SELECT Ing_name
-                    FROM Ingredient_Table
+                    SELECT Ingredient_name
+                    FROM Ingredient
                     WHERE Ingredient_Id = %s;
                 """, (ingredient_id,))
                 ingredient_name = cursor.fetchone()[0]
