@@ -4,16 +4,7 @@ import logging
 import ast
 import json
 
-logger = logging.getLogger(__name__)
-logger.setLevel(logging.DEBUG)
 
-console_handler = logging.StreamHandler()
-console_handler.setLevel(logging.DEBUG)
-
-formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-console_handler.setFormatter(formatter)
-
-logger.addHandler(console_handler)
 
 def parse_quantity(recipe_quantity: str, inventory_quantity: str) -> int:
     try:
@@ -27,7 +18,7 @@ def parse_quantity(recipe_quantity: str, inventory_quantity: str) -> int:
         return max(percentage, 0)
     
     except Exception as e:
-        logger.error(f"Error parsing quantities: {e}")
+        print(e)
         return 0
 
 class RecipeSuggestion:
@@ -40,7 +31,7 @@ class RecipeSuggestion:
             self.alternatives = self.get_alternatives()
             self.ingredient_names = self.get_ingredient_names()
         except (Exception, psycopg2.Error) as error:
-            logging.error(f"Error connecting to database: {error}")
+            print(error)
             raise 
 
     def _del_(self):
@@ -57,7 +48,7 @@ class RecipeSuggestion:
                 cursor.execute(query)
                 return dict(cursor.fetchall())
         except psycopg2.Error as e:
-            logging.error(f"Database error in get_ingredient_names: {e}")
+            print(e)
             return {}
         
     def get_recipes(self) -> Dict[int, Dict[str, Any]]:
@@ -73,12 +64,12 @@ class RecipeSuggestion:
             recipes = {}
 
             for recipe_id, recipe_name, ingredient_list_str in recipes_data:
-                logger.info(f"Processing recipe {recipe_id}: {recipe_name}")
+                
 
                 try:
                     ingredient_list = ast.literal_eval(ingredient_list_str)
                 except (ValueError, SyntaxError) as e:
-                    logger.error(f"Error parsing ingredient list for recipe {recipe_id}: {e}")
+                    print(e)
                     continue
 
                 core = {}
@@ -97,10 +88,9 @@ class RecipeSuggestion:
                         elif importance_level == "optional":
                             optional[ingredient_id] = ingredient_quantity
                         else:
-                            logger.warning(f"Unknown importance level {importance_level} for ingredient {ingredient_id}")
-
+                            print("Unknown importance level")
                     except Exception as e:
-                        logger.error(f"Unexpected error processing ingredient {ingredient_id} in recipe {recipe_id}: {e}")
+                        print(e)
 
                 recipes[recipe_id] = {
                     'recipe_name': recipe_name,
@@ -109,11 +99,9 @@ class RecipeSuggestion:
                     'optional': optional
                 }
 
-                logger.info(f"Recipe {recipe_id} processed successfully")
-
             return recipes
         except psycopg2.Error as e:
-            logger.error(f"Database error in get_recipes: {e}")
+            print(e)
             return {}    
 
     def get_inventory(self) -> Dict[int, str]:
@@ -133,14 +121,14 @@ class RecipeSuggestion:
                         raw_ingredients = ast.literal_eval(result[0])
                         inventory = {int(ingredient_id): str(quantity) for ingredient_id, quantity in raw_ingredients.items()}
                         return inventory
-                    except (ValueError, SyntaxError):
-                        logger.error("Error parsing inventory ingredients")
+                    except (ValueError, SyntaxError) as e:
+                        print(e)
                         return {}
                 else:
-                    logger.warning("No inventory found for user.")
+                    print("No inventory found for user.")
                     return {}
             except psycopg2.Error as e:
-                logger.error(f"Database error in get_inventory: {e}")
+                print(e)
                 return {}
             
     def get_alternatives(self) -> Dict[int, List[str]]:
@@ -157,11 +145,11 @@ class RecipeSuggestion:
                     parsed_alternatives = json.loads(alternatives_list) if alternatives_list else []
                     alternatives[ingredient_id] = parsed_alternatives
                 except (json.JSONDecodeError, AttributeError) as e:
-                    logger.error(f"Error processing alternatives for ingredient {ingredient_id}: {e}")
+                    print(e)
             
             return alternatives
         except psycopg2.Error as e:
-            logger.error(f"Database error in get_alternatives: {e}")
+            print(e)
             return {}
         
     
@@ -179,8 +167,8 @@ class RecipeSuggestion:
         recipes = self.get_recipes()
         fridge = self.get_inventory()
 
-        logger.debug(f"Recipes: {recipes}")
-        logger.debug(f"Fridge Inventory: {fridge}")
+        # logger.debug(f"Recipes: {recipes}")
+        # logger.debug(f"Fridge Inventory: {fridge}")
 
         results = []
 
@@ -196,7 +184,6 @@ class RecipeSuggestion:
             for ingredient_id, required_qty in all_ingredients.items():
                 available_qty = fridge.get(ingredient_id, '0')
                 percentages[ingredient_id] = parse_quantity(required_qty, available_qty)
-                # logger.debug(f"Ingredient ID: {ingredient_id}, Required: {required_qty}, Available: {available_qty}, Percentage: {percentages[ingredient_id]}")
         
             for ingredient_id in core.keys():
                 if percentages.get(ingredient_id, 0) < 95:  
@@ -214,13 +201,11 @@ class RecipeSuggestion:
                             alt_available_qty = fridge[alt_id]
                             alt_percentage = parse_quantity(secondary[ingredient_id], alt_available_qty)
                             percentages[ingredient_id] = max(percentages[ingredient_id], alt_percentage)
-            
-            logger.debug(f"Ingredient ID: {ingredient_id}, Required: {required_qty}, Available: {available_qty}, Percentage: {percentages[ingredient_id]}")
-                
+        
             core_complete = all(percentages.get(ing, 0) >= 95 for ing in core)
             secondary_complete = all(percentages.get(ing, 0) >= 95 for ing in secondary)
             optional_complete = all(percentages.get(ing, 0) >= 95 for ing in optional)
-            print("c:",core_complete,"\ns:",secondary_complete,"\no:",optional_complete)
+            
             if core_complete and secondary_complete and optional_complete:
                 score1 = self.calculate_score(percentages, core, secondary, optional)
                 results.append({
@@ -230,7 +215,6 @@ class RecipeSuggestion:
                     "score2": 0, 
                     "total": score1
                 })
-                print(f"Recipe: {recipe_data['recipe_name']} - Complete, Score: {score1:.2f}")
                 continue  
 
             
@@ -286,14 +270,13 @@ def main():
     }
 
     try:
-        logging.getLogger().setLevel(logging.DEBUG)
+        
         user_id = 2
         recipe_suggester = RecipeSuggestion(db_params, user_id)
         results = recipe_suggester.suggest_recipes()
 
         complete_recipes = [r for r in results if r['case'] == 'Complete']
         partial_recipes = [r for r in results if r['case'] == 'Partial']
-        rejected_recipes = [r for r in results if r['case'] == 'Rejected']
 
         print("COMPLETE RECIPES:")
         print("-" * 50)
@@ -311,15 +294,10 @@ def main():
             print(f"Score 2: {recipe['score2']:.2f}")
             print("-" * 50)
 
-        print("\nREJECTED RECIPES:")
-        print("-" * 50)
-        for recipe in rejected_recipes:
-            print(f"Recipe: {recipe['recipe']}")
-            print(f"Reason: {recipe.get('reason', 'Unknown')}")
-            print("-" * 50)
+        
 
     except Exception as e:
-        logger.error(f"An error occurred: {e}", exc_info=True)
+        print(e)
 
 if __name__ == "__main__":
     main()   
