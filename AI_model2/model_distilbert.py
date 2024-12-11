@@ -46,12 +46,12 @@ labels = {"core": 0, "secondary": 1, "optional": 2}
 dataset = dataset.map(lambda x: {"label": labels[x["label"]]})
 
 #train and test data
-# train_test_split = dataset.train_test_split(test_size=0.2)
-# train_data = train_test_split["train"]
-# test_data = train_test_split["test"]
-#debug-using same data for test and train
-train_data = dataset
-test_data = dataset
+train_test_split = dataset.train_test_split(test_size=0.2)
+train_data = train_test_split["train"]
+test_data = train_test_split["test"]
+# debug-using same data for test and train
+# train_data = dataset
+# test_data = dataset
 
 #calculate weights
 class_weights = compute_class_weight('balanced',classes=np.unique(train_data['label']), y=train_data['label'])
@@ -97,8 +97,8 @@ training_args = TrainingArguments(
     evaluation_strategy="steps",
     save_steps=50,
     eval_steps=50,
-    learning_rate=3e-5, 
-    per_device_train_batch_size=32 ,
+    learning_rate=1e-4, 
+    per_device_train_batch_size=16,
     num_train_epochs=20,  #increased
     weight_decay=0.01, #reduced
     logging_dir="./logs_distilbert",
@@ -111,7 +111,7 @@ training_args = TrainingArguments(
 #try 2- lr=3e-5, batch-16 ,epoch-20 acc-50.96
 #try 3- lr=3e-5, batch-25 , epoch-20,acc-35.627/50.96
 #try 4 - lr=5e-5, batch-16 ,epoch-20, acc-29.03
-#try 5 - lr=1e-4, batch-16 ,epoch-20, acc-50.96/47.74 ------finals
+#try 5 - lr=1e-4, batch-16 ,epoch-20, acc-50.96/47.74/58.06 ------finals
 #try 6- lr=1e-4, batch-32 , epoch-20, acc-27.09/45.80
 #try 7- lr=1e-4, batch-32 , epoch-30, acc-34.8(stopped )
 

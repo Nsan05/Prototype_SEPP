@@ -49,12 +49,12 @@ labels = {"core": 0, "secondary": 1, "optional": 2}
 dataset = dataset.map(lambda x: {"label": labels[x["label"]]})
 
 #train and test data
-# train_test_split = dataset.train_test_split(test_size=0.2)
-# train_data = train_test_split["train"]
-# test_data = train_test_split["test"]
+train_test_split = dataset.train_test_split(test_size=0.2)
+train_data = train_test_split["train"]
+test_data = train_test_split["test"]
 #debug-using same data for test and train
-train_data = dataset
-test_data = dataset
+# train_data = dataset
+# test_data = dataset
 
 #calculate weights
 class_weights = compute_class_weight('balanced',classes=np.unique(train_data['label']), y=train_data['label'])
@@ -100,8 +100,8 @@ training_args = TrainingArguments(
     eval_steps=50,
     learning_rate=2e-5, #switch to diff values later to accomodate
     #try accomodating linear scheduler later
-    per_device_train_batch_size=8,
-    num_train_epochs=10,
+    per_device_train_batch_size=4,
+    num_train_epochs=15,
     weight_decay=0.02,
     logging_dir="./logs",
     logging_steps=10,
@@ -109,13 +109,12 @@ training_args = TrainingArguments(
     metric_for_best_model="eval_accuracy", 
     greater_is_better=True
 )
-#try 0- lr=2e-5, batch-4 , epoch-15. acc-50.96
-#try 0- lr=2e-5, batch-8 , epoch-20. acc-
+#try 0- lr=2e-5, batch-4 , epoch-15. acc-50.96 ----finals
 #try 1 - lr=3e-5, batch-4 , epoch-20. acc-35.48
 #try 2- lr=3e-5, batch-16 ,epoch-20 acc-50.96
 #try 3- lr=3e-5, batch-25 , epoch-20,acc-35.627/50.96
 #try 4 - lr=5e-5, batch-16 ,epoch-20, acc-29.03
-#try 5 - lr=1e-4, batch-16 ,epoch-20, acc-50.96/47.74 ------finals
+#try 5 - lr=1e-4, batch-16 ,epoch-20, acc-50.96/47.74 
 #try 6- lr=1e-4, batch-32 , epoch-20, acc-27.09/45.80
 #try 7- lr=1e-4, batch-32 , epoch-30, acc-34.8(stopped )
 
