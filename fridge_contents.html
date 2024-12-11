@@ -5,24 +5,47 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Fridge Inventory Management</title>
+        <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
         <style>
+            :root {
+                --primary-blue: #3498db;
+                --dark-blue: #2980b9;
+                --light-blue: #5dade2;
+                --background-blue: #ebf5fb;
+                --text-color: #2c3e50;
+            }
+
+            * {
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
+            }
+
             body {
-                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-                background-color: #f8f9fa;
-                color: #333;
+                font-family: 'Poppins', sans-serif;
+                background-color: var(--background-blue);
+                color: var(--text-color);
                 max-width: 900px;
                 margin: 30px auto;
                 padding: 20px;
-                border-radius: 8px;
-                box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-                overflow-x: hidden;
+                border-radius: 15px;
+                box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+                background-image: linear-gradient(to bottom right, 
+                    rgba(255, 255, 255, 0.3), 
+                    rgba(255, 255, 255, 0.1)
+                );
             }
+
             h1 {
-                color: #2c3e50;
+                color: var(--dark-blue);
                 text-align: center;
+                font-weight: 600;
+                margin-bottom: 30px;
                 position: relative;
+                text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
             }
+
             h1::after {
                 content: "🧊🍎🥬";
                 position: absolute;
@@ -30,10 +53,14 @@
                 right: -40px;
                 animation: float 3s infinite ease-in-out;
             }
+
             h2 {
-                color: #2c3e50;
+                color: var(--dark-blue);
                 text-align: center;
+                margin-bottom: 15px;
+                font-weight: 500;
             }
+
             @keyframes float {
                 0%, 100% {
                     transform: translateY(0);
@@ -42,141 +69,157 @@
                     transform: translateY(-10px);
                 }
             }
+
             .option-container {
                 display: flex;
                 justify-content: space-around;
                 margin-bottom: 30px;
+                gap: 20px;
             }
+
             .option-box {
-                border: 1px solid #ddd;
-                background-color: #ffffff;
-                padding: 20px;
-                width: 40%;
+                flex: 1;
+                border: 2px solid var(--light-blue);
+                background-color: white;
+                padding: 25px;
                 text-align: center;
                 cursor: pointer;
-                border-radius: 10px;
-                transition: transform 0.2s, background-color 0.3s, box-shadow 0.3s;
+                border-radius: 15px;
+                transition: all 0.3s ease;
+                box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
                 position: relative;
+                overflow: hidden;
             }
+
+            .option-box::before {
+                content: "";
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: linear-gradient(45deg, 
+                    rgba(var(--light-blue), 0.1), 
+                    rgba(var(--dark-blue), 0.1)
+                );
+                opacity: 0;
+                transition: opacity 0.3s ease;
+                z-index: 1;
+            }
+
             .option-box:hover {
                 transform: translateY(-5px);
-                background-color: #eaf2f8;
-                box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.15);
+                box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
             }
-            .option-box::before {
-                content: "👆";
-                font-size: 1.5em;
-                position: absolute;
-                top: -20px;
-                left: 10px;
-                animation: bounce 2s infinite;
+
+            .option-box:hover::before {
+                opacity: 1;
             }
-            @keyframes bounce {
-                0%, 100% {
-                    transform: translateY(0);
-                }
-                50% {
-                    transform: translateY(-5px);
-                }
+
+            .option-box p {
+                color: var(--text-color);
+                opacity: 0.7;
             }
+
             #existing-user-section, 
             #create-fridge-section {
                 display: none;
                 margin-top: 20px;
-                padding: 20px;
-                background-color: #ffffff;
-                border: 1px solid #ddd;
-                border-radius: 10px;
-                box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+                padding: 25px;
+                background-color: white;
+                border: 2px solid var(--light-blue);
+                border-radius: 15px;
+                box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
             }
+
             .ingredient-list {
                 max-height: 300px;
                 overflow-y: auto;
-                border: 1px solid #ddd;
-                padding: 10px;
-                margin-top: 10px;
-                background-color: #fefefe;
-                border-radius: 5px;
-                animation: slideIn 0.5s ease-in;
+                border: 1px solid var(--light-blue);
+                padding: 15px;
+                margin-top: 15px;
+                background-color: var(--background-blue);
+                border-radius: 10px;
+                scrollbar-width: thin;
+                scrollbar-color: var(--light-blue) transparent;
             }
-            @keyframes slideIn {
-                from {
-                    opacity: 0;
-                    transform: translateX(-100%);
-                }
-                to {
-                    opacity: 1;
-                    transform: translateX(0);
-                }
+
+            .ingredient-list::-webkit-scrollbar {
+                width: 8px;
             }
+
+            .ingredient-list::-webkit-scrollbar-thumb {
+                background-color: var(--light-blue);
+                border-radius: 4px;
+            }
+
             .ingredient-item {
-                padding: 8px;
-                margin-bottom: 5px;
-                background-color: #f9f9f9;
-                border-radius: 5px;
+                padding: 10px;
+                margin-bottom: 8px;
+                background-color: white;
+                border: 1px solid var(--light-blue);
+                border-radius: 8px;
                 cursor: pointer;
-                transition: background-color 0.3s, box-shadow 0.3s;
+                transition: all 0.3s ease;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
             }
+
             .ingredient-item:hover {
-                background-color: #dceefb;
-                box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+                background-color: var(--background-blue);
+                transform: scale(1.02);
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             }
+
             .selected-ingredient {
-                background-color: #aed6f1;
-                border: 1px solid #5499c7;
+                background-color: var(--light-blue);
+                color: white;
             }
+
             .quantity-metric-container {
                 display: flex;
                 align-items: center;
                 gap: 10px;
                 margin-top: 10px;
             }
+
             .quantity-metric-container select, 
             .quantity-metric-container input {
-                padding: 5px;
+                padding: 8px;
+                border: 1px solid var(--light-blue);
+                border-radius: 5px;
                 font-size: 0.9em;
             }
+
             #done-button {
+                display: none;
                 margin-top: 20px;
                 padding: 12px 24px;
-                background-color: #34495e;
+                background-color: var(--dark-blue);
                 color: white;
                 border: none;
-                border-radius: 5px;
+                border-radius: 8px;
                 font-size: 1em;
                 cursor: pointer;
-                transition: background-color 0.3s;
+                transition: all 0.3s ease;
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
             }
+
             #done-button:hover {
-                background-color: #2c3e50;
+                background-color: var(--primary-blue);
+                transform: translateY(-3px);
             }
-            #done-button::after {
-                content: "✅";
-                margin-left: 10px;
-            }
+
             #selected-user-message, 
             #ingredient-added-message {
                 margin-top: 20px;
                 font-size: 1.2em;
-                font-weight: bold;
-                color: #2c3e50;
+                font-weight: 600;
+                color: var(--dark-blue);
+                text-align: center;
             }
-            #ingredient-added-message {
-                animation: pop 0.5s ease-in-out;
-            }
-            @keyframes pop {
-                0% {
-                    transform: scale(0.8);
-                    opacity: 0;
-                }
-                50% {
-                    transform: scale(1.1);
-                    opacity: 1;
-                }
-                100% {
-                    transform: scale(1);
-                }
-            }
+
             .user-ingredient-list {
                 display: flex;
                 flex-wrap: wrap;
@@ -184,14 +227,47 @@
                 margin-top: 10px;
             }
             .user-ingredient-item {
-                background-color: #f0f0f0;
-                padding: 5px 10px;
-                border-radius: 5px;
+                background-color: var(--background-blue);
+                padding: 8px 12px;
+                border-radius: 8px;
                 cursor: pointer;
-                transition: background-color 0.3s;
+                transition: all 0.3s ease;
+                border: 1px solid var(--light-blue);
             }
+
             .user-ingredient-item:hover {
-                background-color: #e0e0e0;
+                background-color: var(--light-blue);
+                color: white;
+            }
+             /* raisa- added styles for recipe display */
+            #recipe-suggestions-section {
+                margin-top: 30px;
+                padding:20px;
+                background-color: white;
+                border-radius:15px;
+                box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+            }
+
+            .recipe-list {
+                display: flex;
+                flex-wrap:wrap;
+                gap: 15px;
+                justify-content: center;
+            }
+
+            .recipe-card {
+                background-color:var(--background-blue);
+                border: 1px solid var(--light-blue);
+                border-radius: 10px;
+                padding:15px;
+                width:250px;
+                text-align:center;
+                transition:all 0.3s ease;
+            }
+
+            .recipe-card:hover {
+                transform:scale(1.05);
+                box-shadow:0 5px 15px rgba(0, 0, 0, 0.2);
             }
         </style>
     </head>
@@ -211,7 +287,7 @@
         <div id="existing-user-section">
             <h2>📂 Existing Users</h2>
             <div id="users-ingredients-list" class="ingredient-list">
-                <div class="ingredient-item user-ingredient-item" data-userid="1">👥 User 1 Inventory: Eggs (2), Salt (25g)</div> <div class="ingredient-item user-ingredient-item" data-userid="2">👥 User 2 Inventory: Pepper (5), Milk (100ml)</div> <div class="ingredient-item user-ingredient-item" data-userid="3">👥 User 3 Inventory: Eggs (100g), Milk (23g)</div>
+                <div class="ingredient-item user-ingredient-item" data-userid="1">👥 User 1 Inventory: Tomato (300g), Cucumber (250g), Red Onion (100g), Olive Oil (40ml), Bread (2), Egg (2), Garlic (10g), Lamb (600g), Eggplant (250g), Zucchini (250g), Carrot (150g), Cilantro (20g), Paprika (7g), prawns (250g), Avocado (250g), brown rice (170g), Bell Pepper (120g), Vinegar (21ml), Mint (15g), Potato (300g), yam (500g), Cheese (198g), kale (147g), Cumin (5g), Flour (22g), almond flour (60g), Banana (180g), Greek Yogurt (130ml), Honey (22ml), Salmon (520g), Lemon (21ml), Dill (7g), Chicken Breast (500g), Curry Powder (32g), pear (180g), Sugar (35g), Vanilla Extract (7ml)</div> <div class="ingredient-item user-ingredient-item" data-userid="2">👥 User 2 Inventory: Beef (400g), Pasta (300g), Bell Pepper (150g), Zucchini (400g), Mustard (30g), Shrimp (350g), Cream (300ml), Cheese (150g), Basil (20g), mutton (500g), Spinach (150g), Cucumber (100g), white onion (49g), Vinegar (30ml), Rice (180g), Coconut Milk (260ml), mandarin (120g), Mint (7g), Apple (180g), Almonds (90g), Milk (220ml), brown sugar (20g), ground chia (9g), Tofu (300g), courgette (180g), Peanut (20g)</div> <div class="ingredient-item user-ingredient-item" data-userid="3">👥 User 3 Inventory: Tofu (360g), Coconut Milk (300ml), Zucchini (250g), Peanut (30g), Mint (10g), Olive Oil (30ml), Cheese (300g), Orange (175g), Cucumber (98g), Red Onion (50g), Vinegar (20ml), Apple (250g), Soy Sauce (35ml), Lemon (25ml), Basil (9.5g), peanut butter (45g), coriander leaves (7g), ginger paste (25g), plantain (180g), regular yogurt (130ml), agave syrup (20ml), vegetable oil (6ml), trout (520g), preserved lemon (13ml), dried dill (7g), Sugar (21g), Vanilla Extract (7ml)</div> <div class="ingredient-item user-ingredient-item" data-userid="4">👥 User 4 Inventory: Bread (2), Egg (2), Olive Oil (10ml), Garlic (2), Cheese (100g), Potato (200g)</div> <div class="ingredient-item user-ingredient-item" data-userid="5">👥 User 5 Inventory: Banana (200g), Greek Yogurt (150ml), Honey (30ml), Olive Oil (10ml), Apple (200g), Sugar (30g), Vanilla Extract (10ml)</div> <div class="ingredient-item user-ingredient-item" data-userid="6">👥 User 6 Inventory: Salmon (600g), Lemon (30ml), Dill (10g), Olive Oil (20ml), Cilantro (10g), Shrimp (250g), Rice (200g)</div> <div class="ingredient-item user-ingredient-item" data-userid="7">👥 User 7 Inventory: Tofu (300g), Spinach (200g), Bell Pepper (150g), Basil (10g), Soy Sauce (30ml), Avocado (200g), Pasta (150g)</div> <div class="ingredient-item user-ingredient-item" data-userid="8">👥 User 8 Inventory: Lamb (500g), Eggplant (250g), Zucchini (200g), Carrot (150g), Cilantro (15g), Paprika (5g), Cheese (150g), Olive Oil (30ml)</div>
             </div>
             <div id="user-contents" style="margin-top: 20px;"></div>
             <div id="selected-user-message"></div>
@@ -220,29 +296,93 @@
         <div id="create-fridge-section">
             <h2>🆕 Create New Fridge</h2>
             <div class="ingredient-list" id="ingredient-list">
-                <div class="ingredient-item" data-id="101">🍴 Eggs</div> <div class="ingredient-item" data-id="102">🍴 Salt</div> <div class="ingredient-item" data-id="103">🍴 Pepper</div> <div class="ingredient-item" data-id="104">🍴 Milk</div> <div class="ingredient-item" data-id="105">🍴 Cheese</div> <div class="ingredient-item" data-id="106">🍴 Flour</div> <div class="ingredient-item" data-id="107">🍴 Sugar</div> <div class="ingredient-item" data-id="108">🍴 Butter</div> <div class="ingredient-item" data-id="109">🍴 Oil</div> <div class="ingredient-item" data-id="110">🍴 Garlic</div> <div class="ingredient-item" data-id="111">🍴 Onion</div> <div class="ingredient-item" data-id="112">🍴 Tomato</div> <div class="ingredient-item" data-id="113">🍴 Lemon</div> <div class="ingredient-item" data-id="114">🍴 Yogurt</div> <div class="ingredient-item" data-id="115">🍴 Cucumber</div>
+                <div class="ingredient-item" data-id="101">🍴 Tomato</div> <div class="ingredient-item" data-id="102">🍴 Cucumber</div> <div class="ingredient-item" data-id="103">🍴 Red Onion</div> <div class="ingredient-item" data-id="201">🍴 Chicken Breast</div> <div class="ingredient-item" data-id="202">🍴 Ginger</div> <div class="ingredient-item" data-id="203">🍴 Coconut Milk</div> <div class="ingredient-item" data-id="204">🍴 Curry Powder</div> <div class="ingredient-item" data-id="205">🍴 Garlic</div> <div class="ingredient-item" data-id="301">🍴 Mixed Vegetables</div> <div class="ingredient-item" data-id="302">🍴 Olive Oil</div> <div class="ingredient-item" data-id="401">🍴 Bread</div> <div class="ingredient-item" data-id="402">🍴 Egg</div> <div class="ingredient-item" data-id="501">🍴 Banana</div> <div class="ingredient-item" data-id="502">🍴 Greek Yogurt</div> <div class="ingredient-item" data-id="503">🍴 Honey</div> <div class="ingredient-item" data-id="601">🍴 Salmon</div> <div class="ingredient-item" data-id="602">🍴 Lemon</div> <div class="ingredient-item" data-id="603">🍴 Dill</div> <div class="ingredient-item" data-id="701">🍴 Beef</div> <div class="ingredient-item" data-id="702">🍴 Tofu</div> <div class="ingredient-item" data-id="703">🍴 Shrimp</div> <div class="ingredient-item" data-id="704">🍴 Lamb</div> <div class="ingredient-item" data-id="801">🍴 Spinach</div> <div class="ingredient-item" data-id="802">🍴 Bell Pepper</div> <div class="ingredient-item" data-id="803">🍴 Eggplant</div> <div class="ingredient-item" data-id="804">🍴 Zucchini</div> <div class="ingredient-item" data-id="805">🍴 Carrot</div> <div class="ingredient-item" data-id="901">🍴 Rice</div> <div class="ingredient-item" data-id="902">🍴 Pasta</div> <div class="ingredient-item" data-id="903">🍴 Potato</div> <div class="ingredient-item" data-id="1001">🍴 Cheese</div> <div class="ingredient-item" data-id="1002">🍴 Milk</div> <div class="ingredient-item" data-id="1003">🍴 Cream</div> <div class="ingredient-item" data-id="1101">🍴 Basil</div> <div class="ingredient-item" data-id="1102">🍴 Cilantro</div> <div class="ingredient-item" data-id="1103">🍴 Mint</div> <div class="ingredient-item" data-id="1104">🍴 Paprika</div> <div class="ingredient-item" data-id="1105">🍴 Cumin</div> <div class="ingredient-item" data-id="1201">🍴 Apple</div> <div class="ingredient-item" data-id="1202">🍴 Orange</div> <div class="ingredient-item" data-id="1203">🍴 Avocado</div> <div class="ingredient-item" data-id="1301">🍴 Soy Sauce</div> <div class="ingredient-item" data-id="1302">🍴 Vinegar</div> <div class="ingredient-item" data-id="1303">🍴 Mustard</div> <div class="ingredient-item" data-id="1401">🍴 Sugar</div> <div class="ingredient-item" data-id="1402">🍴 Flour</div> <div class="ingredient-item" data-id="1403">🍴 Vanilla Extract</div> <div class="ingredient-item" data-id="1501">🍴 Almonds</div> <div class="ingredient-item" data-id="1502">🍴 Chia Seeds</div> <div class="ingredient-item" data-id="1503">🍴 Peanut</div> <div class="ingredient-item" data-id="1601">🍴 Quinoa</div> <div class="ingredient-item" data-id="1602">🍴 Lentils</div> <div class="ingredient-item" data-id="1603">🍴 Chickpeas</div> <div class="ingredient-item" data-id="1604">🍴 Nutritional Yeast</div> <div class="ingredient-item" data-id="1605">🍴 Tahini</div> <div class="ingredient-item" data-id="1739">🍴 cherry tomato</div> <div class="ingredient-item" data-id="1606">🍴 plum tomato</div> <div class="ingredient-item" data-id="1607">🍴 english cucumber</div> <div class="ingredient-item" data-id="1608">🍴 persian cucumber</div> <div class="ingredient-item" data-id="1609">🍴 sweet onion</div> <div class="ingredient-item" data-id="1610">🍴 white onion</div> <div class="ingredient-item" data-id="1611">🍴 chicken thigh</div> <div class="ingredient-item" data-id="1612">🍴 turkey breast</div> <div class="ingredient-item" data-id="1613">🍴 ginger paste</div> <div class="ingredient-item" data-id="1614">🍴 minced ginger</div> <div class="ingredient-item" data-id="1615">🍴 cream</div> <div class="ingredient-item" data-id="1616">🍴 almond milk</div> <div class="ingredient-item" data-id="1617">🍴 garam masala</div> <div class="ingredient-item" data-id="1618">🍴 turmeric</div> <div class="ingredient-item" data-id="1619">🍴 garlic paste</div> <div class="ingredient-item" data-id="1620">🍴 dried garlic</div> <div class="ingredient-item" data-id="1621">🍴 frozen vegetables</div> <div class="ingredient-item" data-id="1622">🍴 seasonal vegetables</div> <div class="ingredient-item" data-id="1623">🍴 vegetable oil</div> <div class="ingredient-item" data-id="1624">🍴 canola oil</div> <div class="ingredient-item" data-id="1625">🍴 whole wheat bread</div> <div class="ingredient-item" data-id="1626">🍴 sourdough</div> <div class="ingredient-item" data-id="1627">🍴 egg whites</div> <div class="ingredient-item" data-id="1628">🍴 vegan egg substitute</div> <div class="ingredient-item" data-id="1629">🍴 frozen banana</div> <div class="ingredient-item" data-id="1630">🍴 plantain</div> <div class="ingredient-item" data-id="1631">🍴 regular yogurt</div> <div class="ingredient-item" data-id="1632">🍴 plant-based yogurt</div> <div class="ingredient-item" data-id="1633">🍴 agave syrup</div> <div class="ingredient-item" data-id="1634">🍴 maple syrup</div> <div class="ingredient-item" data-id="1635">🍴 trout</div> <div class="ingredient-item" data-id="1636">🍴 tilapia</div> <div class="ingredient-item" data-id="1637">🍴 lime</div> <div class="ingredient-item" data-id="1638">🍴 preserved lemon</div> <div class="ingredient-item" data-id="1639">🍴 dried dill</div> <div class="ingredient-item" data-id="1640">🍴 parsley</div> <div class="ingredient-item" data-id="1641">🍴 ground beef</div> <div class="ingredient-item" data-id="1642">🍴 steak</div> <div class="ingredient-item" data-id="1643">🍴 sirloin</div> <div class="ingredient-item" data-id="1644">🍴 tempeh</div> <div class="ingredient-item" data-id="1645">🍴 seitan</div> <div class="ingredient-item" data-id="1646">🍴 plant-based protein</div> <div class="ingredient-item" data-id="1647">🍴 prawns</div> <div class="ingredient-item" data-id="1648">🍴 crab</div> <div class="ingredient-item" data-id="1649">🍴 imitation crab</div> <div class="ingredient-item" data-id="1650">🍴 goat meat</div> <div class="ingredient-item" data-id="1651">🍴 mutton</div> <div class="ingredient-item" data-id="1652">🍴 kale</div> <div class="ingredient-item" data-id="1653">🍴 swiss chard</div> <div class="ingredient-item" data-id="1654">🍴 collard greens</div> <div class="ingredient-item" data-id="1655">🍴 capsicum</div> <div class="ingredient-item" data-id="1656">🍴 paprika</div> <div class="ingredient-item" data-id="1657">🍴 chili pepper</div> <div class="ingredient-item" data-id="1658">🍴 aubergine</div> <div class="ingredient-item" data-id="1659">🍴 brinjal</div> <div class="ingredient-item" data-id="1660">🍴 courgette</div> <div class="ingredient-item" data-id="1661">🍴 summer squash</div> <div class="ingredient-item" data-id="1662">🍴 baby carrot</div> <div class="ingredient-item" data-id="1663">🍴 rainbow carrot</div> <div class="ingredient-item" data-id="1664">🍴 basmati rice</div> <div class="ingredient-item" data-id="1665">🍴 brown rice</div> <div class="ingredient-item" data-id="1666">🍴 jasmine rice</div> <div class="ingredient-item" data-id="1667">🍴 spaghetti</div> <div class="ingredient-item" data-id="1668">🍴 penne</div> <div class="ingredient-item" data-id="1669">🍴 gluten-free pasta</div> <div class="ingredient-item" data-id="1670">🍴 sweet potato</div> <div class="ingredient-item" data-id="1671">🍴 yam</div> <div class="ingredient-item" data-id="1672">🍴 fingerling potato</div> <div class="ingredient-item" data-id="1673">🍴 cheddar</div> <div class="ingredient-item" data-id="1674">🍴 mozzarella</div> <div class="ingredient-item" data-id="1675">🍴 vegan cheese</div> <div class="ingredient-item" data-id="1676">🍴 almond milk</div> <div class="ingredient-item" data-id="1677">🍴 soy milk</div> <div class="ingredient-item" data-id="1678">🍴 oat milk</div> <div class="ingredient-item" data-id="1679">🍴 heavy cream</div> <div class="ingredient-item" data-id="1680">🍴 light cream</div> <div class="ingredient-item" data-id="1681">🍴 coconut cream</div> <div class="ingredient-item" data-id="1682">🍴 fresh basil</div> <div class="ingredient-item" data-id="1683">🍴 dried basil</div> <div class="ingredient-item" data-id="1684">🍴 thai basil</div> <div class="ingredient-item" data-id="1685">🍴 coriander leaves</div> <div class="ingredient-item" data-id="1686">🍴 chinese parsley</div> <div class="ingredient-item" data-id="1687">🍴 peppermint</div> <div class="ingredient-item" data-id="1688">🍴 spearmint</div> <div class="ingredient-item" data-id="1689">🍴 smoked paprika</div> <div class="ingredient-item" data-id="1690">🍴 hot paprika</div> <div class="ingredient-item" data-id="1691">🍴 ground cumin</div> <div class="ingredient-item" data-id="1692">🍴 whole cumin seeds</div> <div class="ingredient-item" data-id="1693">🍴 green apple</div> <div class="ingredient-item" data-id="1694">🍴 pear</div> <div class="ingredient-item" data-id="1695">🍴 cooking apple</div> <div class="ingredient-item" data-id="1696">🍴 mandarin</div> <div class="ingredient-item" data-id="1697">🍴 clementine</div> <div class="ingredient-item" data-id="1698">🍴 blood orange</div> <div class="ingredient-item" data-id="1699">🍴 hass avocado</div> <div class="ingredient-item" data-id="1700">🍴 fuerte avocado</div> <div class="ingredient-item" data-id="1701">🍴 tamari</div> <div class="ingredient-item" data-id="1702">🍴 light soy sauce</div> <div class="ingredient-item" data-id="1703">🍴 dark soy sauce</div> <div class="ingredient-item" data-id="1704">🍴 apple cider vinegar</div> <div class="ingredient-item" data-id="1705">🍴 rice vinegar</div> <div class="ingredient-item" data-id="1706">🍴 balsamic vinegar</div> <div class="ingredient-item" data-id="1707">🍴 dijon mustard</div> <div class="ingredient-item" data-id="1708">🍴 whole grain mustard</div> <div class="ingredient-item" data-id="1709">🍴 yellow mustard</div> <div class="ingredient-item" data-id="1710">🍴 brown sugar</div> <div class="ingredient-item" data-id="1711">🍴 raw sugar</div> <div class="ingredient-item" data-id="1712">🍴 coconut sugar</div> <div class="ingredient-item" data-id="1713">🍴 wheat flour</div> <div class="ingredient-item" data-id="1714">🍴 almond flour</div> <div class="ingredient-item" data-id="1715">🍴 gluten-free flour</div> <div class="ingredient-item" data-id="1716">🍴 vanilla bean</div> <div class="ingredient-item" data-id="1717">🍴 vanilla paste</div> <div class="ingredient-item" data-id="1718">🍴 sliced almonds</div> <div class="ingredient-item" data-id="1719">🍴 almond flour</div> <div class="ingredient-item" data-id="1720">🍴 roasted almonds</div> <div class="ingredient-item" data-id="1721">🍴 ground chia</div> <div class="ingredient-item" data-id="1722">🍴 whole chia seeds</div> <div class="ingredient-item" data-id="1723">🍴 roasted peanuts</div> <div class="ingredient-item" data-id="1724">🍴 peanut butter</div> <div class="ingredient-item" data-id="1725">🍴 red quinoa</div> <div class="ingredient-item" data-id="1726">🍴 white quinoa</div> <div class="ingredient-item" data-id="1727">🍴 black quinoa</div> <div class="ingredient-item" data-id="1728">🍴 red lentils</div> <div class="ingredient-item" data-id="1729">🍴 green lentils</div> <div class="ingredient-item" data-id="1730">🍴 brown lentils</div> <div class="ingredient-item" data-id="1731">🍴 canned chickpeas</div> <div class="ingredient-item" data-id="1732">🍴 dried chickpeas</div> <div class="ingredient-item" data-id="1733">🍴 roasted chickpeas</div> <div class="ingredient-item" data-id="1734">🍴 fortified nutritional yeast</div> <div class="ingredient-item" data-id="1735">🍴 non-fortified nutritional yeast</div> <div class="ingredient-item" data-id="1736">🍴 light tahini</div> <div class="ingredient-item" data-id="1737">🍴 dark tahini</div> <div class="ingredient-item" data-id="1738">🍴 whole sesame tahini</div>
             </div>
             <div id="selected-ingredients" style="margin-top: 20px;"></div>
-            <button id="done-button" style="display:none;">Done</button>
+            <button id="done-button">Done</button>
             <div id="ingredient-added-message"></div>
+
+        <!-- raisa-added section for recipe suggestion  -->
+        <div id="recipe-suggestions-section" style="display:none;">
+            <h2>🍽️ Recipe Suggestions</h2>
+            <div id="complete-recipes-section">
+                <h3>Complete Recipes</h3>
+                <div id="complete-recipes-list" class="recipe-list"></div>
+            </div>
+            <div id="partial-recipes-section">
+                <h3>Partial Recipes</h3>
+                <div id="partial-recipes-list" class="recipe-list"></div>
+            </div>
         </div>
 
         <script>
+        //raisa-recip suggestion func
+           function suggestRecipes(ingredients) {
+                $.ajax({
+                    url: 'http://localhost:5000/suggest_recipes',
+                    method:'POST',
+                    contentType:'application/json',
+                    data: JSON.stringify({
+                        'inventory':ingredients
+                    }),
+                    success: function(response) {
+                        $('#recipe-suggestions-section').show();
+                        //display complete
+                        const completeRecipesList =$('#complete-recipes-list');
+                        completeRecipesList.empty();
+                        response.complete_recipes.forEach(recipe => {
+                            completeRecipesList.append(`
+                                <div class="recipe-card">
+                                    <h4>${recipe.recipe}</h4>
+                                    <p>Total Score:${recipe.total.toFixed(2)}</p>
+                                </div>
+                            `);
+                        });
+
+                        //display full
+                        const partialRecipesList= $('#partial-recipes-list');
+                        partialRecipesList.empty();
+                        response.partial_recipes.forEach(recipe => {
+                            partialRecipesList.append(`
+                                <div class="recipe-card">
+                                    <h4>${recipe.recipe}</h4>
+                                    <p>Total Score:${recipe.total.toFixed(2)}</p>
+                                    <p>Score 1: ${recipe.score1.toFixed(2)}</p>
+                                    <p>Score 2:${recipe.score2.toFixed(2)}</p>
+                                </div>
+                            `);
+                        });
+                    },
+                    error: function(error) {
+                        console.error('Error getting recipe suggestions:', error);
+                    }
+                });
+            }
+            // Global variables to store selected user or new fridge data
+            let selectedUserId = null;
+            let selectedUserIngredients = null;
+            let newFridgeIngredients = {};
+
             $(document).ready(function () {
-                const existingUsers = {"1": {"Eggs": 2, "Salt": "25g"}, "2": {"Pepper": 5, "Milk": "100ml"}, "3": {"Eggs": "100g", "Milk": "23g"}};
-                const allIngredients = {"101": "Eggs", "102": "Salt", "103": "Pepper", "104": "Milk", "105": "Cheese", "106": "Flour", "107": "Sugar", "108": "Butter", "109": "Oil", "110": "Garlic", "111": "Onion", "112": "Tomato", "113": "Lemon", "114": "Yogurt", "115": "Cucumber"};
+                const existingUsers = {"1": {"Tomato": "300g", "Cucumber": "250g", "Red Onion": "100g", "Olive Oil": "40ml", "Bread": "2", "Egg": "2", "Garlic": "10g", "Lamb": "600g", "Eggplant": "250g", "Zucchini": "250g", "Carrot": "150g", "Cilantro": "20g", "Paprika": "7g", "prawns": "250g", "Avocado": "250g", "brown rice": "170g", "Bell Pepper": "120g", "Vinegar": "21ml", "Mint": "15g", "Potato": "300g", "yam": "500g", "Cheese": "198g", "kale": "147g", "Cumin": "5g", "Flour": "22g", "almond flour": "60g", "Banana": "180g", "Greek Yogurt": "130ml", "Honey": "22ml", "Salmon": "520g", "Lemon": "21ml", "Dill": "7g", "Chicken Breast": "500g", "Curry Powder": "32g", "pear": "180g", "Sugar": "35g", "Vanilla Extract": "7ml"}, "2": {"Beef": "400g", "Pasta": "300g", "Bell Pepper": "150g", "Zucchini": "400g", "Mustard": "30g", "Shrimp": "350g", "Cream": "300ml", "Cheese": "150g", "Basil": "20g", "mutton": "500g", "Spinach": "150g", "Cucumber": "100g", "white onion": "49g", "Vinegar": "30ml", "Rice": "180g", "Coconut Milk": "260ml", "mandarin": "120g", "Mint": "7g", "Apple": "180g", "Almonds": "90g", "Milk": "220ml", "brown sugar": "20g", "ground chia": "9g", "Tofu": "300g", "courgette": "180g", "Peanut": "20g"}, "3": {"Tofu": "360g", "Coconut Milk": "300ml", "Zucchini": "250g", "Peanut": "30g", "Mint": "10g", "Olive Oil": "30ml", "Cheese": "300g", "Orange": "175g", "Cucumber": "98g", "Red Onion": "50g", "Vinegar": "20ml", "Apple": "250g", "Soy Sauce": "35ml", "Lemon": "25ml", "Basil": "9.5g", "peanut butter": "45g", "coriander leaves": "7g", "ginger paste": "25g", "plantain": "180g", "regular yogurt": "130ml", "agave syrup": "20ml", "vegetable oil": "6ml", "trout": "520g", "preserved lemon": "13ml", "dried dill": "7g", "Sugar": "21g", "Vanilla Extract": "7ml"}, "4": {"Bread": "2", "Egg": "2", "Olive Oil": "10ml", "Garlic": "2", "Cheese": "100g", "Potato": "200g"}, "5": {"Banana": "200g", "Greek Yogurt": "150ml", "Honey": "30ml", "Olive Oil": "10ml", "Apple": "200g", "Sugar": "30g", "Vanilla Extract": "10ml"}, "6": {"Salmon": "600g", "Lemon": "30ml", "Dill": "10g", "Olive Oil": "20ml", "Cilantro": "10g", "Shrimp": "250g", "Rice": "200g"}, "7": {"Tofu": "300g", "Spinach": "200g", "Bell Pepper": "150g", "Basil": "10g", "Soy Sauce": "30ml", "Avocado": "200g", "Pasta": "150g"}, "8": {"Lamb": "500g", "Eggplant": "250g", "Zucchini": "200g", "Carrot": "150g", "Cilantro": "15g", "Paprika": "5g", "Cheese": "150g", "Olive Oil": "30ml"}};
+                const allIngredients = {"101": "Tomato", "102": "Cucumber", "103": "Red Onion", "201": "Chicken Breast", "202": "Ginger", "203": "Coconut Milk", "204": "Curry Powder", "205": "Garlic", "301": "Mixed Vegetables", "302": "Olive Oil", "401": "Bread", "402": "Egg", "501": "Banana", "502": "Greek Yogurt", "503": "Honey", "601": "Salmon", "602": "Lemon", "603": "Dill", "701": "Beef", "702": "Tofu", "703": "Shrimp", "704": "Lamb", "801": "Spinach", "802": "Bell Pepper", "803": "Eggplant", "804": "Zucchini", "805": "Carrot", "901": "Rice", "902": "Pasta", "903": "Potato", "1001": "Cheese", "1002": "Milk", "1003": "Cream", "1101": "Basil", "1102": "Cilantro", "1103": "Mint", "1104": "Paprika", "1105": "Cumin", "1201": "Apple", "1202": "Orange", "1203": "Avocado", "1301": "Soy Sauce", "1302": "Vinegar", "1303": "Mustard", "1401": "Sugar", "1402": "Flour", "1403": "Vanilla Extract", "1501": "Almonds", "1502": "Chia Seeds", "1503": "Peanut", "1601": "Quinoa", "1602": "Lentils", "1603": "Chickpeas", "1604": "Nutritional Yeast", "1605": "Tahini", "1739": "cherry tomato", "1606": "plum tomato", "1607": "english cucumber", "1608": "persian cucumber", "1609": "sweet onion", "1610": "white onion", "1611": "chicken thigh", "1612": "turkey breast", "1613": "ginger paste", "1614": "minced ginger", "1615": "cream", "1616": "almond milk", "1617": "garam masala", "1618": "turmeric", "1619": "garlic paste", "1620": "dried garlic", "1621": "frozen vegetables", "1622": "seasonal vegetables", "1623": "vegetable oil", "1624": "canola oil", "1625": "whole wheat bread", "1626": "sourdough", "1627": "egg whites", "1628": "vegan egg substitute", "1629": "frozen banana", "1630": "plantain", "1631": "regular yogurt", "1632": "plant-based yogurt", "1633": "agave syrup", "1634": "maple syrup", "1635": "trout", "1636": "tilapia", "1637": "lime", "1638": "preserved lemon", "1639": "dried dill", "1640": "parsley", "1641": "ground beef", "1642": "steak", "1643": "sirloin", "1644": "tempeh", "1645": "seitan", "1646": "plant-based protein", "1647": "prawns", "1648": "crab", "1649": "imitation crab", "1650": "goat meat", "1651": "mutton", "1652": "kale", "1653": "swiss chard", "1654": "collard greens", "1655": "capsicum", "1656": "paprika", "1657": "chili pepper", "1658": "aubergine", "1659": "brinjal", "1660": "courgette", "1661": "summer squash", "1662": "baby carrot", "1663": "rainbow carrot", "1664": "basmati rice", "1665": "brown rice", "1666": "jasmine rice", "1667": "spaghetti", "1668": "penne", "1669": "gluten-free pasta", "1670": "sweet potato", "1671": "yam", "1672": "fingerling potato", "1673": "cheddar", "1674": "mozzarella", "1675": "vegan cheese", "1676": "almond milk", "1677": "soy milk", "1678": "oat milk", "1679": "heavy cream", "1680": "light cream", "1681": "coconut cream", "1682": "fresh basil", "1683": "dried basil", "1684": "thai basil", "1685": "coriander leaves", "1686": "chinese parsley", "1687": "peppermint", "1688": "spearmint", "1689": "smoked paprika", "1690": "hot paprika", "1691": "ground cumin", "1692": "whole cumin seeds", "1693": "green apple", "1694": "pear", "1695": "cooking apple", "1696": "mandarin", "1697": "clementine", "1698": "blood orange", "1699": "hass avocado", "1700": "fuerte avocado", "1701": "tamari", "1702": "light soy sauce", "1703": "dark soy sauce", "1704": "apple cider vinegar", "1705": "rice vinegar", "1706": "balsamic vinegar", "1707": "dijon mustard", "1708": "whole grain mustard", "1709": "yellow mustard", "1710": "brown sugar", "1711": "raw sugar", "1712": "coconut sugar", "1713": "wheat flour", "1714": "almond flour", "1715": "gluten-free flour", "1716": "vanilla bean", "1717": "vanilla paste", "1718": "sliced almonds", "1719": "almond flour", "1720": "roasted almonds", "1721": "ground chia", "1722": "whole chia seeds", "1723": "roasted peanuts", "1724": "peanut butter", "1725": "red quinoa", "1726": "white quinoa", "1727": "black quinoa", "1728": "red lentils", "1729": "green lentils", "1730": "brown lentils", "1731": "canned chickpeas", "1732": "dried chickpeas", "1733": "roasted chickpeas", "1734": "fortified nutritional yeast", "1735": "non-fortified nutritional yeast", "1736": "light tahini", "1737": "dark tahini", "1738": "whole sesame tahini"};
 
                 // Option selection
                 $('#existing-user-option').on('click', function() {
                     $('#existing-user-section').show();
                     $('#create-fridge-section').hide();
                     $('#selected-user-message').empty();
+                    // Reset new fridge data
+                    newFridgeIngredients = {};
                 });
 
                 $('#create-fridge-option').on('click', function() {
                     $('#create-fridge-section').show();
                     $('#existing-user-section').hide();
                     $('#selected-user-message').empty();
+                    // Reset selected user data
+                    selectedUserId = null;
+                    selectedUserIngredients = null;
                 });
 
                 // Existing User Logic
@@ -251,15 +391,33 @@
                     $('#user-contents').empty();
 
                     if (userId && existingUsers[userId]) {
+                        // Save selected user data to global variables
+                        selectedUserId = userId;
+                        selectedUserIngredients = existingUsers[userId];
+
                         const content = existingUsers[userId];
                         for (let name in content) {
                             $('#user-contents').append(`<p>${name}: ${content[name]}</p>`);
                         }
                         $('#selected-user-message').text('You selected user ' + userId);
+
+                        //raisa- suggesting recipes for this user inventory
+                        const userIngredients = Object.fromEntries(
+                            Object.entries(existingUsers[userId]).map(([name, qty]) => 
+                                [Object.keys(allIngredients).find(k => allIngredients[k] === name), qty]
+                            )
+                        );
+                        suggestRecipes(userIngredients, userId);
+                        // Log to the terminal
+                        console.log('Selected User ID:', userId);
+                        console.log('Selected User Ingredients:', selectedUserIngredients);
                     } else {
                         $('#selected-user-message').empty();
+                        selectedUserId = null;
+                        selectedUserIngredients = null;
                     }
                 });
+
 
                 // Create Fridge Logic
                 $('.ingredient-item:not(.user-ingredient-item)').on('click', function() {
@@ -270,6 +428,7 @@
                     const existingItem = selectedDiv.find(`[data-id="${ingredientId}"]`);
                     if (existingItem.length) {
                         existingItem.remove();
+                        delete newFridgeIngredients[ingredientId];
                     } else {
                         selectedDiv.append(`
                             <div data-id="${ingredientId}">
@@ -288,12 +447,27 @@
                     $('#done-button').toggle($('#selected-ingredients').children().length > 0);
                 });
 
-                // Done Button Logic
-                $('#done-button').on('click', function() {
-                    $('#ingredient-added-message').text('🎉 Ingredients added successfully!');
-                    $('#done-button').hide();
-                });
+            //raisa- combined the the done button handlers 
+            $('#done-button').on('click', function() {
+            
+            newFridgeIngredients = {};
+            $('#selected-ingredients>div').each(function() {
+                const ingredientId = $(this).data('id');
+                const quantity = $(this).find('.ingredient-quantity').val();
+                const metric = $(this).find('.ingredient-metric').val();
+                newFridgeIngredients[ingredientId] = quantity+metric;
             });
+
+            $('#ingredient-added-message').text('🎉 Ingredients added successfully!');
+            $('#done-button').hide();
+        
+            suggestRecipes(newFridgeIngredients);
+            console.log('New Fridge Ingredients:', newFridgeIngredients);
+        });
+
+        });
+        
+        
         </script>
     </body>
     </html>
