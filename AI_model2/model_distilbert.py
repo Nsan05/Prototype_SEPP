@@ -98,7 +98,7 @@ training_args = TrainingArguments(
     save_steps=50,
     eval_steps=50,
     learning_rate=3e-5, 
-    per_device_train_batch_size=4,  
+    per_device_train_batch_size=32 ,
     num_train_epochs=20,  #increased
     weight_decay=0.01, #reduced
     logging_dir="./logs_distilbert",
@@ -107,6 +107,14 @@ training_args = TrainingArguments(
     metric_for_best_model="eval_accuracy", 
     greater_is_better=True
 )
+#try 1 - lr=3e-5, batch-4 , epoch-20. acc-35.48
+#try 2- lr=3e-5, batch-16 ,epoch-20 acc-50.96
+#try 3- lr=3e-5, batch-25 , epoch-20,acc-35.627/50.96
+#try 4 - lr=5e-5, batch-16 ,epoch-20, acc-29.03
+#try 5 - lr=1e-4, batch-16 ,epoch-20, acc-50.96/47.74 ------finals
+#try 6- lr=1e-4, batch-32 , epoch-20, acc-27.09/45.80
+#try 7- lr=1e-4, batch-32 , epoch-30, acc-34.8(stopped )
+
 
 trainer = EnhancedTrainer(
     model=model,
@@ -122,3 +130,4 @@ model.save_pretrained("./AI_model_distilbert_saved")
 tokenizer.save_pretrained("./AI_model_distilbert_saved")
 
 print("DistilBERT MODEL TRAINING COMPLETE")
+
