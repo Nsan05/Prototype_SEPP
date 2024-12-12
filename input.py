@@ -73,7 +73,7 @@ def save_user_inventory(user_id, inventory_dict):
     except Exception as e:
         print(f"Error saving user inventory: {e}")
         connection.rollback()
-        return Nonde
+        return None
     finally:
         cursor.close()
 
