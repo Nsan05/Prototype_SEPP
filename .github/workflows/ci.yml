@@ -42,6 +42,35 @@ jobs:
           python-version: ${{ matrix.python-version }}
           cache: "pip"  # Automatically cache pip dependencies
 
+      - name: Setup PostgreSQL on Ubuntu
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y postgresql postgresql-contrib
+          sudo systemctl start postgresql
+          sudo -u postgres psql -c "CREATE USER SEPP WITH PASSWORD 'prototype';"
+          sudo -u postgres psql -c "ALTER USER SEPP WITH SUPERUSER;"
+      
+      - name: Setup PostgreSQL on macOS
+        if: runner.os == 'macOS'
+        run: |
+          brew install postgresql
+          brew services start postgresql
+          sleep 5
+          createuser -s SEPP
+          psql postgres -c "ALTER USER SEPP WITH PASSWORD 'prototype';"
+      
+      - name: Setup PostgreSQL on Windows
+        if: runner.os == 'Windows'
+        run: |
+          choco install postgresql --version=15.3
+          # Add PostgreSQL bin to PATH
+          $env:Path += ";C:\Program Files\PostgreSQL\15\bin"
+          psql -U postgres -c "CREATE USER SEPP WITH PASSWORD 'prototype';"
+          psql -U postgres -c "ALTER USER SEPP WITH SUPERUSER;"
+        env:
+          PGPASSWORD: prototype
+
       # Step 3: Cache PostgreSQL data (OS-specific)
       - name: Cache PostgreSQL data for Linux
         if: runner.os == 'Linux'
