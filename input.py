@@ -8,18 +8,10 @@ import flask
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 
-# Connect to the PostgreSQL database
-# connection = psycopg2.connect(
-#     dbname="prototype",
-#     user="postgres",
-#     password="idkpassword_2024",
-#     host="localhost",
-#     port="5432"
-# )
 connection = psycopg2.connect(
-    dbname="sepp1",
+    dbname="recipe_db",
     user="postgres",
-    password="raisa",
+    password="your_password",
     host="localhost",
     port="5432"
 )
