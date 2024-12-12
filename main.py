@@ -14,7 +14,6 @@ def parse_quantity(recipe_quantity: str, inventory_quantity: str) -> int:
         
         percentage = min(int((inventory_value / recipe_value) * 100), 100)
         return max(percentage, 0)
-    
     except Exception as e:
         print(e)
         return 0
