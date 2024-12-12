@@ -35,13 +35,6 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
-      # Optional: Download artifacts from the Build workflow
-      - name: Download Build Artifacts
-        uses: actions/download-artifact@v3
-        with:
-          name: build-artifacts
-          path: ./build_artifacts
-
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
@@ -64,7 +57,13 @@ jobs:
             echo "Waiting for PostgreSQL..."
             sleep 2
           done
-
+      
+      - name: Initialize Database
+        run: |
+          psql -h localhost -U SEPP -d recipe_db -f init.sql
+        env:
+          PGPASSWORD: prototype
+      
       - name: Run Tests
         run: |
           pytest test.py --junitxml=pytest-results.xml
