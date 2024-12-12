@@ -115,6 +115,6 @@ def test_recipe_cases_by_user(test_case):
         assert expected_recipe in simplified_results, \
             f"Expected recipe {expected_recipe} not found for user {user_id}"
         
-if __name__ == "__main__":
-    pytest.main(["-v", __file__])
+# if __name__ == "__main__":
+#     pytest.main(["-v", __file__])
 
