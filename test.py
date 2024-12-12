@@ -98,5 +98,23 @@ test_cases = [
     }
 ]
 
+@pytest.mark.parametrize("test_case", test_cases)
+def test_recipe_cases_by_user(test_case):
+    user_id = test_case['user_id']
+    recipe_suggester = RecipeSuggestion(db_params, user_id)
+    results = recipe_suggester.suggest_recipes()
 
+    # Extract only recipe and case
+    simplified_results = [
+        {"recipe": result["recipe_name"], "case": result["case"]} 
+        for result in results
+    ]
+
+    # Check if all expected recipes are in the results
+    for expected_recipe in test_case['expected_recipes']:
+        assert expected_recipe in simplified_results, \
+            f"Expected recipe {expected_recipe} not found for user {user_id}"
+        
+if __name__ == "__main__":
+    pytest.main(["-v", __file__])
 
