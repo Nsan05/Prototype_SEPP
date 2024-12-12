@@ -44,7 +44,7 @@ VALUES
       204: ["10g", "secondary"], 205: ["5g", "secondary"]}', 
     45, 3, 'veg', 
     '1. Chop mixed vegetables into uniform pieces. 2. Toss with olive oil and minced garlic. 3. Sprinkle curry powder. 4. Roast in oven at 200°C for 30 minutes. 5. Serve hot as a side dish.'),
---CHANGED GARLIC FROM UNIT TO GRAMS
+
 (4, 'Classic Egg Toast', 
     '{401: ["2", "core"], 402: ["2", "core"], 302: ["10ml", "secondary"], 
       205: ["10g", "optional"]}', 
@@ -389,7 +389,7 @@ VALUES
 (103, 'Red Onion', '["sweet onion", "white onion"]'),
 (201, 'Chicken Breast', '["chicken thigh", "turkey breast"]'),
 (202, 'Ginger', '["ginger paste", "minced ginger"]'),
-(203, 'Coconut Milk', '["cream", "almond milk"]'),
+(203, 'Coconut Milk', '["greek yogurt", "cashew milk"]'),
 (204, 'Curry Powder', '["garam masala", "turmeric"]'),
 (205, 'Garlic', '["garlic paste", "dried garlic"]'),
 (301, 'Mixed Vegetables', '["frozen vegetables", "seasonal vegetables"]'),
@@ -455,8 +455,8 @@ VALUES
 (1613, 'ginger paste', '["Ginger", "minced ginger"]'),
 (1614, 'minced ginger', '["Ginger", "ginger paste"]'),
 -- Coconut Milk Alternatives
-(1615, 'cream', '["Coconut Milk", "almond milk"]'),
-(1616, 'almond milk', '["Coconut Milk", "cream"]'),
+(1615, 'greek yogurt', '["Coconut Milk", "cashew milk"]'),
+(1616, 'cashew milk', '["Coconut Milk", "greek yogurt"]'),
 -- Curry Powder Alternatives
 (1617, 'garam masala', '["Curry Powder", "turmeric"]'),
 (1618, 'turmeric', '["Curry Powder", "garam masala"]'),
@@ -641,23 +641,12 @@ VALUES
         201: "500g", 204: "32g",
         1694: "180g", 1401: "35g", 1403: "7ml"}'),
 
--- Complete: 1, 4, 8
--- Complete w Alternative (was considered to be partial but an alternative was found above 95% for a missing ingredient/below required %): 9, 10
--- Partial (All the ranges are between the required and beneath threshold): 5, 6
--- Partial (But with a few missing ingredients which make up less than 30% of the recipe): 2, 11
--- Rejected: 
-
 (2, 1, '{701: "400g", 902: "300g", 802: "150g", 804: "100g", 1303: "30g",
         703: "350g", 804: "400g", 1003: "300ml", 1001: "150g", 1101: "20g",
         1651: "500g", 801: "150g", 102: "100g", 1610: "49g", 1302: "30ml",
         901: "180g", 203: "230ml", 1696: "120g", 1103: "7g",
         1201: "180g", 1501: "90g", 1002: "220ml", 1710: "20g", 1721: "9g",
         702: "300g", 203: "260ml", 1660: "180g", 1503: "20g"}'), 
--- Complete: 12, 13
--- Complete w Alternative (was considered to be partial but an alternative was found above 95% for a missing ingredient/below required %): 15
--- Partial (All the ranges are between the required and beneath threshold): 17, 19
--- Partial (But with a few missing ingredients which make up less than 30% of the recipe): 23
--- Rejected: 
 
 (3, 2, '{702 : "360g", 203: "300ml", 804: "250g", 1503: "30g", 1103: "10g", 302: "30ml",
         1001: "300g", 1202: "175g", 102: "98g", 103: "50g", 1302: "20ml",
@@ -667,28 +656,18 @@ VALUES
         1630: "180g", 1631: "130ml", 1633: "20ml", 1623: "6ml",
         1635: "520g", 1638: "13ml", 1639: "7g",
         1401: "21g", 1403: "7ml"}'), 
--- Complete: 23, 24, 25
--- Complete w Alternative (was considered to be partial but an alternative was found above 95% for a missing ingredient/below required %): 28,30
--- Partial (All the ranges are between the required and beneath threshold): 33, 34
--- Partial (But with a few missing ingredients which make up less than 30% of the recipe): 11
--- Rejected: 
 
-(4, 2, '{401: "2", 402: "2", 302: "10ml", 205: "2", 1001: "100g", 903: "200g"}'), 
--- Complete: 26
--- Partial: 16, 19
+(4, 2, '{1603: "350g", 1203: "210g", 902: "160g", 302: "45ml", 1102: "10g",
+        702: "350g", 203: "290ml", 1660: "245g", 1503: "45g", 1623: "30ml",
+        201: "500g", 1613: "20g", 1616: "400ml", 1617: "30g", 1619: "15g",
+        903: "435g", 1001: "130g", 802: "70g", 801: "75g", 1503: "25g",
+        1201: "180g", 1501: "90g", 1002: "220g", 1401: "20g", 1502: "7g",
+        601: "590g", 602: "30ml", 302: "20ml"}'), 
 
-(5, 3, '{501: "200g", 502: "150ml", 503: "30ml", 302: "10ml", 1201: "200g", 1401: "30g", 1403: "10ml"}'), 
--- Complete: 29, 30
--- Partial: 16, 18
-
-(6, 3, '{601: "600g", 602: "30ml", 603: "10g", 302: "20ml", 1102: "10g", 703: "250g", 901: "200g"}'), 
--- Complete: 13
--- Partial: 21, 25
-
-(7, 4, '{702: "300g", 801: "200g", 802: "150g", 1101: "10g", 1301: "30ml", 1203: "200g", 902: "150g"}'), 
--- Complete: 17, 20
--- Partial: 25
-
-(8, 4, '{704: "500g", 803: "250g", 804: "200g", 805: "150g", 1102: "15g", 1104: "5g", 1001: "150g", 302: "30ml"}');
--- Complete: 6, 7, 18
--- Partial: 26, 30
+(5, 3, '{1603: "300g", 1203: "200g", 902: "150g", 302: "40ml", 1102: "10g",
+        1660: "300g", 1644: "250g", 602: "20ml", 1701: "30ml",
+        1630: "200g", 1676: "275ml", 1501: "48g", 503: "19ml",
+        903: "430g", 1001: "128g", 802: "70g", 801: "75g", 1503: "25g",
+        1201: "180g", 1718: "90g", 1002: "215g", 1401: "22g", 1502: "8g",
+        702: "300g", 203: "260ml", 804: "180g", 1103: "5g",
+        401: "2", 402: "2"}');

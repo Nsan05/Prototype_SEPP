@@ -1,0 +1,24 @@
+[
+    {
+      "recipe_id": 1,
+      "recipe_name": "Mediterranean Tomato Cucumber Salad",
+      "ingredients": [
+        {"ingredient_name": "Tomato", "importance": "core", "quantity": "200g"},
+        {"ingredient_name": "Cucumber", "importance": "core", "quantity": "150g"},
+        {"ingredient_name": "Red Onion", "importance": "secondary", "quantity": "50g"},
+        {"ingredient_name": "Olive Oil", "importance": "secondary", "quantity": "30ml"}
+      ]
+    },
+    {
+      "recipe_id": 2,
+      "recipe_name": "Coconut Chicken Curry",
+      "ingredients": [
+        {"ingredient_name": "Chicken Breast", "importance": "core", "quantity": "500g"},
+        {"ingredient_name": "Ginger", "importance": "core", "quantity": "20g"},
+        {"ingredient_name": "Coconut Milk", "importance": "core", "quantity": "400ml"},
+        {"ingredient_name": "Curry Powder", "importance": "secondary", "quantity": "30g"},
+        {"ingredient_name": "Garlic", "importance": "secondary", "quantity": "10g"},
+        {"ingredient_name": "Olive Oil", "importance": "secondary", "quantity": "30ml"}
+      ]
+    }
+]
