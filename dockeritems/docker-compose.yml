@@ -1,0 +1,31 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:15
+    container_name: recipe_db
+    environment:
+      POSTGRES_USER: SEPP
+      POSTGRES_PASSWORD: prototype
+      POSTGRES_DB: recipe_dbb
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./scripts:/docker-entrypoint-initdb.d  # Mount SQL initialization scripts
+      - db_data:/var/lib/postgresql/data      # Persist database data
+
+  app:
+    build: .
+    container_name: recipe_app
+    depends_on:
+      - db
+    environment:
+      - DATABASE_URL=postgresql://SEPP:prototype@db:5432/recipe_dbb
+    command: ["python", "run.py"]  # Execute the run.py script (handles main.py -> wait -> input.py)
+    ports:
+      - "5000:5000"  # Replace 5000 with your app's listening port, if different
+    volumes:
+      - .:/app  # Mount the application code inside the container (useful during development)
+
+volumes:
+  db_data:  # Declare a named volume for persistent data storage
