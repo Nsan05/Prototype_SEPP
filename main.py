@@ -4,12 +4,10 @@ import logging
 import ast
 import json
 
-
-
 def parse_quantity(recipe_quantity: str, inventory_quantity: str) -> int:
     try:
         recipe_value = float(recipe_quantity.replace('g', '').replace('ml', ''))
-        inventory_value = float(inventory_quantity.replace('g', '').replace('ml', ''))
+        inventory_value = float(inventory_quantity.replace('g', '').replace('ml', '').replace('Unit',''))
         
         if recipe_value == 0:
             return 0
@@ -23,19 +21,22 @@ def parse_quantity(recipe_quantity: str, inventory_quantity: str) -> int:
 
 class RecipeSuggestion:
     def __init__(self, db_params: Dict[str, str], user_id: int):
-        
+        self.user_id = user_id
+        self.db_connection = None
+        self.ingredient_names = {}
+        self.alternatives = {}
+
         try:
             self.db_connection = psycopg2.connect(**db_params)
             self.db_connection.autocommit = True
-            self.user_id = user_id
             self.alternatives = self.get_alternatives()
             self.ingredient_names = self.get_ingredient_names()
         except (Exception, psycopg2.Error) as error:
             print(error)
             raise 
 
-    def _del_(self):
-        if hasattr(self, 'db_connection'):
+    def __del__(self):
+        if self.db_connection:
             try:
                 self.db_connection.close()
             except:
@@ -55,7 +56,7 @@ class RecipeSuggestion:
         try:
             with self.db_connection.cursor() as cursor:
                 query = """
-                    SELECT recipe_id, recipe_name, ingredient_list
+                    SELECT recipe_id, recipe_name, ingredient_list, dietary_requirement, preparation_time, instructions
                     FROM recipe
                 """
                 cursor.execute(query)
@@ -63,9 +64,8 @@ class RecipeSuggestion:
 
             recipes = {}
 
-            for recipe_id, recipe_name, ingredient_list_str in recipes_data:
+            for recipe_id, recipe_name, ingredient_list_str, dietary_requirement, preparation_time, instructions in recipes_data:
                 
-
                 try:
                     ingredient_list = ast.literal_eval(ingredient_list_str)
                 except (ValueError, SyntaxError) as e:
@@ -96,7 +96,10 @@ class RecipeSuggestion:
                     'recipe_name': recipe_name,
                     'core': core,
                     'secondary': secondary,
-                    'optional': optional
+                    'optional': optional,
+                    'dietary_requirement': dietary_requirement,
+                    'preparation_time': preparation_time,
+                    'instructions': instructions
                 }
 
             return recipes
@@ -111,7 +114,7 @@ class RecipeSuggestion:
                     query = """
                         SELECT ingredients
                         FROM userinventory
-                        WHERE user_id = %s AND fridge_id = 1
+                        WHERE user_id = %s 
                     """
                     cursor.execute(query, (self.user_id,))
                     result = cursor.fetchone()
@@ -167,12 +170,14 @@ class RecipeSuggestion:
         recipes = self.get_recipes()
         fridge = self.get_inventory()
 
-        # logger.debug(f"Recipes: {recipes}")
-        # logger.debug(f"Fridge Inventory: {fridge}")
-
         results = []
 
         for recipe_id, recipe_data in recipes.items():
+
+            recipe_diet = recipe_data['dietary_requirement'].lower()
+            if dietary_requirement and recipe_diet != dietary_requirement:
+                continue
+
             core = recipe_data["core"]
             secondary = recipe_data["secondary"]
             optional = recipe_data["optional"]
@@ -186,13 +191,13 @@ class RecipeSuggestion:
                 percentages[ingredient_id] = parse_quantity(required_qty, available_qty)
         
             for ingredient_id in core.keys():
-                if percentages.get(ingredient_id, 0) < 95:  
+                if percentages.get(ingredient_id, 0) < 85:  
                     for alt in self.alternatives.get(ingredient_id, []):
                         alt_id = next((id for id, name in self.ingredient_names.items() if name == alt), None)
                         if alt_id and alt_id in fridge:
                             alt_available_qty = fridge[alt_id]
                             percentages[ingredient_id] = max(percentages[ingredient_id], parse_quantity(required_qty, alt_available_qty))
-
+            # checking secondary
             for ingredient_id in secondary.keys():
                 if percentages[ingredient_id] < 65:  
                     for alt in self.alternatives.get(ingredient_id, []):
@@ -209,11 +214,14 @@ class RecipeSuggestion:
             if core_complete and secondary_complete and optional_complete:
                 score1 = self.calculate_score(percentages, core, secondary, optional)
                 results.append({
-                    "recipe": recipe_data['recipe_name'], 
+                    "recipe_name": recipe_data['recipe_name'], 
                     "case": "Complete", 
                     "score1": score1, 
                     "score2": 0, 
-                    "total": score1
+                    "total": score1,
+                    "dietary_requirement": recipe_data['dietary_requirement'],
+                    "preparation_time": recipe_data['preparation_time'],
+                    "instructions": recipe_data['instructions']
                 })
                 continue  
 
@@ -229,12 +237,15 @@ class RecipeSuggestion:
             total_ingredients = len(core) + len(secondary) + len(optional)
             missing_percentage = (len(missing) / total_ingredients) * 100 if total_ingredients > 0 else 100
 
-            if missing_percentage > 31:
+            if missing_percentage > 30:
                 results.append({
-                    "recipe": recipe_data['recipe_name'],
+                    "recipe_name": recipe_data['recipe_name'],
                     "case": "Rejected",
                     "reason": "More than 30% missing ingredients",
-                    "total": 0
+                    "total": 0,
+                    "dietary_requirement": recipe_data['dietary_requirement'],
+                    "preparation_time": recipe_data['preparation_time'],
+                    "instructions": recipe_data['instructions']
                 })
                 continue
 
@@ -251,11 +262,14 @@ class RecipeSuggestion:
             )
 
             results.append({
-                "recipe": recipe_data['recipe_name'], 
+                "recipe_name": recipe_data['recipe_name'], 
                 "case": "Partial", 
                 "score1": score1, 
                 "score2": score2, 
-                "total": score1 + score2
+                "total": score1 + score2,
+                "dietary_requirement": recipe_data['dietary_requirement'],
+                "preparation_time": recipe_data['preparation_time'],
+                "instructions": recipe_data['instructions']
             })
 
         results.sort(key=lambda x: x['total'], reverse=False)
@@ -271,31 +285,48 @@ def main():
 
     try:
         
-        user_id = 2
+        user_id = 1
+        choice = input("Enter your dietary choice (veg, non-veg): ").strip().lower()
+        if choice not in ['veg', 'non-veg']:
+            print("Invalid choice. Please enter 'veg', 'non-veg'.")
+            return
+        
         recipe_suggester = RecipeSuggestion(db_params, user_id)
-        results = recipe_suggester.suggest_recipes()
+        results = recipe_suggester.suggest_recipes(choice)
+        
+        complete_recipes = [r for r in results if r['case'] == 'Complete' and r['dietary_requirement'] == choice]
+        partial_recipes = [r for r in results if r['case'] == 'Partial' and r['dietary_requirement'] == choice]
 
-        complete_recipes = [r for r in results if r['case'] == 'Complete']
-        partial_recipes = [r for r in results if r['case'] == 'Partial']
 
-        print("COMPLETE RECIPES:")
-        print("-" * 50)
-        for recipe in complete_recipes:
-            print(f"Recipe: {recipe['recipe']}")
-            print(f"Total Score: {recipe['total']:.2f}")
+        if complete_recipes: 
+            print("\nCOMPLETE RECIPES:")
             print("-" * 50)
+            for recipe in complete_recipes:
+                print(f"Recipe: {recipe['recipe_name']}")
+                print(f"Score: {recipe['total']:.2f}")
+                print(f"Dietary Requirement: {recipe['dietary_requirement']}")
+                print(f"Preparation Time: {recipe['preparation_time']} mins")
+                print(f"Instructions: {recipe['instructions']}")
+                print("-" * 50)
+        else:
+            print("\nNo complete recipes match your criteria.")
 
-        print("\nPARTIAL RECIPES:")
-        print("-" * 50)
-        for recipe in partial_recipes:
-            print(f"Recipe: {recipe['recipe']}")
-            print(f"Total Score: {recipe['total']:.2f}")
-            print(f"Score 1: {recipe['score1']:.2f}")
-            print(f"Score 2: {recipe['score2']:.2f}")
+        if partial_recipes:
+            print("\nPARTIAL RECIPES:")
             print("-" * 50)
+            for recipe in partial_recipes:
+                print(f"Recipe: {recipe['recipe_name']}")
+                print(f"Total Score: {recipe['total']:.2f}")
+                print(f"Score1: {recipe['score1']:.2f}")
+                print(f"Score2: {recipe['score2']:.2f}")
+                print(f"Dietary Requirement: {recipe['dietary_requirement']}")
+                print(f"Preparation Time: {recipe['preparation_time']} mins")
+                print(f"Instructions: {recipe['instructions']}")
+                print("-" * 50)
+        else:
+            print("\nNo partial recipes match your criteria.")
 
         
-
     except Exception as e:
         print(e)
 
