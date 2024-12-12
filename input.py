@@ -636,16 +636,13 @@ def create_html_file():
 
         }});
         
-        
         </script>
     </body>
     </html>
     """
-
     #Write to an HTML file (temporary one)
     with open('fridge_contents.html', 'w', encoding='utf-8') as f:
         f.write(html_content)
-    
     #Opening it in a web browser
     webbrowser.open('file://' + os.path.realpath('fridge_contents.html'))
 app = Flask(__name__)
@@ -656,7 +653,6 @@ def log_ingredients():
     data = request.json
     user_id = save_user_inventory(ingredients)
     ingredients = data.get('ingredients')
-    
     if user_id:
         return jsonify({"status": "success", "user_id": user_id})
     else:
