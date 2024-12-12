@@ -3,27 +3,12 @@ from typing import Dict,Any,List,Optional
 import logging
 import ast
 import json
+from flask import Flask, request, jsonify
+from flask_cors import CORS
 
-
-
-def parse_quantity(recipe_quantity: str, inventory_quantity: str) -> int:
-    try:
-        recipe_value = float(recipe_quantity.replace('g', '').replace('ml', ''))
-        inventory_value = float(inventory_quantity.replace('g', '').replace('ml', ''))
-        
-        if recipe_value == 0:
-            return 0
-        
-        percentage = min(int((inventory_value / recipe_value) * 100), 100)
-        return max(percentage, 0)
-    
-    except Exception as e:
-        print(e)
-        return 0
 
 class RecipeSuggestion:
-    def __init__(self, db_params: Dict[str, str], user_id: int):
-        
+    def __init__(self, db_params: Dict[str, str], user_id: int = None): #changed
         try:
             self.db_connection = psycopg2.connect(**db_params)
             self.db_connection.autocommit = True
@@ -163,12 +148,10 @@ class RecipeSuggestion:
         
         return core_score + secondary_score + optional_score
     
-    def suggest_recipes(self, dietary_requirement: Optional[str] = None) -> List[Dict[str, Any]]:
+    #changed paramaters
+    def suggest_recipes(self, inventory: Dict[int, str] = None, dietary_requirement: Optional[str] = None) -> List[Dict[str, Any]]:
         recipes = self.get_recipes()
-        fridge = self.get_inventory()
-
-        # logger.debug(f"Recipes: {recipes}")
-        # logger.debug(f"Fridge Inventory: {fridge}")
+        fridge = inventory if inventory is not None else self.get_inventory()
 
         results = []
 
@@ -260,44 +243,59 @@ class RecipeSuggestion:
 
         results.sort(key=lambda x: x['total'], reverse=False)
         return results
-def main():
-    db_params = {
-        "dbname": "sepp1",
-        "user": "kavya",
-        "password": "password",
-        "host": "localhost",
-        "port": "5434"
-    }
 
+
+def parse_quantity(recipe_quantity: str, inventory_quantity: str) -> int:
     try:
+        recipe_value = float(recipe_quantity.replace('g', '').replace('ml', ''))
+        inventory_value = float(inventory_quantity.replace('g', '').replace('ml', ''))
         
-        user_id = 2
-        recipe_suggester = RecipeSuggestion(db_params, user_id)
-        results = recipe_suggester.suggest_recipes()
-
-        complete_recipes = [r for r in results if r['case'] == 'Complete']
-        partial_recipes = [r for r in results if r['case'] == 'Partial']
-
-        print("COMPLETE RECIPES:")
-        print("-" * 50)
-        for recipe in complete_recipes:
-            print(f"Recipe: {recipe['recipe']}")
-            print(f"Total Score: {recipe['total']:.2f}")
-            print("-" * 50)
-
-        print("\nPARTIAL RECIPES:")
-        print("-" * 50)
-        for recipe in partial_recipes:
-            print(f"Recipe: {recipe['recipe']}")
-            print(f"Total Score: {recipe['total']:.2f}")
-            print(f"Score 1: {recipe['score1']:.2f}")
-            print(f"Score 2: {recipe['score2']:.2f}")
-            print("-" * 50)
-
+        if recipe_value == 0:
+            return 0
         
-
+        percentage = min(int((inventory_value / recipe_value) * 100), 100)
+        return max(percentage, 0)
+    
     except Exception as e:
         print(e)
+        return 0
 
-if __name__ == "__main__":
-    main()   
+#flask setup
+app = Flask(__name__)
+CORS(app)
+
+DB_PARAMS = {
+    "dbname": "sepp1",
+    "user": "postgres",
+    "password": "raisa",
+    "host": "localhost",
+    "port": "5432"
+}
+#raisa- added
+@app.route('/suggest_recipes', methods=['POST'])
+def suggest_recipes_endpoint():
+    try:
+     
+        inventory_data =request.json.get('inventory',{})
+        user_id =request.json.get('user_id')
+        inventory = {int(k): v for k, v in inventory_data.items()}
+        
+        recipe_suggester = RecipeSuggestion(DB_PARAMS,user_id)
+        results = recipe_suggester.suggest_recipes(inventory)
+        
+        # Separate complete and partial recipes
+        complete_recipes =[r for r in results if r['case']=='Complete']
+        partial_recipes= [r for r in results if r['case']=='Partial']
+        
+        return jsonify({
+            'complete_recipes':complete_recipes,
+            'partial_recipes': partial_recipes
+        })
+    
+    except Exception as e:
+        return jsonify({
+            'error': str(e)
+        }),500
+
+if __name__ == '__main__':
+    app.run(debug=True, port=5000)
