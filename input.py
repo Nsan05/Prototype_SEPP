@@ -447,10 +447,7 @@ def create_html_file():
                 <h2>📂 Select Existing User</h2>
                 <p>Browse and manage contents of existing users</p>
             </div>
-            <div id="create-fridge-option" class="option-box">
-                <h2>🆕 Create New Fridge</h2>
-                <p>Create a new fridge with available ingredients</p>
-            </div>
+            
         </div>
 
         <div id="existing-user-section">
@@ -462,14 +459,6 @@ def create_html_file():
             <div id="selected-user-message"></div>
         </div>
 
-        <div id="create-fridge-section">
-            <h2>🆕 Create New Fridge</h2>
-            <div class="ingredient-list" id="ingredient-list">
-                {' '.join(f'<div class="ingredient-item" data-id="{ingredient_id}">🍴 {ingredient_name}</div>' for ingredient_id, ingredient_name in all_ingredients.items())}
-            </div>
-            <div id="selected-ingredients" style="margin-top: 20px;"></div>
-            <button id="done-button">Done</button>
-            <div id="ingredient-added-message"></div>
 
         <!-- raisa-added section for recipe suggestion  -->
         <div id="recipe-suggestions-section" style="display:none;">
