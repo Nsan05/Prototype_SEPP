@@ -1,6 +1,6 @@
--- CREATE DATABASE recipe_db; --remove for docker
+CREATE DATABASE recipe_db; 
 
--- \c recipe_db -- remove for docker
+\c recipe_db 
 
 CREATE TABLE Recipe (
     recipe_id INT PRIMARY KEY,
