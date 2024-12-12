@@ -9,8 +9,31 @@ The Fridge Inventory Management project is a web application that allows users t
 - **Recipe Suggestions**: The application provides recipe suggestions based on the user's available ingredients, including both complete recipes and partial recipes that can be made with the current inventory.
 
 ## Installation and Setup
-- Create recipe_db database
-- Run the init.sql script from the scripts folder to obtain a copy of the database on the users' local machine.
+Prerequisites:
+
+- Ensure you have PostgreSQL installed on your local machine
+- Install Python and pip
+- Have Git installed (optional, but recommended)
+
+Database Setup:
+
+- Run the init.sql script to create the database
+
+Database Connection:
+
+- Open the Python files main.py and input.py
+- Update the connection details to match your local PostgreSQL setup:
+
+Installation:
+
+- Install required Python dependencies - mentioned in the requirements.txt file
+
+Running the Application:
+
+Open two terminal windows
+In the first terminal, run main.py
+In the second terminal, run input.py
+The frontend should now pop up
 
 
 ## Usage
