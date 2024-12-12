@@ -264,9 +264,9 @@ app = Flask(__name__)
 CORS(app)
 
 DB_PARAMS = {
-    "dbname": "sepp1",
+    "dbname": "recipe_db",
     "user": "postgres",
-    "password": "raisa",
+    "password": "your_password",
     "host": "localhost",
     "port": "5432"
 }
