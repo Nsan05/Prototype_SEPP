@@ -57,7 +57,13 @@ jobs:
             echo "Waiting for PostgreSQL..."
             sleep 2
           done
-
+          
+      - name: Initialize Database
+        run: |
+          psql -h localhost -U SEPP -d recipe_db -f init.sql
+        env:
+          PGPASSWORD: prototype
+          
       - name: Run Tests
         run: |
           pytest test.py --junitxml=pytest-results.xml
