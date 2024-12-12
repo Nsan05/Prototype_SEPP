@@ -492,7 +492,6 @@ def create_html_file():
                             completeRecipesList.append(`
                                 <div class="recipe-card">
                                     <h4>${{recipe.recipe}}</h4>
-                                    <p>Total Score:${{recipe.total.toFixed(2)}}</p>
                                 </div>
                             `);
                         }});
@@ -503,10 +502,7 @@ def create_html_file():
                         response.partial_recipes.forEach(recipe => {{
                             partialRecipesList.append(`
                                 <div class="recipe-card">
-                                    <h4>${{recipe.recipe}}</h4>
-                                    <p>Total Score:${{recipe.total.toFixed(2)}}</p>
-                                    <p>Score 1: ${{recipe.score1.toFixed(2)}}</p>
-                                    <p>Score 2:${{recipe.score2.toFixed(2)}}</p>
+                                    <h4>${{recipe.recipe}}</h4>    
                                 </div>
                             `);
                         }});
@@ -534,14 +530,6 @@ def create_html_file():
                     newFridgeIngredients = {{}};
                 }});
 
-                $('#create-fridge-option').on('click', function() {{
-                    $('#create-fridge-section').show();
-                    $('#existing-user-section').hide();
-                    $('#selected-user-message').empty();
-                    // Reset selected user data
-                    selectedUserId = null;
-                    selectedUserIngredients = null;
-                }});
 
                 // Existing User Logic
                 $('.user-ingredient-item').on('click', function () {{
@@ -555,7 +543,7 @@ def create_html_file():
 
                         const content = existingUsers[userId];
                         for (let name in content) {{
-                            $('#user-contents').append(`<p>${{name}}: ${{content[name]}}</p>`);
+                            $('#user-contents').append();
                         }}
                         $('#selected-user-message').text('You selected user ' + userId);
 
@@ -577,33 +565,6 @@ def create_html_file():
                 }});
 
 
-                // Create Fridge Logic
-                $('.ingredient-item:not(.user-ingredient-item)').on('click', function() {{
-                    const ingredientId = $(this).data('id');
-                    const ingredientName = $(this).text();
-                    $(this).toggleClass('selected-ingredient');
-                    const selectedDiv = $('#selected-ingredients');
-                    const existingItem = selectedDiv.find(`[data-id="${{ingredientId}}"]`);
-                    if (existingItem.length) {{
-                        existingItem.remove();
-                        delete newFridgeIngredients[ingredientId];
-                    }} else {{
-                        selectedDiv.append(`
-                            <div data-id="${{ingredientId}}">
-                                <span>${{ingredientName}}:</span>
-                                <div class="quantity-metric-container">
-                                    <input type="number" min="1" value="1" class="ingredient-quantity">
-                                    <select class="ingredient-metric">
-                                        <option value="ml">ml</option>
-                                        <option value="g">g</option>
-                                        <option value="unit">Unit</option>
-                                    </select>
-                                </div>
-                            </div>
-                        `);
-                    }}
-                    $('#done-button').toggle($('#selected-ingredients').children().length > 0);
-                }});
 
             //raisa- combined the the done button handlers 
             $('#done-button').on('click', function() {{
